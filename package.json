@@ -1,0 +1,15 @@
+{
+  "name": "chat-exporter",
+  "version": "0.1.0",
+  "description": "Exportador de conversaciones de ChatGPT a Markdown.",
+  "license": "MIT",
+  "author": "Guille",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
