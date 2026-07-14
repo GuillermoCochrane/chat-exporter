@@ -18,7 +18,7 @@ Estado:
 - [x] Inspector
 - [x] Parser
 - [x] Filtro de mensajes
-- [ ] Normalización
+- [x] Normalización
 - [ ] Generador Markdown
 - [ ] Writer
 - [ ] CLI

@@ -33,6 +33,13 @@
 
 ---
 
+## v0.5.4 - Normalizer
+
+- Normalización de mensajes.
+- Modelo interno desacoplado del JSON de ChatGPT.
+
+---
+
 ## Próxima versión (v0.5.4)
 
 - Normalización de mensajes.

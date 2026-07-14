@@ -71,9 +71,9 @@ No altera el contenido de los mensajes restantes.
 
 ### normalizer.js
 
-Transforma los mensajes al modelo interno del proyecto.
+Transforma los mensajes filtrados al modelo interno del proyecto.
 
-Desacopla el resto del pipeline del formato original de ChatGPT.
+Elimina la dependencia del formato original de ChatGPT.
 
 ---
 
