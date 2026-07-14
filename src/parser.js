@@ -1,43 +1,28 @@
-export function inspectConversation(conversation) {
+export function extractMessages(conversation) {
     const mapping = conversation.mapping ?? {};
 
-    const stats = {
-        title: conversation.title ?? "(Sin título)",
-        nodes: 0,
-        messages: 0,
-        user: 0,
-        assistant: 0,
-        system: 0,
-        tool: 0,
-        empty: 0
-    };
+    const messages = [];
 
-    // Mapeo directo con valores por defecto
-    const roleCounters = {
-        'user': 'user',
-        'assistant': 'assistant', 
-        'system': 'system',
-        'tool': 'tool'
-    };
-
-    for (const node of Object.values(mapping)) {
-        stats.nodes++;
-
+    for (const [id, node] of Object.entries(mapping)) {
         const message = node.message;
 
-        if (!message) {
-            stats.empty++;
-            continue;
-        }
+        if (!message) continue;
 
-        stats.messages++;
+        messages.push({
+            id,
+            parent: node.parent ?? null,
+            children: node.children ?? [],
 
-        const role = message.author?.role;
-        // Incrementa directamente usando el mapeo
-        if (role && role in roleCounters) {
-            stats[roleCounters[role]]++;
-        }
+            role: message.author?.role ?? null,
+
+            createTime: message.create_time ?? null,
+            status: message.status ?? null,
+
+            rawContent: message.content ?? null,
+
+            metadata: message.metadata ?? {}
+        });
     }
 
-    return stats;
+    return messages;
 }
