@@ -14,10 +14,14 @@ Estado:
 - [x] Inicialización del proyecto
 - [x] Estructura de carpetas
 - [x] Pipeline definido
-- [ ] Parser del JSON
+- [x] Loader
+- [x] Inspector
+- [x] Parser
+- [x] Filtro de mensajes
+- [ ] Normalización
 - [ ] Generador Markdown
+- [ ] Writer
 - [ ] CLI
-- [ ] Exportación de archivos
 - [ ] Tests
 - [ ] Primera Release
 
@@ -33,6 +37,10 @@ Inspector
 ↓
 Parser
 ↓
+Filter
+↓
+Normalizer
+↓
 Markdown Builder
 ↓
 Writer
@@ -41,12 +49,11 @@ Writer
 
 ## Próximos pasos
 
-1. Implementar parser.
-2. Normalizar mensajes.
-3. Generar Markdown.
-4. Escribir archivo.
-5. Añadir CLI.
-6. Publicar v1.0.
+1. Normalizar mensajes.
+2. Generar Markdown.
+3. Escribir archivo.
+4. Añadir CLI.
+5. Publicar v1.0.
 
 ---
 

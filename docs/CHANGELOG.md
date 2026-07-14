@@ -1,21 +1,38 @@
 # Changelog
 
-## v0.5
+## v0.5.0 - Inicialización
 
-- Estructura inicial.
+- Estructura inicial del proyecto.
 - Arquitectura definida.
 - Pipeline establecido.
-- Inspector implementado.
 
 ---
 
-## v0.6
+## v0.5.1 - Loader e Inspector
+
+- Loader implementado.
+- Inspector implementado.
+- Primeras pruebas con JSON exportado.
+
+---
+
+## v0.5.2 - Parser
 
 - Parser funcional.
-- Conversación normalizada.
+- Extracción de mensajes desde `mapping`.
+- Validación sobre conversaciones reales.
 
 ---
 
-## v0.7
+## v0.5.3 - Filter
 
-- Exportación Markdown.
+- Filtro de mensajes visibles.
+- Eliminación de mensajes de sistema.
+- Eliminación de contextos internos.
+- Validación de múltiples mensajes consecutivos del mismo autor.
+
+---
+
+## Próxima versión (v0.5.4)
+
+- Normalización de mensajes.

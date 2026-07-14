@@ -23,6 +23,10 @@ inspector.js
 ↓
 parser.js
 ↓
+filter.js
+↓
+normalizer.js
+↓
 markdown.js
 ↓
 writer.js
@@ -43,7 +47,7 @@ No interpreta datos.
 
 ### inspector.js
 
-Obtiene estadísticas.
+Obtiene estadísticas de la conversación.
 
 No modifica información.
 
@@ -51,9 +55,25 @@ No modifica información.
 
 ### parser.js
 
-Transforma el árbol de conversación en una lista lineal.
+Transforma el árbol de conversación (`mapping`) en una lista de mensajes.
 
-Es el núcleo del proyecto.
+No filtra ni modifica contenido.
+
+---
+
+### filter.js
+
+Elimina mensajes que no pertenecen a la conversación visible.
+
+No altera el contenido de los mensajes restantes.
+
+---
+
+### normalizer.js
+
+Transforma los mensajes al modelo interno del proyecto.
+
+Desacopla el resto del pipeline del formato original de ChatGPT.
 
 ---
 
@@ -67,7 +87,7 @@ No conoce el JSON original.
 
 ### writer.js
 
-Escribe archivos.
+Escribe archivos en disco.
 
 No interpreta contenido.
 

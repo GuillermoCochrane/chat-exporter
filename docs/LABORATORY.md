@@ -4,7 +4,9 @@
 
 ### H-001
 
-El endpoint de conversación devuelve el árbol completo.
+Objetivo:
+
+Verificar si el endpoint de conversación devuelve el árbol completo.
 
 Estado:
 
@@ -12,35 +14,47 @@ Estado:
 
 Evidencia:
 
-El JSON contiene "mapping".
+El JSON contiene el campo `mapping`, con todos los nodos de la conversación.
 
 ---
 
 ### H-002
 
-El segundo fetch devuelve 404.
+Objetivo:
+
+Verificar el comportamiento del endpoint al repetir la petición.
 
 Estado:
 
 ✔ Confirmada.
 
-Causa:
+Resultado:
 
-El endpoint solo está disponible durante la carga inicial.
+La segunda petición devuelve `404`.
+
+Conclusión:
+
+El endpoint solo está disponible durante la carga inicial de la conversación.
 
 ---
 
 ### H-003
 
-Es posible interceptar Response.prototype.json.
+Objetivo:
+
+Interceptar `Response.prototype.json`.
 
 Estado:
 
 ✖ Refutada.
 
-Observaciones:
+Resultado:
 
-La respuesta ya fue consumida por la aplicación.
+No fue posible capturar el JSON.
+
+Conclusión:
+
+La respuesta ya había sido consumida por la aplicación antes de instalar el hook.
 
 ---
 
@@ -50,7 +64,7 @@ La respuesta ya fue consumida por la aplicación.
 
 Objetivo:
 
-Interceptar fetch.
+Interceptar las llamadas a `fetch`.
 
 Resultado:
 
@@ -58,7 +72,8 @@ Parcial.
 
 Observaciones:
 
-Se capturó la petición, pero demasiado tarde.
+- Se logró interceptar la petición.
+- La captura ocurrió demasiado tarde para obtener el JSON completo.
 
 ---
 
@@ -66,18 +81,51 @@ Se capturó la petición, pero demasiado tarde.
 
 Objetivo:
 
-Usar Copy as Fetch.
+Obtener la respuesta completa mediante DevTools.
 
 Resultado:
 
-Exitoso.
+✔ Exitoso.
 
-Se obtuvo el JSON completo.
+Observaciones:
+
+- `Copy Response` devuelve el JSON completo.
+- El campo `mapping` contiene todo el árbol de la conversación.
+- Este método permitió comenzar el desarrollo del parser.
+
+---
+
+### E-003
+
+Objetivo:
+
+Implementar el parser y validar la extracción de mensajes conversacionales.
+
+Resultado:
+
+✔ Confirmado.
+
+Observaciones:
+
+- El parser recorre correctamente el campo `mapping`.
+- Se eliminaron correctamente los mensajes de sistema.
+- Se eliminaron correctamente los contextos internos (`user_editable_context`, `model_editable_context`).
+- El orden original de la conversación se conserva.
+- ChatGPT puede emitir múltiples mensajes consecutivos del mismo autor (`assistant → assistant`).
+- Los Canvas aparecen como mensajes independientes del asistente.
+
+Conclusión:
+
+No puede asumirse alternancia entre `user` y `assistant`.
+
+El pipeline deberá respetar exclusivamente el orden del árbol de conversación.
 
 ---
 
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
-- El JSON contiene el árbol completo.
-- El parser podrá funcionar únicamente sobre el campo `mapping`.
+- El JSON contiene el árbol completo en `mapping`.
+- El parser puede trabajar únicamente sobre `mapping`.
+- La alternancia de roles no está garantizada.
+- Los Canvas forman parte del árbol de conversación como mensajes propios.
