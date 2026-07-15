@@ -4,6 +4,7 @@ import { extractMessages } from "./parser.js";
 import { filterConversationMessages } from "./filter.js";
 import { normalizeMessages } from "./normalizer.js";
 import { buildMarkdown } from "./markdown.js";
+import { writeFileContent } from "./writer.js";
 
 async function main() {
   const conversation = await loadConversation("./input/epistolario_SMALL.json");
@@ -15,6 +16,8 @@ async function main() {
   const normalized = normalizeMessages(filtered);
 
   const markdown = buildMarkdown(normalized);
+
+  await writeFileContent("./output/conversacion.md", markdown);
 
   console.log(markdown);
 }
