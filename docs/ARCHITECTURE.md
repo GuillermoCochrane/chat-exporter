@@ -86,6 +86,7 @@ Centraliza el formateo de datos comunes.
 Actualmente implementa:
 
 - Fechas
+- Bloques de cita (Markdown)
 
 Está preparado para incorporar nuevos formateadores sin modificar el resto del pipeline.
 

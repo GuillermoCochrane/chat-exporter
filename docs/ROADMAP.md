@@ -21,7 +21,7 @@ Estado:
 - [x] Filtro de mensajes
 - [x] Normalización
 - [x] Formatter
-- [ ] Generador Markdown
+- [x] Generador Markdown
 - [ ] Writer
 - [ ] CLI
 - [ ] Tests
@@ -53,10 +53,9 @@ Writer
 
 ## Próximos pasos
 
-1. Generar Markdown.
-2. Escribir archivo.
-3. Añadir CLI.
-4. Publicar v1.0.
+1. Escribir archivo.
+2. Añadir CLI.
+3. Publicar v1.0.
 
 ---
 

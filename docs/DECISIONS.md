@@ -102,7 +102,7 @@ Motivación:
 La representación de los datos no debe depender del parser ni del generador Markdown.
 
 Consecuencia:
-El módulo `formatter` centraliza el formateo de fechas y podrá ampliarse para otros tipos de datos sin modificar el resto del pipeline.
+El módulo `formatter` centraliza el formateo de datos comunes (fechas y bloques de cita) y podrá ampliarse para otros tipos de datos sin modificar el resto del pipeline.
 
 Estado:
 Aceptada.

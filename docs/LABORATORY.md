@@ -144,6 +144,28 @@ El formatter pasa a ser un servicio reutilizable dentro del pipeline.
 
 ---
 
+### E-005
+
+Objetivo:
+
+Desacoplar el formateo de bloques Markdown del generador.
+
+Resultado:
+
+✔ Confirmado.
+
+Observaciones:
+
+- El prefijo `>` se aplica correctamente a todas las líneas del mensaje.
+- El generador Markdown delega completamente el formateo al formatter.
+- Se mantiene una única responsabilidad por módulo.
+
+Conclusión:
+
+El formatter pasa a centralizar toda la representación textual reutilizable del pipeline.
+
+---
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -152,3 +174,4 @@ El formatter pasa a ser un servicio reutilizable dentro del pipeline.
 - La alternancia de roles no está garantizada.
 - Los Canvas forman parte del árbol de conversación como mensajes propios.
 - El formateo puede desacoplarse completamente de la lógica de negocio.
+- El formateo de bloques Markdown puede desacoplarse completamente del generador.

@@ -49,4 +49,14 @@
   - `iso`
   - `human`
   - `locale`
+- Nuevo formateador de bloques de cita (`formatQuote`).
 - El formatter queda preparado para incorporar nuevos formateadores sin modificar el resto del pipeline.
+
+---
+
+## v0.5.6 - Markdown Builder
+
+- Implementado el generador de Markdown.
+- El Markdown consume exclusivamente el modelo normalizado.
+- Todo el formateo textual se delega al módulo `formatter`.
+- Validación realizada con conversaciones MINI, SMALL y ORIGINAL.
