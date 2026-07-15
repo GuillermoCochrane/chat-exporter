@@ -5,9 +5,12 @@ import { filterConversationMessages } from "./filter.js";
 import { normalizeMessages } from "./normalizer.js";
 import { buildMarkdown } from "./markdown.js";
 import { writeFileContent } from "./writer.js";
+import { parseArguments } from "./cli.js";
+
+const { input, output } = parseArguments();
 
 async function main() {
-  const conversation = await loadConversation("./input/epistolario_SMALL.json");
+  const conversation = await loadConversation(input); 
 
   inspectConversation(conversation);
 
@@ -17,9 +20,9 @@ async function main() {
 
   const markdown = buildMarkdown(normalized);
 
-  await writeFileContent("./output/conversacion.md", markdown);
+  await writeFileContent(output, markdown);
 
-  console.log(markdown);
+  console.log(`✔ Conversación exportada a ${output}`);
 }
 
 main().catch(console.error);
