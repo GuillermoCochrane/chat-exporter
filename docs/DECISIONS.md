@@ -4,52 +4,65 @@
 
 ## ADR-0001
 
-Fecha:
+#### Fecha
+
 2026-07-14
 
-Título:
+#### Título
+
 Separación por responsabilidades.
 
-Motivación:
+#### Motivación
+
 Evitar módulos gigantes y facilitar la reutilización.
 
-Consecuencia:
+#### Consecuencia
+
 Cada módulo tendrá una única responsabilidad y podrá reutilizarse de forma independiente.
 
-Estado:
+#### Estado
+
 Aceptada.
 
 ---
 
 ## ADR-0002
 
-Fecha:
+#### Fecha
+
 2026-07-14
 
-Título:
+#### Título
+
 Markdown como formato base.
 
-Motivación:
+#### Motivación
+
 Es portable, legible y ampliamente soportado.
 
-Consecuencia:
+#### Consecuencia
+
 Otros formatos (HTML, PDF, DOCX, etc.) podrán generarse a partir del Markdown sin modificar el parser.
 
-Estado:
+#### Estado
+
 Aceptada.
 
 ---
 
 ## ADR-0003
 
-Fecha:
+#### Fecha
+
 2026-07-14
 
-Título:
+#### Título
+
 Pipeline lineal.
 
-Arquitectura:
+#### Arquitectura
 
+```text
 JSON
 → Loader
 → Inspector
@@ -59,50 +72,90 @@ JSON
 → Formatter
 → Markdown Builder
 → Writer
+````
 
-Motivación:
+#### Motivación
+
 Facilita testing, debugging y desacoplamiento entre etapas.
 
-Consecuencia:
+#### Consecuencia
+
 Cada módulo tiene una única responsabilidad y puede probarse de forma independiente.
 
-Estado:
+#### Estado
+
 Aceptada.
 
 ---
 
 ## ADR-0004
 
-Fecha:
+#### Fecha
+
 2026-07-14
 
-Título:
+#### Título
+
 No asumir alternancia de roles.
 
-Motivación:
+#### Motivación
+
 Los Canvas y otros artefactos internos generan múltiples mensajes consecutivos del mismo autor.
 
-Consecuencia:
+#### Consecuencia
+
 El exportador respetará exclusivamente el orden del árbol de conversación, sin inferir alternancia entre usuario y asistente.
 
-Estado:
+#### Estado
+
 Aceptada.
 
 ---
 
 ## ADR-0005
 
-Fecha:
+#### Fecha
+
 2026-07-14
 
-Título:
+#### Título
+
 Desacoplar el formateo del pipeline.
 
-Motivación:
+#### Motivación
+
 La representación de los datos no debe depender del parser ni del generador Markdown.
 
-Consecuencia:
+#### Consecuencia
+
 El módulo `formatter` centraliza el formateo de datos comunes (fechas y bloques de cita) y podrá ampliarse para otros tipos de datos sin modificar el resto del pipeline.
 
-Estado:
+#### Estado
+
 Aceptada.
+
+---
+
+## ADR-0006
+
+#### Fecha
+
+2026-07-15
+
+#### Título
+
+Separar la generación del documento de su escritura.
+
+#### Motivación
+
+Generar el contenido y escribirlo en disco son responsabilidades diferentes.
+
+#### Consecuencia
+
+`markdown.js` produce únicamente texto y `writer.js` se ocupa exclusivamente del sistema de archivos.
+
+#### Estado
+
+Aceptada.
+
+```

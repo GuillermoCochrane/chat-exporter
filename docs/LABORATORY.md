@@ -4,15 +4,15 @@
 
 ### H-001
 
-Objetivo:
+#### Objetivo
 
 Verificar si el endpoint de conversación devuelve el árbol completo.
 
-Estado:
+#### Estado
 
 ✔ Confirmada.
 
-Evidencia:
+#### Evidencia
 
 El JSON contiene el campo `mapping`, con todos los nodos de la conversación.
 
@@ -20,19 +20,19 @@ El JSON contiene el campo `mapping`, con todos los nodos de la conversación.
 
 ### H-002
 
-Objetivo:
+#### Objetivo
 
 Verificar el comportamiento del endpoint al repetir la petición.
 
-Estado:
+#### Estado
 
 ✔ Confirmada.
 
-Resultado:
+#### Resultado
 
 La segunda petición devuelve `404`.
 
-Conclusión:
+#### Conclusión
 
 El endpoint solo está disponible durante la carga inicial de la conversación.
 
@@ -40,19 +40,19 @@ El endpoint solo está disponible durante la carga inicial de la conversación.
 
 ### H-003
 
-Objetivo:
+#### Objetivo
 
 Interceptar `Response.prototype.json`.
 
-Estado:
+#### Estado
 
 ✖ Refutada.
 
-Resultado:
+#### Resultado
 
 No fue posible capturar el JSON.
 
-Conclusión:
+#### Conclusión
 
 La respuesta ya había sido consumida por la aplicación antes de instalar el hook.
 
@@ -62,15 +62,15 @@ La respuesta ya había sido consumida por la aplicación antes de instalar el ho
 
 ### E-001
 
-Objetivo:
+#### Objetivo
 
 Interceptar las llamadas a `fetch`.
 
-Resultado:
+#### Resultado
 
 Parcial.
 
-Observaciones:
+#### Observaciones
 
 - Se logró interceptar la petición.
 - La captura ocurrió demasiado tarde para obtener el JSON completo.
@@ -79,15 +79,15 @@ Observaciones:
 
 ### E-002
 
-Objetivo:
+#### Objetivo
 
 Obtener la respuesta completa mediante DevTools.
 
-Resultado:
+#### Resultado
 
 ✔ Exitoso.
 
-Observaciones:
+#### Observaciones
 
 - `Copy Response` devuelve el JSON completo.
 - El campo `mapping` contiene todo el árbol de la conversación.
@@ -97,15 +97,15 @@ Observaciones:
 
 ### E-003
 
-Objetivo:
+#### Objetivo
 
 Implementar el parser y validar la extracción de mensajes conversacionales.
 
-Resultado:
+#### Resultado
 
 ✔ Confirmado.
 
-Observaciones:
+#### Observaciones
 
 - El parser recorre correctamente el campo `mapping`.
 - Se eliminaron correctamente los mensajes de sistema.
@@ -114,7 +114,7 @@ Observaciones:
 - ChatGPT puede emitir múltiples mensajes consecutivos del mismo autor (`assistant → assistant`).
 - Los Canvas aparecen como mensajes independientes del asistente.
 
-Conclusión:
+#### Conclusión
 
 No puede asumirse alternancia entre `user` y `assistant`.
 
@@ -124,21 +124,21 @@ El pipeline deberá respetar exclusivamente el orden del árbol de conversación
 
 ### E-004
 
-Objetivo:
+#### Objetivo
 
 Desacoplar el formateo de fechas del parser y del generador Markdown.
 
-Resultado:
+#### Resultado
 
 ✔ Confirmado.
 
-Observaciones:
+#### Observaciones
 
 - El parser entrega datos puros.
 - El formateo queda centralizado.
 - El módulo puede reutilizarse por cualquier exportador.
 
-Conclusión:
+#### Conclusión
 
 El formatter pasa a ser un servicio reutilizable dentro del pipeline.
 
@@ -146,23 +146,45 @@ El formatter pasa a ser un servicio reutilizable dentro del pipeline.
 
 ### E-005
 
-Objetivo:
+#### Objetivo
 
 Desacoplar el formateo de bloques Markdown del generador.
 
-Resultado:
+#### Resultado
 
 ✔ Confirmado.
 
-Observaciones:
+#### Observaciones
 
 - El prefijo `>` se aplica correctamente a todas las líneas del mensaje.
 - El generador Markdown delega completamente el formateo al formatter.
 - Se mantiene una única responsabilidad por módulo.
 
-Conclusión:
+#### Conclusión
 
 El formatter pasa a centralizar toda la representación textual reutilizable del pipeline.
+
+---
+
+### E-006
+
+#### Objetivo
+
+Implementar el módulo Writer y validar la escritura del documento Markdown.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- El archivo se genera correctamente en disco.
+- El contenido coincide con la salida generada por el Markdown Builder.
+- Se validó con los archivos MINI, SMALL y ORIGINAL.
+
+#### Conclusión
+
+El pipeline completo puede exportar conversaciones a un archivo Markdown.
 
 ---
 
@@ -175,3 +197,4 @@ El formatter pasa a centralizar toda la representación textual reutilizable del
 - Los Canvas forman parte del árbol de conversación como mensajes propios.
 - El formateo puede desacoplarse completamente de la lógica de negocio.
 - El formateo de bloques Markdown puede desacoplarse completamente del generador.
+- El pipeline completo funciona desde la carga del JSON hasta la escritura del archivo Markdown.

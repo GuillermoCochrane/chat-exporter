@@ -60,3 +60,12 @@
 - El Markdown consume exclusivamente el modelo normalizado.
 - Todo el formateo textual se delega al módulo `formatter`.
 - Validación realizada con conversaciones MINI, SMALL y ORIGINAL.
+
+---
+
+## v0.5.7 - Writer
+
+- Implementado `writer.js`.
+- Escritura de archivos Markdown en disco.
+- Pipeline completo funcional (JSON → Markdown → Archivo).
+- Validación realizada con conversaciones MINI, SMALL y ORIGINAL.

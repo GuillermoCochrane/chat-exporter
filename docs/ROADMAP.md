@@ -8,9 +8,9 @@ Convertir conversaciones exportadas desde ChatGPT a Markdown limpio y reutilizab
 
 ## Estado actual
 
-Versión: 0.5.4
+### Versión: 0.5.4
 
-Estado:
+**Estado**:
 
 - [x] Inicialización del proyecto
 - [x] Estructura de carpetas
@@ -22,7 +22,7 @@ Estado:
 - [x] Normalización
 - [x] Formatter
 - [x] Generador Markdown
-- [ ] Writer
+- [x] Writer
 - [ ] CLI
 - [ ] Tests
 - [ ] Primera Release
@@ -53,8 +53,8 @@ Writer
 
 ## Próximos pasos
 
-1. Escribir archivo.
-2. Añadir CLI.
+1. Añadir CLI.
+2. Añadir tests.
 3. Publicar v1.0.
 
 ---
