@@ -188,6 +188,28 @@ El pipeline completo puede exportar conversaciones a un archivo Markdown.
 
 ---
 
+### E-007
+
+#### Objetivo
+
+Incorporar una interfaz de línea de comandos para parametrizar la ejecución del exportador.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- El archivo de entrada puede indicarse desde la línea de comandos.
+- El archivo de salida también puede personalizarse.
+- El pipeline permanece desacoplado de la configuración de ejecución.
+
+#### Conclusión
+
+El módulo `cli` desacopla la configuración de ejecución del resto del pipeline.
+
+---
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.

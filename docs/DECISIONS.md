@@ -72,7 +72,7 @@ JSON
 → Formatter
 → Markdown Builder
 → Writer
-````
+```
 
 #### Motivación
 
@@ -158,4 +158,26 @@ Generar el contenido y escribirlo en disco son responsabilidades diferentes.
 
 Aceptada.
 
-```
+---
+
+## ADR-0007
+
+#### Fecha
+
+2026-07-15
+
+#### Título
+
+Desacoplar la configuración de ejecución.
+
+#### Motivación
+
+El pipeline no debe depender de rutas codificadas dentro de `index.js`.
+
+#### Consecuencia
+
+El módulo `cli` centraliza la lectura de argumentos y permite reutilizar el mismo pipeline con distintas conversaciones y archivos de salida.
+
+#### Estado
+
+Aceptada.

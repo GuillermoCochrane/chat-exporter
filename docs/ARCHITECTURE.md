@@ -33,6 +33,8 @@ markdown.js
 ↓
 writer.js
 ↓
+cli.js
+↓
 index.js
 
 ---
@@ -107,6 +109,14 @@ No conoce el JSON original.
 Escribe archivos en disco.
 
 No interpreta contenido.
+
+---
+
+### cli.js
+
+Obtiene y valida los argumentos de la línea de comandos.
+
+No conoce la lógica del pipeline.
 
 ---
 

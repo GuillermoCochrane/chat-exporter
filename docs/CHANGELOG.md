@@ -69,3 +69,10 @@
 - Escritura de archivos Markdown en disco.
 - Pipeline completo funcional (JSON → Markdown → Archivo).
 - Validación realizada con conversaciones MINI, SMALL y ORIGINAL.
+
+## v0.5.8 - CLI
+
+- Implementado `cli.js`.
+- Soporte para indicar archivo de entrada desde la consola.
+- Soporte para indicar archivo de salida desde la consola.
+- `index.js` deja de depender de rutas fijas.
