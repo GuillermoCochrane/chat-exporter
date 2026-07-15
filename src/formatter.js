@@ -30,3 +30,10 @@ export function formatDate(timestamp, format = "human", ...args) {
 
   return formatter(timestamp);
 }
+
+export function formatQuote(text = "") {
+  return text
+    .split("\n")
+    .map(line => `> ${line}`)
+    .join("\n");
+}
