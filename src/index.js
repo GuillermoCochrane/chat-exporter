@@ -3,19 +3,20 @@ import { inspectConversation } from "./inspector.js";
 import { extractMessages } from "./parser.js";
 import { filterConversationMessages } from "./filter.js";
 import { normalizeMessages } from "./normalizer.js";
+import { buildMarkdown } from "./markdown.js";
 
 async function main() {
-  const conversation = await loadConversation(
-    "./input/epistolario_ORIGINAL.json",
-  );
+  const conversation = await loadConversation("./input/epistolario_SMALL.json");
 
-  const stats = inspectConversation(conversation);
-  const messages = extractMessages(conversation);
-  const filtered = filterConversationMessages(messages);
+  inspectConversation(conversation);
+
+  const parsed = extractMessages(conversation);
+  const filtered = filterConversationMessages(parsed);
   const normalized = normalizeMessages(filtered);
 
-  console.dir(normalized[0], { depth: null });
-  console.dir(normalized[1], { depth: null });
+  const markdown = buildMarkdown(normalized);
+
+  console.log(markdown);
 }
 
 main().catch(console.error);
