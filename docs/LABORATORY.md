@@ -122,6 +122,28 @@ El pipeline deberá respetar exclusivamente el orden del árbol de conversación
 
 ---
 
+### E-004
+
+Objetivo:
+
+Desacoplar el formateo de fechas del parser y del generador Markdown.
+
+Resultado:
+
+✔ Confirmado.
+
+Observaciones:
+
+- El parser entrega datos puros.
+- El formateo queda centralizado.
+- El módulo puede reutilizarse por cualquier exportador.
+
+Conclusión:
+
+El formatter pasa a ser un servicio reutilizable dentro del pipeline.
+
+---
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -129,3 +151,4 @@ El pipeline deberá respetar exclusivamente el orden del árbol de conversación
 - El parser puede trabajar únicamente sobre `mapping`.
 - La alternancia de roles no está garantizada.
 - Los Canvas forman parte del árbol de conversación como mensajes propios.
+- El formateo puede desacoplarse completamente de la lógica de negocio.

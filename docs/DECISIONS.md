@@ -55,6 +55,8 @@ JSON
 → Inspector
 → Parser
 → Filter
+→ Normalizer
+→ Formatter
 → Markdown Builder
 → Writer
 
@@ -82,6 +84,25 @@ Los Canvas y otros artefactos internos generan múltiples mensajes consecutivos 
 
 Consecuencia:
 El exportador respetará exclusivamente el orden del árbol de conversación, sin inferir alternancia entre usuario y asistente.
+
+Estado:
+Aceptada.
+
+---
+
+## ADR-0005
+
+Fecha:
+2026-07-14
+
+Título:
+Desacoplar el formateo del pipeline.
+
+Motivación:
+La representación de los datos no debe depender del parser ni del generador Markdown.
+
+Consecuencia:
+El módulo `formatter` centraliza el formateo de fechas y podrá ampliarse para otros tipos de datos sin modificar el resto del pipeline.
 
 Estado:
 Aceptada.

@@ -40,6 +40,13 @@
 
 ---
 
-## Próxima versión (v0.5.4)
+## v0.5.5 - Formatter
 
-- Normalización de mensajes.
+- Nuevo módulo `formatter`.
+- Formateo desacoplado de fechas.
+- Soporte para formatos:
+  - `unix`
+  - `iso`
+  - `human`
+  - `locale`
+- El formatter queda preparado para incorporar nuevos formateadores sin modificar el resto del pipeline.

@@ -27,6 +27,8 @@ filter.js
 ↓
 normalizer.js
 ↓
+formatter.js
+↓
 markdown.js
 ↓
 writer.js
@@ -74,6 +76,20 @@ No altera el contenido de los mensajes restantes.
 Transforma los mensajes filtrados al modelo interno del proyecto.
 
 Elimina la dependencia del formato original de ChatGPT.
+
+---
+
+### formatter.js
+
+Centraliza el formateo de datos comunes.
+
+Actualmente implementa:
+
+- Fechas
+
+Está preparado para incorporar nuevos formateadores sin modificar el resto del pipeline.
+
+No conoce el formato de salida (Markdown, HTML, PDF, etc.).
 
 ---
 
