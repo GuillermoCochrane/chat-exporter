@@ -6,7 +6,7 @@ export function normalizeMessages(messages) {
 
     role: message.role,
 
-    text: message.rawContent.parts.join("\n"),
+    text: message.rawContent.parts?.join("\n") ?? "",
 
     timestamp: message.createTime,
   }));
