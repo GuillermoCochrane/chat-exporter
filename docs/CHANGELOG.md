@@ -102,3 +102,11 @@ Además de los cambios entre versiones, este documento conserva las principales 
 - La consulta de versión no ejecuta el pipeline.
 
 ---
+
+## v0.5.8.3 - CLI Named Arguments
+
+- Incorporadas las opciones `-i` y `-o`.
+- Eliminada la dependencia del orden de los argumentos.
+- La configuración de ejecución pasa a construirse mediante acciones independientes sobre un objeto compartido.
+
+---

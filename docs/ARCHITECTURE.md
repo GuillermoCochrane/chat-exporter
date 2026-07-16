@@ -122,6 +122,10 @@ Actualmente implementa:
 - Valores por defecto.
 - Ayuda integrada (`-h`, `--help`).
 - Consulta de versión (`-v`, `--version`).
+- Selección del archivo de entrada (`-i`).
+- Selección del archivo de salida (`-o`).
+
+Las opciones se procesan mediante un registro de acciones (`cliActions`), lo que permite ampliar la interfaz agregando nuevas entradas sin modificar la lógica principal del parser.
 
 No conoce la lógica del pipeline.
 

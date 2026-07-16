@@ -254,6 +254,30 @@ La CLI permite consultar la versión instalada sin depender de documentación ex
 
 ---
 
+
+## E-010
+
+#### Objetivo
+
+Eliminar la dependencia del orden posicional de los argumentos de la CLI.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+* Se incorporaron las opciones `-i` y `-o`.
+* El orden de los argumentos deja de ser significativo.
+* La configuración se construye mediante acciones independientes sobre un mismo objeto.
+
+#### Conclusión
+
+La CLI pasa a comportarse como una interfaz declarativa basada en opciones, facilitando futuras ampliaciones.
+
+---
+
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -265,3 +289,4 @@ La CLI permite consultar la versión instalada sin depender de documentación ex
 - El formateo de bloques Markdown puede desacoplarse completamente del generador.
 - El pipeline completo funciona desde la carga del JSON hasta la escritura del archivo Markdown.
 - La versión del proyecto puede obtenerse desde una única fuente de verdad (`package.json`), evitando duplicación de información.
+- Las opciones nombradas (`-i`, `-o`) eliminan la dependencia del orden de los argumentos y facilitan la escalabilidad de la CLI.

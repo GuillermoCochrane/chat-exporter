@@ -99,3 +99,48 @@ npm start -- -v
 ✔ Se muestra la versión instalada.
 
 ---
+
+
+---
+
+### Entrada mediante opción
+
+**Comando**
+
+```bash
+node src/index.js -i input/epistolario_MINI.json
+```
+
+**Resultado**
+
+✔ Se utiliza el archivo indicado mediante `-i`.
+
+---
+
+### Entrada y salida mediante opciones
+
+**Comando**
+
+```bash
+node src/index.js -i input/epistolario_SMALL.json -o output/prueba.md
+```
+
+**Resultado**
+
+✔ Exportación correcta.
+
+---
+
+### Orden independiente de las opciones
+
+**Comando**
+
+```bash
+node src/index.js -o output/prueba.md -i input/epistolario_SMALL.json
+```
+
+**Resultado**
+
+✔ La exportación funciona independientemente del orden de las opciones.
+
+---

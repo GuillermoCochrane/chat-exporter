@@ -255,3 +255,28 @@ La CLI obtiene la versión directamente desde `package.json`, utilizando una ún
 #### Estado
 
 Aceptada.
+
+
+## ADR-0011
+
+#### Fecha
+
+2026-07-16
+
+#### Título
+
+Preferir opciones nombradas frente a argumentos posicionales.
+
+#### Motivación
+
+Los argumentos posicionales generan dependencia del orden y dificultan la incorporación de nuevas opciones.
+
+#### Consecuencia
+
+La CLI utiliza opciones explícitas (`-i`, `-o`) para construir la configuración de ejecución de forma independiente del orden en que aparecen.
+
+#### Estado
+
+Aceptada.
+
+---
