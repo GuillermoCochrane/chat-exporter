@@ -277,6 +277,27 @@ La CLI pasa a comportarse como una interfaz declarativa basada en opciones, faci
 
 ---
 
+### E-011
+
+#### Objetivo
+
+Separar la validación de argumentos de la lógica de la CLI.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se creó el módulo `validator`.
+- La validación ocurre antes de interpretar los argumentos.
+- La CLI deja de ser responsable de validar opciones desconocidas.
+
+#### Conclusión
+
+La validación de argumentos pasa a constituir una responsabilidad independiente, permitiendo ampliar las reglas sin modificar el módulo `cli`.
+
+---
 
 ## Descubrimientos
 
@@ -290,3 +311,4 @@ La CLI pasa a comportarse como una interfaz declarativa basada en opciones, faci
 - El pipeline completo funciona desde la carga del JSON hasta la escritura del archivo Markdown.
 - La versión del proyecto puede obtenerse desde una única fuente de verdad (`package.json`), evitando duplicación de información.
 - Las opciones nombradas (`-i`, `-o`) eliminan la dependencia del orden de los argumentos y facilitan la escalabilidad de la CLI.
+- La validación de argumentos puede evolucionar como un módulo independiente del parser de la CLI.

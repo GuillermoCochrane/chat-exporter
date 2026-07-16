@@ -280,3 +280,27 @@ La CLI utiliza opciones explícitas (`-i`, `-o`) para construir la configuració
 Aceptada.
 
 ---
+
+## ADR-0012
+
+#### Fecha
+
+2026-07-16
+
+#### Título
+
+Separar la validación de argumentos de la interpretación de la CLI.
+
+#### Motivación
+
+Interpretar argumentos y validar su validez son responsabilidades diferentes que evolucionan de forma independiente.
+
+#### Consecuencia
+
+La validación se delega al módulo `validator`, permitiendo incorporar nuevas reglas sin modificar la implementación de `cli`.
+
+#### Estado
+
+Aceptada.
+
+---

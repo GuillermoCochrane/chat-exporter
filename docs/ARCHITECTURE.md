@@ -33,6 +33,8 @@ markdown.js
 ↓
 writer.js
 ↓
+validator.js
+↓
 cli.js
 ↓
 index.js
@@ -114,7 +116,7 @@ No interpreta contenido.
 
 ### cli.js
 
-Centraliza la interacción con la línea de comandos.
+Interpreta las opciones de la línea de comandos y construye la configuración de ejecución.
 
 Actualmente implementa:
 
@@ -122,12 +124,28 @@ Actualmente implementa:
 - Valores por defecto.
 - Ayuda integrada (`-h`, `--help`).
 - Consulta de versión (`-v`, `--version`).
-- Selección del archivo de entrada (`-i`).
-- Selección del archivo de salida (`-o`).
+- Selección del archivo de entrada (`-i`, `--input`).
+- Selección del archivo de salida (`-o`, `--output`).
 
-Las opciones se procesan mediante un registro de acciones (`cliActions`), lo que permite ampliar la interfaz agregando nuevas entradas sin modificar la lógica principal del parser.
+Las opciones se procesan mediante un registro de acciones (`cliActions`), permitiendo ampliar la interfaz agregando nuevas entradas sin modificar la lógica principal.
+
+La validación de argumentos se delega completamente al módulo `validator`.
 
 No conoce la lógica del pipeline.
+
+---
+
+### validator.js
+
+Centraliza las validaciones de la interfaz de línea de comandos.
+
+Actualmente implementa:
+
+- Validación de opciones desconocidas.
+
+Está preparado para incorporar nuevas reglas de validación sin modificar `cli.js`.
+
+No interpreta argumentos ni conoce la lógica del pipeline.
 
 ---
 

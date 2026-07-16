@@ -110,3 +110,12 @@ Además de los cambios entre versiones, este documento conserva las principales 
 - La configuración de ejecución pasa a construirse mediante acciones independientes sobre un objeto compartido.
 
 ---
+
+## v0.5.9.0 - CLI Validator
+
+- Creado el módulo `validator.js`.
+- La validación de argumentos se desacopla de `cli.js`.
+- Primera regla implementada: detección de opciones desconocidas.
+- `index.js` incorpora manejo centralizado de errores mediante `try/catch`, mostrando mensajes amigables al usuario.
+
+---

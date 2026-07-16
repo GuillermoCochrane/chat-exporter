@@ -144,3 +144,31 @@ node src/index.js -o output/prueba.md -i input/epistolario_SMALL.json
 ✔ La exportación funciona independientemente del orden de las opciones.
 
 ---
+
+## v0.5.9.0
+
+### Opción desconocida
+
+**Comando**
+
+```bash
+node src/index.js -x
+```
+
+**Resultado**
+
+✔ Se informa que la opción no existe.
+
+---
+
+### Opción desconocida combinada con opciones válidas
+
+**Comando**
+
+```bash
+node src/index.js -i input.json -x
+```
+
+**Resultado**
+
+✔ La validación detecta la opción inválida antes de ejecutar el pipeline.
