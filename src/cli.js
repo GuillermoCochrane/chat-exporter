@@ -1,6 +1,8 @@
-function showHelp() {
-  console.log(`
-Chat Exporter v0.5.8
+import packageJson from "../package.json" with { type: "json" };
+
+const cliMessages = {
+  help: `
+Chat Exporter v${packageJson.version}
 
 Uso:
 
@@ -18,16 +20,27 @@ Opciones:
 
   -h, --help       Muestra esta ayuda.
   -v, --version    Muestra la versión.
-`);
+`,
+  version: `Chat Exporter v${packageJson.version}`,
+};
+
+function showMessage(type) {
+  console.log(cliMessages[type]);
+  process.exit(0);
 }
+
+const cliActions = {
+  "-h": () => showMessage("help"),
+  "--help": () => showMessage("help"),
+  "-v": () => showMessage("version"),
+  "--version": () => showMessage("version"),
+};
 
 export function parseArguments() {
   const args = process.argv.slice(2);
 
-  if (args.includes("-h") || args.includes("--help")) {
-    showHelp();
-    process.exit(0);
-  }
+  const action = cliActions[args[0]];
+  if (action) action();
 
   return {
     input: args[0] ?? "./input/epistolario_SMALL.json",
