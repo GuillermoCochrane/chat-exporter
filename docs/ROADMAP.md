@@ -53,8 +53,9 @@ Writer
 
 ## Próximos pasos
 
-1. Añadir tests.
-2. Publicar v1.0.
+1. Nuevas funcionalidades CLI
+2. Añadir tests.
+3. Publicar v1.0.
 
 ---
 

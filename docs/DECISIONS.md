@@ -181,3 +181,38 @@ El módulo `cli` centraliza la lectura de argumentos y permite reutilizar el mis
 #### Estado
 
 Aceptada.
+
+---
+#### ADR-0008
+
+**Título**
+
+Versionado de desarrollo previo a la versión 1.0.
+
+**Motivación**
+
+Durante el desarrollo se realizan iteraciones pequeñas dentro de un mismo módulo que no justifican un nuevo hito funcional.
+
+**Consecuencia**
+
+Hasta la versión 1.0 el proyecto utiliza un cuarto componente de versión para identificar iteraciones pequeñas dentro de un mismo módulo.
+
+A partir de la versión 1.0 se adoptará Semantic Versioning (MAJOR.MINOR.PATCH).
+
+---
+
+#### ADR-0009
+
+**Título**
+
+CLI autoexplicativo.
+
+**Motivación**
+
+El usuario debe poder conocer el uso del programa sin consultar documentación externa.
+
+**Consecuencia**
+
+El módulo `cli` incorpora comandos de ayuda (`-h` y `--help`) desacoplados del pipeline.
+
+---

@@ -1,5 +1,11 @@
 # Changelog
 
+## Registro cronológico de la evolución del proyecto.
+
+Además de los cambios entre versiones, este documento conserva las principales decisiones de implementación para facilitar reconstruir el camino de desarrollo del proyecto.
+
+---
+
 ## v0.5.0 - Inicialización
 
 - Estructura inicial del proyecto.
@@ -70,9 +76,21 @@
 - Pipeline completo funcional (JSON → Markdown → Archivo).
 - Validación realizada con conversaciones MINI, SMALL y ORIGINAL.
 
+---
+
 ## v0.5.8 - CLI
 
 - Implementado `cli.js`.
 - Soporte para indicar archivo de entrada desde la consola.
 - Soporte para indicar archivo de salida desde la consola.
 - `index.js` deja de depender de rutas fijas.
+
+---
+
+## v0.5.8.1 - CLI Help
+
+- Soporte para `-h` y `--help`.
+- La ayuda muestra ejemplos de uso y opciones disponibles.
+- La ayuda no ejecuta el pipeline.
+
+---

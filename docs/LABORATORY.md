@@ -210,6 +210,28 @@ El módulo `cli` desacopla la configuración de ejecución del resto del pipelin
 
 ---
 
+### E-008
+
+#### Objetivo
+
+Implementar ayuda integrada para la interfaz de línea de comandos.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+* Se incorporó soporte para `-h` y `--help`.
+* La ayuda no ejecuta el pipeline.
+* Se muestra el uso esperado y ejemplos de ejecución.
+
+#### Conclusión
+
+La interfaz de línea de comandos resulta autoexplicativa sin afectar la lógica del exportador.
+
+---
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
