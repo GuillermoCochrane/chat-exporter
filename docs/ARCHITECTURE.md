@@ -141,11 +141,12 @@ Centraliza las validaciones de la interfaz de línea de comandos.
 
 Actualmente implementa:
 
-- Validación de opciones desconocidas.
+- Validación de opciones soportadas.
+- Validación de argumentos obligatorios.
 
-Está preparado para incorporar nuevas reglas de validación sin modificar `cli.js`.
+Las reglas utilizan la definición de cada acción (`consumes`) para evitar duplicación de información.
 
-No interpreta argumentos ni conoce la lógica del pipeline.
+Está preparado para incorporar nuevas validaciones sin modificar `cli.js`.
 
 ---
 

@@ -119,3 +119,11 @@ Además de los cambios entre versiones, este documento conserva las principales 
 - `index.js` incorpora manejo centralizado de errores mediante `try/catch`, mostrando mensajes amigables al usuario.
 
 ---
+
+## v0.5.9.1 - CLI Required Arguments
+
+- Incorporada la validación de opciones que requieren argumentos.
+- La validación utiliza la propiedad `consumes` definida en `cliActions`.
+- Los mensajes de validación quedaron centralizados mediante `validatorMessages`.
+
+---

@@ -172,3 +172,36 @@ node src/index.js -i input.json -x
 **Resultado**
 
 ✔ La validación detecta la opción inválida antes de ejecutar el pipeline.
+
+---
+
+## v0.5.9.1
+
+### Parámetro obligatorio (`-i`)
+
+**Comando**
+
+```bash
+node src/index.js -i
+````
+
+**Resultado**
+
+✔ Se informa que la opción requiere un valor.
+
+---
+
+### Parámetro obligatorio (`--input`)
+
+**Comando**
+
+```bash
+node src/index.js --input
+```
+
+**Resultado**
+
+✔ Se informa que la opción requiere un valor.
+
+
+---

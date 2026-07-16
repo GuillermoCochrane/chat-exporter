@@ -304,3 +304,27 @@ La validación se delega al módulo `validator`, permitiendo incorporar nuevas r
 Aceptada.
 
 ---
+
+## ADR-0012
+
+#### Fecha
+
+2026-07-16
+
+#### Título
+
+Separar la validación de la interpretación de argumentos.
+
+#### Motivación
+
+Interpretar opciones y validar su consistencia son responsabilidades distintas.
+
+#### Consecuencia
+
+El módulo `validator` incorpora reglas de validación reutilizables apoyándose en la definición de cada acción de la CLI.
+
+#### Estado
+
+Aceptada.
+
+---

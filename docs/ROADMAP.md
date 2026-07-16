@@ -8,7 +8,7 @@ Convertir conversaciones exportadas desde ChatGPT a Markdown limpio y reutilizab
 
 ## Estado actual
 
-### Versión: 0.5.9.0
+### Versión: 0.5.9.1
 
 **Estado**:
 
@@ -53,7 +53,7 @@ Writer
 
 ## Próximos pasos
 
-1. Ampliar el módulo `validator`.
+1. Incorporar nuevas reglas al módulo `validator`.
 2. Añadir tests.
 3. Publicar v1.0.
 

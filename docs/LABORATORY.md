@@ -299,6 +299,30 @@ La validación de argumentos pasa a constituir una responsabilidad independiente
 
 ---
 
+## E-011
+
+#### Objetivo
+
+Validar que las opciones que consumen argumentos reciban un valor.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- La validación utiliza la propiedad `consumes` definida en cada acción de la CLI.
+- La regla funciona para cualquier opción registrada que requiera argumentos.
+- Los mensajes de error quedaron centralizados mediante `validatorMessages`.
+
+#### Conclusión
+
+La validación deja de depender de opciones específicas y pasa a utilizar la definición declarativa de cada acción.
+
+
+---
+
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -312,3 +336,4 @@ La validación de argumentos pasa a constituir una responsabilidad independiente
 - La versión del proyecto puede obtenerse desde una única fuente de verdad (`package.json`), evitando duplicación de información.
 - Las opciones nombradas (`-i`, `-o`) eliminan la dependencia del orden de los argumentos y facilitan la escalabilidad de la CLI.
 - La validación de argumentos puede evolucionar como un módulo independiente del parser de la CLI.
+- La propiedad `consumes` puede utilizarse como única fuente de verdad para validar opciones que requieren argumentos.
