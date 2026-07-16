@@ -1,4 +1,5 @@
 import packageJson from "../package.json" with { type: "json" };
+import { validateArguments } from "./validator.js";
 
 const defaultConfig = {
   input: "./input/epistolario_SMALL.json",
@@ -88,6 +89,8 @@ const cliActions = {
 
 export function parseArguments() {
   const args = process.argv.slice(2);
+
+  validateArguments(args, cliActions);
 
   // Se crea una copia para evitar modificar la configuración por defecto.
   const config = { ...defaultConfig };
