@@ -69,3 +69,33 @@ node src/index.js input/epistolario_SMALL.json output/prueba.md
 **Resultado**
 
 ✔ Exportación correcta.
+
+---
+
+### Versión larga
+
+**Comando**
+
+```bash
+npm start -- --version
+```
+
+**Resultado**
+
+✔ Se muestra la versión instalada.
+
+---
+
+### Versión corta
+
+**Comando**
+
+```bash
+npm start -- -v
+```
+
+**Resultado**
+
+✔ Se muestra la versión instalada.
+
+---

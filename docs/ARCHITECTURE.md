@@ -114,7 +114,14 @@ No interpreta contenido.
 
 ### cli.js
 
-Obtiene y valida los argumentos de la línea de comandos.
+Centraliza la interacción con la línea de comandos.
+
+Actualmente implementa:
+
+- Lectura de argumentos.
+- Valores por defecto.
+- Ayuda integrada (`-h`, `--help`).
+- Consulta de versión (`-v`, `--version`).
 
 No conoce la lógica del pipeline.
 

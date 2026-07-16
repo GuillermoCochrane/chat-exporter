@@ -94,3 +94,11 @@ Además de los cambios entre versiones, este documento conserva las principales 
 - La ayuda no ejecuta el pipeline.
 
 ---
+
+## v0.5.8.2 - CLI Version
+
+- Soporte para `-v` y `--version`.
+- La versión se obtiene dinámamente desde `package.json`.
+- La consulta de versión no ejecuta el pipeline.
+
+---

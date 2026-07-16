@@ -232,6 +232,28 @@ La interfaz de línea de comandos resulta autoexplicativa sin afectar la lógica
 
 ---
 
+### E-009
+
+#### Objetivo
+
+Incorporar consulta de versión integrada para la interfaz de línea de comandos.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+* Se incorporó soporte para `-v` y `--version`.
+* La versión se obtiene directamente desde `package.json`.
+* La consulta no ejecuta el pipeline.
+
+#### Conclusión
+
+La CLI permite consultar la versión instalada sin depender de documentación externa.
+
+---
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -242,3 +264,4 @@ La interfaz de línea de comandos resulta autoexplicativa sin afectar la lógica
 - El formateo puede desacoplarse completamente de la lógica de negocio.
 - El formateo de bloques Markdown puede desacoplarse completamente del generador.
 - El pipeline completo funciona desde la carga del JSON hasta la escritura del archivo Markdown.
+- La versión del proyecto puede obtenerse desde una única fuente de verdad (`package.json`), evitando duplicación de información.

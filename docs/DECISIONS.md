@@ -183,36 +183,75 @@ El módulo `cli` centraliza la lectura de argumentos y permite reutilizar el mis
 Aceptada.
 
 ---
-#### ADR-0008
 
-**Título**
+## ADR-0008
+
+#### Fecha
+
+2026-07-15
+
+#### Título
 
 Versionado de desarrollo previo a la versión 1.0.
 
-**Motivación**
+#### Motivación
 
 Durante el desarrollo se realizan iteraciones pequeñas dentro de un mismo módulo que no justifican un nuevo hito funcional.
 
-**Consecuencia**
+#### Consecuencia
 
 Hasta la versión 1.0 el proyecto utiliza un cuarto componente de versión para identificar iteraciones pequeñas dentro de un mismo módulo.
 
 A partir de la versión 1.0 se adoptará Semantic Versioning (MAJOR.MINOR.PATCH).
 
+#### Estado
+
+Aceptada.
+
 ---
 
-#### ADR-0009
+## ADR-0009
 
-**Título**
+#### Fecha
+
+2026-07-15
+
+#### Título
 
 CLI autoexplicativo.
 
-**Motivación**
+#### Motivación
 
 El usuario debe poder conocer el uso del programa sin consultar documentación externa.
 
-**Consecuencia**
+#### Consecuencia
 
-El módulo `cli` incorpora comandos de ayuda (`-h` y `--help`) desacoplados del pipeline.
+El módulo `cli` incorpora comandos de ayuda (`-h`, `--help`) y consulta de versión (`-v`, `--version`) desacoplados del pipeline.
+
+#### Estado
+
+Aceptada.
 
 ---
+
+## ADR-0010
+
+#### Fecha
+
+2026-07-15
+
+#### Título
+
+Centralizar la versión del proyecto.
+
+#### Motivación
+
+Evitar mantener el número de versión duplicado entre el código y la documentación.
+
+#### Consecuencia
+
+La CLI obtiene la versión directamente desde `package.json`, utilizando una única fuente de verdad.
+
+#### Estado
+
+Aceptada.
