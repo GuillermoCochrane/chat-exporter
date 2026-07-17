@@ -38,29 +38,35 @@ function showMessage(type) {
 }
 
 // Registro de acciones disponibles para la CLI.
-// Cada acción declara cuántos argumentos consume y cómo actualiza la configuración.
+// Cada acción declara el grupo al que pertenece, cuántos argumentos consume
+// y cómo actualiza la configuración.
 const cliActions = {
   "-h": {
+    group: "help",
     consumes: 0,
     handler: () => showMessage("help"),
   },
 
   "--help": {
+    group: "help",
     consumes: 0,
     handler: () => showMessage("help"),
   },
 
   "-v": {
+    group: "version",
     consumes: 0,
     handler: () => showMessage("version"),
   },
 
   "--version": {
+    group: "version",
     consumes: 0,
     handler: () => showMessage("version"),
   },
 
   "-i": {
+    group: "input",
     consumes: 1,
     handler: (value, config) => {
       config.input = value;
@@ -68,6 +74,7 @@ const cliActions = {
   },
 
   "--input": {
+    group: "input",
     consumes: 1,
     handler: (value, config) => {
       config.input = value;
@@ -75,6 +82,7 @@ const cliActions = {
   },
 
   "-o": {
+    group: "output",
     consumes: 1,
     handler: (value, config) => {
       config.output = value;
@@ -82,6 +90,7 @@ const cliActions = {
   },
 
   "--output": {
+    group: "output",
     consumes: 1,
     handler: (value, config) => {
       config.output = value;
