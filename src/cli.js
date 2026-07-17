@@ -37,6 +37,8 @@ function showMessage(type) {
   process.exit(0);
 }
 
+// Registro de acciones disponibles para la CLI.
+// Cada acción declara cuántos argumentos consume y cómo actualiza la configuración.
 const cliActions = {
   "-h": {
     consumes: 0,
