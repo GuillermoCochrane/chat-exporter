@@ -370,3 +370,49 @@ El módulo `validator` incorpora validaciones sobre el sistema de archivos, evit
 Aceptada.
 
 ---
+
+## ADR-0015
+
+#### Fecha
+
+2026-07-17
+
+#### Título
+
+Permitir la ejecución parcial del pipeline.
+
+#### Motivación
+
+Durante el desarrollo resulta útil inspeccionar el estado de una conversación sin ejecutar las etapas posteriores del pipeline.
+
+#### Consecuencia
+
+La CLI incorpora el modo `--inspect`, permitiendo finalizar la ejecución luego del Inspector sin generar el documento Markdown.
+
+#### Estado
+
+Aceptada.
+
+---
+
+## ADR-0016
+
+#### Fecha
+
+2026-07-17
+
+#### Título
+
+Desacoplar las pruebas manuales de su ejecutor.
+
+#### Motivación
+
+Las baterías de pruebas evolucionan de forma independiente del mecanismo que las ejecuta.
+
+#### Consecuencia
+
+Los casos de prueba se almacenan en archivos independientes consumidos por un runner genérico reutilizable.
+
+#### Estado
+
+Aceptada.

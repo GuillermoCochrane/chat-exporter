@@ -127,6 +127,7 @@ Actualmente implementa:
 - Selección del archivo de entrada (`-i`, `--input`).
 - Selección del archivo de salida (`-o`, `--output`).
 - Cada acción declara el grupo lógico al que pertenece, permitiendo tratar como equivalentes las opciones cortas y largas.
+- Modo inspección (`-in`, `--inspect`).
 
 Las opciones se procesan mediante un registro de acciones (`cliActions`), permitiendo ampliar la interfaz agregando nuevas entradas sin modificar la lógica principal.
 
@@ -157,6 +158,8 @@ No conoce la lógica del pipeline.
 
 ### index.js
 
-Coordina todo el flujo.
+Coordina la ejecución del pipeline.
+
+Decide qué etapas ejecutar según la configuración recibida desde la CLI.
 
 No contiene lógica de negocio.

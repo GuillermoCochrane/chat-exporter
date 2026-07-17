@@ -409,6 +409,28 @@ El módulo `validator` incorpora validaciones sobre el sistema de archivos sin a
 
 ---
 
+## E-015
+
+#### Objetivo
+
+Permitir inspeccionar conversaciones sin ejecutar el pipeline completo.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se incorporó la opción `--inspect` (`-in`).
+- El pipeline puede finalizar luego del Inspector.
+- No se genera ningún archivo de salida.
+
+#### Conclusión
+
+El Inspector pasa a ser una etapa reutilizable e independiente del proceso de exportación.
+
+---
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -427,3 +449,5 @@ El módulo `validator` incorpora validaciones sobre el sistema de archivos sin a
 - La validación de extensiones puede reutilizar una única regla parametrizada para distintos tipos de archivo.
 - Las opciones equivalentes pueden agruparse mediante una propiedad declarativa (group), permitiendo validar alias sin depender de sus nombres.
 - La existencia de archivos y directorios puede validarse mediante una única función reutilizable.
+- El pipeline puede finalizar anticipadamente en distintas etapas sin afectar el desacoplamiento entre módulos.
+- Las pruebas manuales también pueden organizarse mediante un patrón datos + ejecutor, reutilizando un único runner para distintas baterías de pruebas.

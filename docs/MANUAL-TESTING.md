@@ -489,4 +489,60 @@ node src/index.js -i input/epistolario_SMALL.json -o out/prueba.md
 
 ✔ Se informa que el directorio no existe.
 
+## v0.5.9.6
+
+### Inspect
+
+**Comando**
+
+```bash
+node src/index.js --inspect
+```
+
+**Resultado**
+
+✔ Se muestran las estadísticas de la conversación sin generar el archivo Markdown.
+
 ---
+
+### Inspect corto
+
+**Comando**
+
+```bash
+node src/index.js -in
+```
+
+**Resultado**
+
+✔ Se muestran las estadísticas de la conversación sin generar el archivo Markdown.
+
+---
+
+### Inspect con archivo personalizado
+
+**Comando**
+
+```bash
+node src/index.js --inspect -i input/epistolario_MINI.json
+```
+
+**Resultado**
+
+✔ Se muestran las estadísticas correspondientes al archivo indicado.
+
+---
+
+### Opción repetida
+
+**Comando**
+
+```bash
+node src/index.js --inspect --inspect
+```
+
+**Resultado**
+
+✔ Se informa que la opción `--inspect` no puede repetirse.
+
+```

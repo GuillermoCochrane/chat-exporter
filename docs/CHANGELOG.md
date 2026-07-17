@@ -164,3 +164,13 @@ Además de los cambios entre versiones, este documento conserva las principales 
 - Nuevo mensaje de validación `pathNotFound`.
 
 ---
+
+## v0.5.9.6 - CLI Inspect
+
+- Incorporado el modo `--inspect` (`-in`).
+- El pipeline puede detenerse luego del Inspector.
+- Se muestran estadísticas de la conversación sin generar Markdown.
+- Incorporado un runner reutilizable para pruebas manuales.
+- Las baterías de pruebas quedan desacopladas del ejecutor mediante archivos independientes.
+
+---
