@@ -9,7 +9,7 @@ import { parseArguments } from "./cli.js";
 
 async function main() {
   try {
-    const { input, output, inspect } = parseArguments();
+    const { input, output, inspect, noWrite } = parseArguments();
 
     const conversation = await loadConversation(input);
 
@@ -25,6 +25,11 @@ async function main() {
     const normalized = normalizeMessages(filtered);
 
     const markdown = buildMarkdown(normalized);
+
+    if (noWrite) {
+      console.log("✔ Conversación procesada (modo --no-write).");
+      return;
+    }
 
     await writeFileContent(output, markdown);
 

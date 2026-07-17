@@ -32,6 +32,7 @@ Opciones:
   -i, --input        Archivo de entrada.
   -o, --output       Archivo de salida.
   -in, --inspect     Ls gajes deMuestra estadísticas de la conversación sin exportar.
+  -nw, --no-write     Ejecuta todo el pipeline sin escribir el archivo.
 `,
   version: `Chat Exporter v${packageJson.version}`,
 };
@@ -114,6 +115,22 @@ const cliActions = {
       consumes: 0,
       handler: (_, config) => {
         config.inspect = true;
+      },
+    },
+
+    "--no-write": {
+      group: "noWrite",
+      consumes: 0,
+      handler: (_, config) => {
+        config.noWrite = true;
+      },
+    },
+
+    "-nw": {
+      group: "noWrite",
+      consumes: 0,
+      handler: (_, config) => {
+        config.noWrite = true;
       },
     },
 };
