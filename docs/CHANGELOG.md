@@ -127,3 +127,13 @@ Además de los cambios entre versiones, este documento conserva las principales 
 - Los mensajes de validación quedaron centralizados mediante `validatorMessages`.
 
 ---
+
+## v0.5.9.2 - CLI Argument Validation
+
+- Validación de parámetros reemplazados por otras opciones.
+- `-i -o` informa correctamente que `-i` requiere un valor.
+- `-o -i` informa correctamente que `-o` requiere un valor.
+- Centralización de mensajes de validación mediante `validatorMessages`.
+
+---
+

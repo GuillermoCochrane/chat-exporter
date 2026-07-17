@@ -299,7 +299,7 @@ La validación de argumentos pasa a constituir una responsabilidad independiente
 
 ---
 
-## E-011
+## E-012
 
 #### Objetivo
 
@@ -319,8 +319,27 @@ Validar que las opciones que consumen argumentos reciban un valor.
 
 La validación deja de depender de opciones específicas y pasa a utilizar la definición declarativa de cada acción.
 
-
 ---
+
+## E-013
+
+#### Objetivo
+
+Validar que el parámetro requerido por una opción no pueda ser reemplazado por otra opción.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+* Las opciones que consumen parámetros (`-i`, `-o`) verifican que el argumento siguiente no sea otra opción.
+* La validación reutiliza el registro de acciones (`cliActions`) para conocer cuántos parámetros consume cada opción.
+* Los mensajes de error quedan centralizados mediante `validatorMessages`.
+
+#### Conclusión
+
+La CLI detecta parámetros ausentes incluso cuando el siguiente argumento corresponde a otra opción válida.
 
 
 ## Descubrimientos
@@ -337,3 +356,4 @@ La validación deja de depender de opciones específicas y pasa a utilizar la de
 - Las opciones nombradas (`-i`, `-o`) eliminan la dependencia del orden de los argumentos y facilitan la escalabilidad de la CLI.
 - La validación de argumentos puede evolucionar como un módulo independiente del parser de la CLI.
 - La propiedad `consumes` puede utilizarse como única fuente de verdad para validar opciones que requieren argumentos.
+- Un parámetro obligatorio no puede ser reemplazado por otra opción de la CLI.

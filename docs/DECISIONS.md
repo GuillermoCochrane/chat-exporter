@@ -305,7 +305,7 @@ Aceptada.
 
 ---
 
-## ADR-0012
+## ADR-0013
 
 #### Fecha
 
@@ -328,3 +328,25 @@ El módulo `validator` incorpora reglas de validación reutilizables apoyándose
 Aceptada.
 
 ---
+
+## ADR-0014
+
+#### Fecha
+
+2026-07-17
+
+#### Título
+
+Validar parámetros antes de ejecutar acciones.
+
+#### Motivación
+
+Las opciones que consumen argumentos no deben interpretar otra opción como si fuera un valor válido.
+
+#### Consecuencia
+
+El validador verifica la estructura completa de los argumentos antes de que la CLI construya la configuración de ejecución.
+
+#### Estado
+
+Aceptada.

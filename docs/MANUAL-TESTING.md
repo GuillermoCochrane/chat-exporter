@@ -203,5 +203,46 @@ node src/index.js --input
 
 ✔ Se informa que la opción requiere un valor.
 
+---
+
+### Opción seguida por otra opción
+
+**Comando**
+
+```bash
+node src/index.js -i -o output.md
+```
+
+**Resultado**
+
+✔ Se informa que `-i` requiere un valor.
+
+---
+
+### Salida seguida por otra opción
+
+**Comando**
+
+```bash
+node src/index.js -o -i input.json
+```
+
+**Resultado**
+
+✔ Se informa que `-o` requiere un valor.
+
+---
+
+### Valor reemplazado por otra opción existente
+
+**Comando**
+
+```bash
+node src/index.js -i --version
+```
+
+**Resultado**
+
+✔ Se informa que `-i` requiere un valor.
 
 ---
