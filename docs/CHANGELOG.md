@@ -174,3 +174,13 @@ Además de los cambios entre versiones, este documento conserva las principales 
 - Las baterías de pruebas quedan desacopladas del ejecutor mediante archivos independientes.
 
 ---
+
+## v0.5.9.7 - CLI No Write
+
+- Incorporado el modo `--no-write` (`-nw`).
+- El pipeline ejecuta todas las etapas excepto la escritura del archivo.
+- El documento Markdown se genera completamente en memoria.
+- El modo resulta útil para validar el pipeline completo sin modificar el sistema de archivos.
+
+---
+

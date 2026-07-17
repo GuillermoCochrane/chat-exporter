@@ -416,3 +416,30 @@ Los casos de prueba se almacenan en archivos independientes consumidos por un ru
 #### Estado
 
 Aceptada.
+
+---
+
+## ADR-0017
+
+#### Fecha
+
+2026-07-17
+
+#### Título
+
+Permitir ejecutar el pipeline sin escribir archivos.
+
+#### Motivación
+
+Durante el desarrollo resulta útil validar el funcionamiento completo del pipeline sin generar archivos en disco.
+
+#### Consecuencia
+
+La CLI incorpora el modo `--no-write`, permitiendo ejecutar todas las etapas del pipeline excepto la escritura del archivo final.
+
+#### Estado
+
+Aceptada.
+
+---
+

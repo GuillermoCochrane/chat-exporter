@@ -545,4 +545,75 @@ node src/index.js --inspect --inspect
 
 ✔ Se informa que la opción `--inspect` no puede repetirse.
 
+
+---
+
+## v0.5.9.7
+
+### No Write
+
+**Comando**
+
+```bash
+node src/index.js --no-write
 ```
+
+**Resultado**
+
+✔ Se ejecuta el pipeline completo sin escribir el archivo de salida.
+
+---
+
+### No Write corto
+
+**Comando**
+
+```bash
+node src/index.js -nw
+```
+
+**Resultado**
+
+✔ Se ejecuta el pipeline completo sin escribir el archivo de salida.
+
+---
+
+### No Write con archivo personalizado
+
+**Comando**
+
+```bash
+node src/index.js --no-write -i input/epistolario_MINI.json
+```
+
+**Resultado**
+
+✔ El pipeline procesa el archivo indicado sin generar salida en disco.
+
+---
+
+### Opción repetida
+
+**Comando**
+
+```bash
+node src/index.js --no-write --no-write
+```
+
+**Resultado**
+
+✔ Se informa que la opción `--no-write` no puede repetirse.
+
+---
+
+### No Write junto a Inspect
+
+**Comando**
+
+```bash
+node src/index.js --inspect --no-write
+```
+
+**Resultado**
+
+✔ El modo `--inspect` tiene prioridad y finaliza la ejecución luego del Inspector.

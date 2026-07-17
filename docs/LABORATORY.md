@@ -431,6 +431,28 @@ El Inspector pasa a ser una etapa reutilizable e independiente del proceso de ex
 
 ---
 
+## E-016
+
+#### Objetivo
+
+Ejecutar el pipeline completo sin escribir archivos.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- El Markdown se genera completamente.
+- El Writer no se ejecuta.
+- La validación permite comprobar el pipeline completo sin modificar el sistema de archivos.
+
+#### Conclusión
+
+El Writer deja de ser obligatorio para validar el procesamiento de una conversación.
+
+---
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -451,3 +473,5 @@ El Inspector pasa a ser una etapa reutilizable e independiente del proceso de ex
 - La existencia de archivos y directorios puede validarse mediante una única función reutilizable.
 - El pipeline puede finalizar anticipadamente en distintas etapas sin afectar el desacoplamiento entre módulos.
 - Las pruebas manuales también pueden organizarse mediante un patrón datos + ejecutor, reutilizando un único runner para distintas baterías de pruebas.
+- La ejecución del pipeline puede finalizar en distintas etapas sin romper el desacoplamiento entre módulos.
+- La generación del documento y su persistencia pueden validarse de forma independiente.
