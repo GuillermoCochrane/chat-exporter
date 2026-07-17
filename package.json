@@ -8,7 +8,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "manualtest": "bash ./run-manual-tests.sh ./test/test-cases-inspect.sh"
+    "manualtest": "bash ./run-manual-tests.sh ./test/test-cases-nowrite.sh"
   },
   "engines": {
     "node": ">=20"
