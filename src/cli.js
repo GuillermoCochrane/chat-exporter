@@ -4,6 +4,9 @@ import { validateArguments } from "./validator.js";
 const defaultConfig = {
   input: "./input/epistolario_SMALL.json",
   output: "./output/conversacion.md",
+
+  inspect: false,
+  noWrite: false,
 };
 
 const cliMessages = {
@@ -28,6 +31,7 @@ Opciones:
   -v, --version      Muestra la versión.
   -i, --input        Archivo de entrada.
   -o, --output       Archivo de salida.
+  -in, --inspect     Ls gajes deMuestra estadísticas de la conversación sin exportar.
 `,
   version: `Chat Exporter v${packageJson.version}`,
 };
@@ -96,6 +100,22 @@ const cliActions = {
       config.output = value;
     },
   },
+
+    "--inspect": {
+      group: "inspect",
+      consumes: 0,
+      handler: (_, config) => {
+        config.inspect = true;
+      },
+    },
+
+    "-in": {
+      group: "inspect",
+      consumes: 0,
+      handler: (_, config) => {
+        config.inspect = true;
+      },
+    },
 };
 
 export function parseArguments() {

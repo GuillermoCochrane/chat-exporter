@@ -7,13 +7,18 @@ import { buildMarkdown } from "./markdown.js";
 import { writeFileContent } from "./writer.js";
 import { parseArguments } from "./cli.js";
 
-
 async function main() {
   try {
-    const { input, output } = parseArguments();
+    const { input, output, inspect } = parseArguments();
+
     const conversation = await loadConversation(input);
 
-    inspectConversation(conversation);
+    const report  = inspectConversation(conversation);
+
+    if (inspect) {
+      console.table(report);
+      return;
+    }
 
     const parsed = extractMessages(conversation);
     const filtered = filterConversationMessages(parsed);
@@ -24,7 +29,6 @@ async function main() {
     await writeFileContent(output, markdown);
 
     console.log(`✔ Conversación exportada a ${output}`);
-
   } catch (error) {
     console.error(`✖ ${error.message}`);
     process.exit(1);
