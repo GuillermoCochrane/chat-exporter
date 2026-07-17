@@ -419,4 +419,74 @@ node src/index.js -i input/epistolario_SMALL.json -o output/prueba.md
 
 ---
 
+## v0.5.9.5
 
+### Archivo de entrada existente
+
+**Comando**
+
+```bash
+node src/index.js -i input/epistolario_SMALL.json
+```
+
+**Resultado**
+
+✔ La conversación se exporta correctamente.
+
+---
+
+### Archivo de entrada inexistente
+
+**Comando**
+
+```bash
+node src/index.js -i input/no-existe.json
+```
+
+**Resultado**
+
+✔ Se informa que el archivo no existe.
+
+---
+
+### Archivo inexistente con salida válida
+
+**Comando**
+
+```bash
+node src/index.js -i input/no-existe.json -o output/prueba.md
+```
+
+**Resultado**
+
+✔ Se informa que el archivo no existe.
+
+---
+
+### Archivo con extensión inválida
+
+**Comando**
+
+```bash
+node src/index.js -i input/chat.txt
+```
+
+**Resultado**
+
+✔ Se informa que el archivo de entrada debe tener extensión `.json`.
+
+---
+
+### Directorio de salida inexistente
+
+**Comando**
+
+```bash
+node src/index.js -i input/epistolario_SMALL.json -o out/prueba.md
+```
+
+**Resultado**
+
+✔ Se informa que el directorio no existe.
+
+---

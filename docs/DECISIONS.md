@@ -323,18 +323,50 @@ Aceptada.
 ---
 
 
-## ADR-0015
+## ADR-0014
 
-**Título**
+#### Fecha
+
+2026-07-17
+
+####  Título
 
 Agrupar opciones equivalentes mediante un identificador común.
 
-**Motivación**
+#### Motivación
 
 Las opciones cortas y largas representan la misma acción y deben validarse como una única entidad lógica.
 
-**Consecuencia**
+#### Consecuencia
 
 Cada acción declara un `group`, permitiendo que las reglas de validación trabajen sobre conceptos (`input`, `output`, etc.) en lugar de nombres concretos (`-i`, `--input`).
+
+#### Estado
+
+Aceptada.
+
+---
+
+## ADR-0015
+
+#### Fecha
+
+2026-07-17
+
+#### Título
+
+Validar recursos del sistema de archivos antes de ejecutar el pipeline.
+
+#### Motivación
+
+Los errores producidos por archivos o directorios inexistentes deben detectarse antes de iniciar la ejecución del pipeline.
+
+#### Consecuencia
+
+El módulo `validator` incorpora validaciones sobre el sistema de archivos, evitando delegar esos errores al `loader` o al `writer`.
+
+#### Estado
+
+Aceptada.
 
 ---

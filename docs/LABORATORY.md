@@ -387,6 +387,28 @@ La validación deja de depender del nombre de la opción y pasa a operar sobre e
 
 ---
 
+### E-015
+
+#### Objetivo
+
+Validar la existencia de archivos y directorios antes de ejecutar el pipeline.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- El archivo de entrada debe existir antes de iniciar la carga.
+- El directorio de salida debe existir antes de escribir el documento.
+- La validación reutiliza una única función para comprobar ambos recursos.
+
+#### Conclusión
+
+El módulo `validator` incorpora validaciones sobre el sistema de archivos sin afectar el resto del pipeline.
+
+---
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -404,3 +426,4 @@ La validación deja de depender del nombre de la opción y pasa a operar sobre e
 - Un parámetro obligatorio no puede ser reemplazado por otra opción de la CLI.
 - La validación de extensiones puede reutilizar una única regla parametrizada para distintos tipos de archivo.
 - Las opciones equivalentes pueden agruparse mediante una propiedad declarativa (group), permitiendo validar alias sin depender de sus nombres.
+- La existencia de archivos y directorios puede validarse mediante una única función reutilizable.

@@ -146,6 +146,8 @@ Actualmente implementa:
 - Parámetros obligatorios.
 - Verificación de que un parámetro obligatorio no sea otra opción.
 - Detección de opciones repetidas mediante grupos lógicos.
+- Validación de extensiones.
+- Validación de existencia de archivos y directorios.
 
 Los mensajes de validación se encuentran desacoplados de la lógica mediante `validatorMessages`.
 

@@ -155,3 +155,12 @@ Además de los cambios entre versiones, este documento conserva las principales 
 - La validación deja de depender del nombre específico de cada opción.
 
 ---
+
+## v0.5.9.5 - CLI Path Validation
+
+- Validación de existencia del archivo de entrada.
+- Validación de existencia del directorio de salida.
+- Se reutiliza una única función para validar ambos recursos.
+- Nuevo mensaje de validación `pathNotFound`.
+
+---
