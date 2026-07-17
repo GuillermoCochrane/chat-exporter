@@ -137,3 +137,12 @@ Además de los cambios entre versiones, este documento conserva las principales 
 
 ---
 
+## v0.5.9.3 - CLI File Extensions
+
+* Incorporada la validación de extensiones para archivos de entrada y salida.
+* Los archivos de entrada deben utilizar `.json`.
+* Los archivos de salida deben utilizar `.md`.
+* La validación reutiliza una única regla parametrizada.
+* Los mensajes continúan centralizados mediante `validatorMessages`.
+
+---

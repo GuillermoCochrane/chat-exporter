@@ -283,53 +283,22 @@ Aceptada.
 
 ## ADR-0012
 
-#### Fecha
+**Título**
 
-2026-07-16
+Separar la validación de la interpretación de argumentos.
 
-#### Título
+**Motivación**
 
-Separar la validación de argumentos de la interpretación de la CLI.
+Interpretar argumentos y validar su consistencia son responsabilidades distintas y evolucionan de forma independiente.
 
-#### Motivación
+**Consecuencia**
 
-Interpretar argumentos y validar su validez son responsabilidades diferentes que evolucionan de forma independiente.
+La validación se delega al módulo `validator`, permitiendo incorporar reglas reutilizables sin modificar la implementación de `cli`.
 
-#### Consecuencia
-
-La validación se delega al módulo `validator`, permitiendo incorporar nuevas reglas sin modificar la implementación de `cli`.
-
-#### Estado
-
-Aceptada.
 
 ---
 
 ## ADR-0013
-
-#### Fecha
-
-2026-07-16
-
-#### Título
-
-Separar la validación de la interpretación de argumentos.
-
-#### Motivación
-
-Interpretar opciones y validar su consistencia son responsabilidades distintas.
-
-#### Consecuencia
-
-El módulo `validator` incorpora reglas de validación reutilizables apoyándose en la definición de cada acción de la CLI.
-
-#### Estado
-
-Aceptada.
-
----
-
-## ADR-0014
 
 #### Fecha
 

@@ -246,3 +246,76 @@ node src/index.js -i --version
 ✔ Se informa que `-i` requiere un valor.
 
 ---
+
+## v0.5.9.3
+
+### Extensión válida para archivo de entrada
+
+**Comando**
+
+```bash
+node src/index.js -i input/epistolario_SMALL.txt
+```
+
+**Resultado**
+
+✔ Se informa que el archivo de entrada debe tener extensión `.json`.
+
+---
+
+### Archivo sin extensión
+
+**Comando**
+
+```bash
+node src/index.js -i input/epistolario_SMALL
+```
+
+**Resultado**
+
+✔ Se informa que el archivo de entrada debe tener extensión `.json`.
+
+---
+
+### Entrada válida con salida válida
+
+**Comando**
+
+```bash
+node src/index.js -i input/epistolario_SMALL.json
+```
+
+**Resultado**
+
+✔ La conversación se exporta correctamente.
+
+---
+
+### Extensión inválida para archivo de salida
+
+**Comando**
+
+```bash
+node src/index.js -i input/chat.json -o output/prueba.txt
+```
+
+**Resultado**
+
+✔ Se informa que el archivo de salida debe tener extensión `.md`.
+
+---
+
+### Archivo inexistente con extensión válida
+
+**Comando**
+
+```bash
+node src/index.js -i input/no-existe.json
+```
+
+**Resultado**
+
+✔ La validación de extensión se supera y el error corresponde únicamente a que el archivo no existe.
+
+---
+

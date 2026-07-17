@@ -144,6 +144,7 @@ Actualmente implementa:
 - Opciones válidas.
 - Parámetros obligatorios.
 - Verificación de que un parámetro obligatorio no sea otra opción.
+- Validación de extensiones para archivos de entrada y salida.
 
 Los mensajes de validación se encuentran desacoplados de la lógica mediante `validatorMessages`.
 
