@@ -319,3 +319,104 @@ node src/index.js -i input/no-existe.json
 
 ---
 
+## v0.5.9.4
+
+### Opción repetida (`-i`)
+
+**Comando**
+
+```bash
+node src/index.js -i uno.json -i dos.json
+```
+
+**Resultado**
+
+✔ Se informa que la opción no puede repetirse.
+
+---
+
+### Opción repetida (`--input`)
+
+**Comando**
+
+```bash
+node src/index.js --input uno.json --input dos.json
+```
+
+**Resultado**
+
+✔ Se informa que la opción no puede repetirse.
+
+---
+
+### Alias repetidos
+
+**Comando**
+
+```bash
+node src/index.js -i uno.json --input dos.json
+```
+
+**Resultado**
+
+✔ Se informa que las opciones equivalentes no pueden repetirse.
+
+---
+
+### Alias repetidos (orden inverso)
+
+**Comando**
+
+```bash
+node src/index.js --input uno.json -i dos.json
+```
+
+**Resultado**
+
+✔ Se informa que las opciones equivalentes no pueden repetirse.
+
+---
+
+### Opción de salida repetida
+
+**Comando**
+
+```bash
+node src/index.js -o uno.md -o dos.md
+```
+
+**Resultado**
+
+✔ Se informa que la opción no puede repetirse.
+
+---
+
+### Alias de salida repetidos
+
+**Comando**
+
+```bash
+node src/index.js --output uno.md -o dos.md
+```
+
+**Resultado**
+
+✔ Se informa que las opciones equivalentes no pueden repetirse.
+
+---
+
+### Opciones de grupos diferentes
+
+**Comando**
+
+```bash
+node src/index.js -i input/epistolario_SMALL.json -o output/prueba.md
+```
+
+**Resultado**
+
+✔ La conversación se exporta correctamente.
+
+---
+
+

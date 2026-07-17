@@ -319,3 +319,22 @@ El validador verifica la estructura completa de los argumentos antes de que la C
 #### Estado
 
 Aceptada.
+
+---
+
+
+## ADR-0015
+
+**Título**
+
+Agrupar opciones equivalentes mediante un identificador común.
+
+**Motivación**
+
+Las opciones cortas y largas representan la misma acción y deben validarse como una única entidad lógica.
+
+**Consecuencia**
+
+Cada acción declara un `group`, permitiendo que las reglas de validación trabajen sobre conceptos (`input`, `output`, etc.) en lugar de nombres concretos (`-i`, `--input`).
+
+---

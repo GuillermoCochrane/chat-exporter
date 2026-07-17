@@ -126,6 +126,7 @@ Actualmente implementa:
 - Consulta de versión (`-v`, `--version`).
 - Selección del archivo de entrada (`-i`, `--input`).
 - Selección del archivo de salida (`-o`, `--output`).
+- Cada acción declara el grupo lógico al que pertenece, permitiendo tratar como equivalentes las opciones cortas y largas.
 
 Las opciones se procesan mediante un registro de acciones (`cliActions`), permitiendo ampliar la interfaz agregando nuevas entradas sin modificar la lógica principal.
 
@@ -144,7 +145,7 @@ Actualmente implementa:
 - Opciones válidas.
 - Parámetros obligatorios.
 - Verificación de que un parámetro obligatorio no sea otra opción.
-- Validación de extensiones para archivos de entrada y salida.
+- Detección de opciones repetidas mediante grupos lógicos.
 
 Los mensajes de validación se encuentran desacoplados de la lógica mediante `validatorMessages`.
 

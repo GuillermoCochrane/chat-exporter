@@ -343,9 +343,6 @@ La CLI detecta parámetros ausentes incluso cuando el siguiente argumento corres
 
 ---
 
-## E-014
-
-```md
 ### E-014
 
 #### Objetivo
@@ -366,6 +363,30 @@ Validar que los archivos indicados por la CLI posean la extensión esperada ante
 
 El módulo `validator` pasa a verificar no sólo la estructura de los argumentos, sino también restricciones sobre su formato, manteniendo desacoplada la lógica de la CLI.
 
+---
+
+## E-015
+
+#### Objetivo
+
+Validar que una misma opción lógica no pueda declararse más de una vez.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se incorporó la propiedad `group` en `cliActions`.
+- La validación utiliza `group` en lugar del nombre de la opción.
+- Los alias (`-i` / `--input`) pasan a considerarse equivalentes.
+
+#### Conclusión
+
+La validación deja de depender del nombre de la opción y pasa a operar sobre el modelo declarativo de la CLI.
+
+---
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -382,3 +403,4 @@ El módulo `validator` pasa a verificar no sólo la estructura de los argumentos
 - La propiedad `consumes` puede utilizarse como única fuente de verdad para validar opciones que requieren argumentos.
 - Un parámetro obligatorio no puede ser reemplazado por otra opción de la CLI.
 - La validación de extensiones puede reutilizar una única regla parametrizada para distintos tipos de archivo.
+- Las opciones equivalentes pueden agruparse mediante una propiedad declarativa (group), permitiendo validar alias sin depender de sus nombres.
