@@ -11,7 +11,8 @@
     "manualtest": "bash ./run-manual-tests.sh ./test/test-cases-nowrite.sh",
     "test:formatter": "node test/formatter.test.js",
     "test:validator": "node test/validator.test.js",
-    "test:parser": "node test/parser.test.js"
+    "test:parser": "node test/parser.test.js",
+    "test:filter": "node test/filter.test.js"
   },
   "engines": {
     "node": ">=20"
