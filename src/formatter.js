@@ -1,3 +1,5 @@
+// Registro de formatos disponibles para fechas.
+// Cada formato transforma un timestamp Unix a una representación textual.
 const dateFormats = {
   unix(timestamp) {
     return timestamp;
@@ -25,12 +27,14 @@ const dateFormats = {
   },
 };
 
+// Formatea un timestamp utilizando el formato indicado.
+// Si el formato no existe, utiliza "human".
 export function formatDate(timestamp, format = "human", ...args) {
   const formatter = dateFormats[format] ?? dateFormats.human;
-
-  return formatter(timestamp);
+  return formatter(timestamp, ...args);
 }
 
+// Convierte un texto en un bloque de cita Markdown.
 export function formatQuote(text = "") {
   return text
     .split("\n")
