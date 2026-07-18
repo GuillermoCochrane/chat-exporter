@@ -41,6 +41,30 @@ index.js
 
 ---
 
+## Testing
+
+El proyecto incorpora pruebas automatizadas de forma incremental.
+
+Los módulos se validan de manera independiente, comenzando por aquellos completamente puros y sin dependencias externas.
+
+La estrategia prevista es:
+
+Formatter
+↓
+Validator
+↓
+Parser
+↓
+Filter
+↓
+Normalizer
+↓
+Markdown
+↓
+Loader / Writer
+
+---
+
 ## Responsabilidades
 
 ### loader.js

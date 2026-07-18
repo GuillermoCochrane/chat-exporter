@@ -453,6 +453,26 @@ El Writer deja de ser obligatorio para validar el procesamiento de una conversac
 
 ---
 
+## E-017
+
+#### Objetivo
+
+Incorporar la primera infraestructura de testing automatizado del proyecto.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se implementó la primera prueba automatizada sobre el módulo `formatter`.
+- Se creó un comando dedicado para ejecutar la batería de pruebas.
+- El módulo fue elegido por ser completamente puro y no depender del sistema de archivos.
+
+#### Conclusión
+
+El proyecto incorpora una infraestructura de testing automatizado que servirá como base para validar el resto de los módulos.
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -475,3 +495,4 @@ El Writer deja de ser obligatorio para validar el procesamiento de una conversac
 - Las pruebas manuales también pueden organizarse mediante un patrón datos + ejecutor, reutilizando un único runner para distintas baterías de pruebas.
 - La ejecución del pipeline puede finalizar en distintas etapas sin romper el desacoplamiento entre módulos.
 - La generación del documento y su persistencia pueden validarse de forma independiente.
+- Los módulos completamente puros constituyen el punto de entrada ideal para incorporar testing automatizado.

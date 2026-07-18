@@ -443,3 +443,26 @@ Aceptada.
 
 ---
 
+## ADR-0018
+
+#### Fecha
+
+2026-07-18
+
+#### Título
+
+Incorporar testing automatizado de forma incremental.
+
+#### Motivación
+
+El proyecto alcanzó un nivel de desacoplamiento suficiente para validar cada módulo de manera independiente.
+
+#### Consecuencia
+
+Las pruebas automatizadas se incorporarán módulo por módulo, comenzando por aquellos que sean completamente puros y no dependan del sistema de archivos.
+
+#### Estado
+
+Aceptada.
+
+---

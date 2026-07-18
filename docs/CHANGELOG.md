@@ -184,3 +184,9 @@ Además de los cambios entre versiones, este documento conserva las principales 
 
 ---
 
+## v0.5.10.0 - Automated Testing
+
+- Comienza la incorporación de pruebas automatizadas.
+- Se implementa la primera batería de tests para `formatter.js`.
+- Se incorpora el comando `npm run test:formatter`.
+- El proyecto inicia la transición desde pruebas manuales hacia pruebas automatizadas por módulo.
