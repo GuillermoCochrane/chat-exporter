@@ -53,19 +53,20 @@ Writer
 
 ## Próximos pasos
 
-1. Incorporar nuevas opciones a la CLI.
-2. Ampliar las pruebas manuales.
-3. Añadir tests.
-4. Publicar v1.0.
+1. Añadir tests.
+2. Revisar el uso de salida de markdown.js
+3. Publicar v1.0.
 
 ---
 
 ## Ideas futuras
 
+- Convertir en extensiuon de Chrome
+- Soporte Gemini
+- Soporte DeepSeek
+- Soporte Claude
+- Soporte Modo IA de google
 - Exportar HTML
 - Exportar PDF
 - Exportar Obsidian
-- Soporte Gemini
-- Soporte Claude
-- Soporte DeepSeek
-- Soporte Qwen
+- Warning de sobrescritura interacitvo en la CLI
