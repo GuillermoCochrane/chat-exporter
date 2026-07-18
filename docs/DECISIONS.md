@@ -466,3 +466,25 @@ Las pruebas automatizadas se incorporarán módulo por módulo, comenzando por a
 Aceptada.
 
 ---
+
+## ADR-0019
+
+#### Fecha
+
+2026-07-18
+
+#### Título
+
+Incorporar pruebas automatizadas de forma incremental.
+
+#### Motivación
+
+El proyecto ya posee módulos pequeños, desacoplados y con responsabilidades únicas, permitiendo validar cada uno de forma independiente.
+
+#### Consecuencia
+
+Las pruebas automatizadas se incorporan módulo por módulo, comenzando por aquellos completamente puros y sin dependencias externas.
+
+#### Estado
+
+Aceptada.

@@ -473,6 +473,28 @@ Incorporar la primera infraestructura de testing automatizado del proyecto.
 
 El proyecto incorpora una infraestructura de testing automatizado que servirá como base para validar el resto de los módulos.
 
+---
+
+## E-018
+
+#### Objetivo
+
+Validar automáticamente las reglas implementadas por el módulo `validator`.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se incorporó la primera batería de pruebas automatizadas para `validator`.
+- Se validan tanto casos exitosos como errores esperados.
+- El módulo no requirió modificaciones para ser testeado.
+
+#### Conclusión
+
+La arquitectura desacoplada permitió incorporar pruebas automatizadas sin modificar la implementación existente.
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -496,3 +518,4 @@ El proyecto incorpora una infraestructura de testing automatizado que servirá c
 - La ejecución del pipeline puede finalizar en distintas etapas sin romper el desacoplamiento entre módulos.
 - La generación del documento y su persistencia pueden validarse de forma independiente.
 - Los módulos completamente puros constituyen el punto de entrada ideal para incorporar testing automatizado.
+- Los módulos diseñados como funciones puras pueden incorporar pruebas automatizadas sin requerir refactorización previa.

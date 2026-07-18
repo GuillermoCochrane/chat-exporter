@@ -118,6 +118,8 @@ Actualmente implementa:
 
 Está preparado para incorporar nuevos formateadores sin modificar el resto del pipeline.
 
+El módulo cuenta con pruebas automatizadas independientes.
+
 No conoce el formato de salida (Markdown, HTML, PDF, etc.).
 
 ---
@@ -176,6 +178,8 @@ Actualmente implementa:
 - Validación de existencia de archivos y directorios.
 
 Los mensajes de validación se encuentran desacoplados de la lógica mediante `validatorMessages`.
+
+El módulo cuenta con pruebas automatizadas independientes.
 
 No conoce la lógica del pipeline.
 

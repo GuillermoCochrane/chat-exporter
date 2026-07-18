@@ -190,3 +190,14 @@ Además de los cambios entre versiones, este documento conserva las principales 
 - Se implementa la primera batería de tests para `formatter.js`.
 - Se incorpora el comando `npm run test:formatter`.
 - El proyecto inicia la transición desde pruebas manuales hacia pruebas automatizadas por módulo.
+
+---
+
+## v0.5.10.1 - Validator Testing
+
+- Incorporada la primera batería de pruebas automatizadas para `validator.js`.
+- Se validan casos exitosos y errores esperados.
+- El módulo supera todas las pruebas sin requerir modificaciones en su implementación.
+
+---
+
