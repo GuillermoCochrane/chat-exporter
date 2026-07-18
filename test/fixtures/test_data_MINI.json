@@ -1,0 +1,150 @@
+{
+  "title": "Conversación de prueba",
+  "create_time": 1750582900.0,
+  "update_time": 1750582920.0,
+  "mapping": {
+    "root": {
+      "id": "root",
+      "message": null,
+      "parent": null,
+      "children": ["system-1"]
+    },
+
+    "system-1": {
+      "id": "system-1",
+      "parent": "root",
+      "children": ["context-1"],
+      "message": {
+        "id": "system-1",
+        "author": {
+          "role": "system"
+        },
+        "create_time": null,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": ["System prompt"]
+        },
+        "metadata": {
+          "is_visually_hidden_from_conversation": true,
+          "can_save": false
+        }
+      }
+    },
+
+    "context-1": {
+      "id": "context-1",
+      "parent": "system-1",
+      "children": ["user-1"],
+      "message": {
+        "id": "context-1",
+        "author": {
+          "role": "user"
+        },
+        "create_time": null,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "user_editable_context",
+          "user_profile": "Perfil de prueba",
+          "user_instructions": ""
+        },
+        "metadata": {
+          "is_visually_hidden_from_conversation": true,
+          "can_save": false
+        }
+      }
+    },
+
+    "user-1": {
+      "id": "user-1",
+      "parent": "context-1",
+      "children": ["assistant-1"],
+      "message": {
+        "id": "user-1",
+        "author": {
+          "role": "user"
+        },
+        "create_time": 1750582900.374667,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": ["Hola."]
+        },
+        "metadata": {}
+      }
+    },
+
+    "assistant-1": {
+      "id": "assistant-1",
+      "parent": "user-1",
+      "children": ["user-2"],
+      "message": {
+        "id": "assistant-1",
+        "author": {
+          "role": "assistant"
+        },
+        "create_time": 1750582901.755295,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": ["Hola, ¿cómo estás?"]
+        },
+        "metadata": {
+          "is_complete": true
+        }
+      }
+    },
+
+    "user-2": {
+      "id": "user-2",
+      "parent": "assistant-1",
+      "children": ["assistant-2"],
+      "message": {
+        "id": "user-2",
+        "author": {
+          "role": "user"
+        },
+        "create_time": 1750582910.125,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": ["Estoy probando el exportador."]
+        },
+        "metadata": {}
+      }
+    },
+
+    "assistant-2": {
+      "id": "assistant-2",
+      "parent": "user-2",
+      "children": [],
+      "message": {
+        "id": "assistant-2",
+        "author": {
+          "role": "assistant"
+        },
+        "create_time": 1750582912.845,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Perfecto. Si este mensaje aparece en Markdown, el pipeline funciona correctamente."
+          ]
+        },
+        "metadata": {
+          "is_complete": true
+        }
+      }
+    }
+  },
+  "moderation_results": [],
+  "current_node": "assistant-2",
+  "plugin_ids": null,
+  "conversation_id": "conversation-mini-test",
+  "conversation_template_id": null,
+  "gizmo_id": null,
+  "is_archived": false,
+  "safe_urls": [],
+  "blocked_urls": [],
+  "default_model_slug": "gpt-4o"
+}

@@ -1,0 +1,277 @@
+{
+  "title": "Conversación de prueba SMALL",
+  "create_time": 1750582900,
+  "update_time": 1750583100,
+  "current_node": "assistant-8",
+  "mapping": {
+    "root": {
+      "id": "root",
+      "message": null,
+      "parent": null,
+      "children": ["system"]
+    },
+
+    "system": {
+      "id": "system",
+      "parent": "root",
+      "children": ["context"],
+      "message": {
+        "id": "system",
+        "author": { "role": "system" },
+        "create_time": null,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": ["System prompt"]
+        },
+        "metadata": {
+          "is_visually_hidden_from_conversation": true
+        }
+      }
+    },
+
+    "context": {
+      "id": "context",
+      "parent": "system",
+      "children": ["user-1"],
+      "message": {
+        "id": "context",
+        "author": { "role": "user" },
+        "create_time": null,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "user_editable_context",
+          "user_profile": "Perfil",
+          "user_instructions": ""
+        },
+        "metadata": {}
+      }
+    },
+
+    "user-1": {
+      "id": "user-1",
+      "parent": "context",
+      "children": ["assistant-1"],
+      "message": {
+        "id": "user-1",
+        "author": { "role": "user" },
+        "create_time": 1750582900,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Hola.\n\nEste mensaje tiene varias líneas.\nSirve para probar el bloque de cita."
+          ]
+        },
+        "metadata": {}
+      }
+    },
+
+    "assistant-1": {
+      "id": "assistant-1",
+      "parent": "user-1",
+      "children": ["user-2"],
+      "message": {
+        "id": "assistant-1",
+        "author": { "role": "assistant" },
+        "create_time": 1750582905,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Perfecto.\n\nTambién respondo en varias líneas.\nAsí comprobamos el formatter."
+          ]
+        },
+        "metadata": {}
+      }
+    },
+
+    "user-2": {
+      "id": "user-2",
+      "parent": "assistant-1",
+      "children": ["assistant-2"],
+      "message": {
+        "id": "user-2",
+        "author": { "role": "user" },
+        "create_time": 1750582910,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Probemos listas:\n\n- Uno\n- Dos\n- Tres"
+          ]
+        },
+        "metadata": {}
+      }
+    },
+
+    "assistant-2": {
+      "id": "assistant-2",
+      "parent": "user-2",
+      "children": ["assistant-3"],
+      "message": {
+        "id": "assistant-2",
+        "author": { "role": "assistant" },
+        "create_time": 1750582915,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Primera respuesta consecutiva del assistant."
+          ]
+        },
+        "metadata": {}
+      }
+    },
+
+    "assistant-3": {
+      "id": "assistant-3",
+      "parent": "assistant-2",
+      "children": ["user-3"],
+      "message": {
+        "id": "assistant-3",
+        "author": { "role": "assistant" },
+        "create_time": 1750582918,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Segunda respuesta consecutiva.\nNo debe romper el pipeline."
+          ]
+        },
+        "metadata": {}
+      }
+    },
+
+    "user-3": {
+      "id": "user-3",
+      "parent": "assistant-3",
+      "children": ["user-4"],
+      "message": {
+        "id": "user-3",
+        "author": { "role": "user" },
+        "create_time": 1750582925,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Primer mensaje consecutivo del usuario."
+          ]
+        },
+        "metadata": {}
+      }
+    },
+
+    "user-4": {
+      "id": "user-4",
+      "parent": "user-3",
+      "children": ["assistant-4"],
+      "message": {
+        "id": "user-4",
+        "author": { "role": "user" },
+        "create_time": 1750582930,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Segundo mensaje consecutivo del usuario."
+          ]
+        },
+        "metadata": {}
+      }
+    },
+
+    "assistant-4": {
+      "id": "assistant-4",
+      "parent": "user-4",
+      "children": ["assistant-5"],
+      "message": {
+        "id": "assistant-4",
+        "author": { "role": "assistant" },
+        "create_time": 1750582940,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "# Encabezado\n\n**Markdown**\n\n`Código`"
+          ]
+        },
+        "metadata": {}
+      }
+    },
+
+    "assistant-5": {
+      "id": "assistant-5",
+      "parent": "assistant-4",
+      "children": ["assistant-6"],
+      "message": {
+        "id": "assistant-5",
+        "author": { "role": "assistant" },
+        "create_time": 1750582945,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "model_editable_context",
+          "parts": []
+        },
+        "metadata": {}
+      }
+    },
+
+    "assistant-6": {
+      "id": "assistant-6",
+      "parent": "assistant-5",
+      "children": ["assistant-7"],
+      "message": {
+        "id": "assistant-6",
+        "author": { "role": "assistant" },
+        "create_time": 1750582950,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Seguimos luego del model_editable_context."
+          ]
+        },
+        "metadata": {}
+      }
+    },
+
+    "assistant-7": {
+      "id": "assistant-7",
+      "parent": "assistant-6",
+      "children": ["assistant-8"],
+      "message": {
+        "id": "assistant-7",
+        "author": { "role": "assistant" },
+        "create_time": 1750582960,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Última prueba.\n\nLínea 2.\n\nLínea 3."
+          ]
+        },
+        "metadata": {}
+      }
+    },
+
+    "assistant-8": {
+      "id": "assistant-8",
+      "parent": "assistant-7",
+      "children": [],
+      "message": {
+        "id": "assistant-8",
+        "author": { "role": "assistant" },
+        "create_time": 1750582970,
+        "status": "finished_successfully",
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Fin de la conversación de prueba."
+          ]
+        },
+        "metadata": {}
+      }
+    }
+  }
+}
