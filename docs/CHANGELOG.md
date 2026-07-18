@@ -201,3 +201,11 @@ Además de los cambios entre versiones, este documento conserva las principales 
 
 ---
 
+## v0.5.10.2 - Parser Tests
+
+- Incorporadas pruebas automatizadas para `parser.js`.
+- Se verifican la estructura de los mensajes extraídos y la preservación de información relevante.
+- Se incorporan fixtures específicos para pruebas del parser.
+
+---
+

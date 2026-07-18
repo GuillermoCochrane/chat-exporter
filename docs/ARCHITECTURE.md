@@ -89,6 +89,8 @@ Transforma el árbol de conversación (`mapping`) en una lista de mensajes.
 
 No filtra ni modifica contenido.
 
+El módulo cuenta con pruebas automatizadas independientes.
+
 ---
 
 ### filter.js
