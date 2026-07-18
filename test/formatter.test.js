@@ -1,18 +1,36 @@
-import { formatDate } from "../src/formatter.js";
+import assert from "node:assert/strict";
+import { formatDate, formatQuote } from "../src/formatter.js";
 
 const timestamp = 1750582900.374667;
 
-console.log("UNIX");
-console.log(formatDate(timestamp, "unix"));
+// formatDate
+assert.equal(formatDate(timestamp, "unix"), timestamp);
 
-console.log("\nISO");
-console.log(formatDate(timestamp, "iso"));
+assert.equal(
+  formatDate(timestamp, "iso"),
+  "2025-06-22 09:01:40"
+);
 
-console.log("\nHUMAN");
-console.log(formatDate(timestamp, "human"));
+assert.equal(
+  formatDate(timestamp, "cualquier-cosa"),
+  formatDate(timestamp, "human")
+);
 
-console.log("\nLOCALE");
-console.log(formatDate(timestamp, "locale"));
+// locale
+assert.notEqual(
+  formatDate(timestamp, "locale", "es-AR"),
+  formatDate(timestamp, "locale", "en-US")
+);
 
-console.log("\nFORMATO INEXISTENTE");
-console.log(formatDate(timestamp, "cualquier-cosa"));
+// formatQuote
+assert.equal(
+  formatQuote("Hola"),
+  "> Hola"
+);
+
+assert.equal(
+  formatQuote("Hola\nMundo"),
+  "> Hola\n> Mundo"
+);
+
+console.log("✔ formatter.test.js OK");
