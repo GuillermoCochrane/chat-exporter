@@ -75,6 +75,10 @@ Parcial.
 - Se logró interceptar la petición.
 - La captura ocurrió demasiado tarde para obtener el JSON completo.
 
+#### Conclusión
+
+Interceptar `fetch` después de que la aplicación consume la respuesta no garantiza acceder al contenido completo del JSON.
+
 ---
 
 ### E-002
@@ -85,13 +89,17 @@ Obtener la respuesta completa mediante DevTools.
 
 #### Resultado
 
-✔ Exitoso.
+✔ Confirmado.
 
 #### Observaciones
 
 - `Copy Response` devuelve el JSON completo.
 - El campo `mapping` contiene todo el árbol de la conversación.
 - Este método permitió comenzar el desarrollo del parser.
+
+#### Conclusión
+
+El JSON exportado por DevTools constituye una fuente confiable para reconstruir la conversación.
 
 ---
 
@@ -110,7 +118,7 @@ Implementar el parser y validar la extracción de mensajes conversacionales.
 - El parser recorre correctamente el campo `mapping`.
 - Se eliminaron correctamente los mensajes de sistema.
 - Se eliminaron correctamente los contextos internos (`user_editable_context`, `model_editable_context`).
-- El orden original de la conversación se conserva.
+- Se conserva el orden original de la conversación.
 - ChatGPT puede emitir múltiples mensajes consecutivos del mismo autor (`assistant → assistant`).
 - Los Canvas aparecen como mensajes independientes del asistente.
 
@@ -118,7 +126,7 @@ Implementar el parser y validar la extracción de mensajes conversacionales.
 
 No puede asumirse alternancia entre `user` y `assistant`.
 
-El pipeline deberá respetar exclusivamente el orden del árbol de conversación.
+El pipeline debe respetar exclusivamente el orden del árbol de conversación.
 
 ---
 
@@ -136,11 +144,11 @@ Desacoplar el formateo de fechas del parser y del generador Markdown.
 
 - El parser entrega datos puros.
 - El formateo queda centralizado.
-- El módulo puede reutilizarse por cualquier exportador.
+- El módulo puede reutilizarse desde cualquier exportador.
 
 #### Conclusión
 
-El formatter pasa a ser un servicio reutilizable dentro del pipeline.
+El módulo `formatter` pasa a ser un servicio reutilizable dentro del pipeline.
 
 ---
 
@@ -148,7 +156,7 @@ El formatter pasa a ser un servicio reutilizable dentro del pipeline.
 
 #### Objetivo
 
-Desacoplar el formateo de bloques Markdown del generador.
+Desacoplar el formateo textual del generador Markdown.
 
 #### Resultado
 
@@ -156,13 +164,13 @@ Desacoplar el formateo de bloques Markdown del generador.
 
 #### Observaciones
 
-- El prefijo `>` se aplica correctamente a todas las líneas del mensaje.
-- El generador Markdown delega completamente el formateo al formatter.
+- El formateo de bloques Markdown se delega completamente al módulo `formatter`.
+- Posteriormente también se incorporó el formateo de roles (`user` → Usuario, `assistant` → Asistente).
 - Se mantiene una única responsabilidad por módulo.
 
 #### Conclusión
 
-El formatter pasa a centralizar toda la representación textual reutilizable del pipeline.
+`formatter` centraliza toda la representación textual reutilizable del pipeline.
 
 ---
 
@@ -179,8 +187,8 @@ Implementar el módulo Writer y validar la escritura del documento Markdown.
 #### Observaciones
 
 - El archivo se genera correctamente en disco.
-- El contenido coincide con la salida generada por el Markdown Builder.
-- Se validó con los archivos MINI, SMALL y ORIGINAL.
+- El contenido coincide con la salida producida por `markdown.js`.
+- Se validó utilizando los archivos MINI, SMALL y ORIGINAL.
 
 #### Conclusión
 
@@ -222,9 +230,9 @@ Implementar ayuda integrada para la interfaz de línea de comandos.
 
 #### Observaciones
 
-* Se incorporó soporte para `-h` y `--help`.
-* La ayuda no ejecuta el pipeline.
-* Se muestra el uso esperado y ejemplos de ejecución.
+- Se incorporó soporte para `-h` y `--help`.
+- La ayuda no ejecuta el pipeline.
+- Se muestran el uso esperado y ejemplos de ejecución.
 
 #### Conclusión
 
@@ -244,18 +252,17 @@ Incorporar consulta de versión integrada para la interfaz de línea de comandos
 
 #### Observaciones
 
-* Se incorporó soporte para `-v` y `--version`.
-* La versión se obtiene directamente desde `package.json`.
-* La consulta no ejecuta el pipeline.
+- Se incorporó soporte para `-v` y `--version`.
+- La versión se obtiene directamente desde `package.json`.
+- La consulta no ejecuta el pipeline.
 
 #### Conclusión
 
-La CLI permite consultar la versión instalada sin depender de documentación externa.
+La CLI permite consultar la versión instalada utilizando una única fuente de verdad.
 
 ---
 
-
-## E-010
+### E-010
 
 #### Objetivo
 
@@ -267,9 +274,9 @@ Eliminar la dependencia del orden posicional de los argumentos de la CLI.
 
 #### Observaciones
 
-* Se incorporaron las opciones `-i` y `-o`.
-* El orden de los argumentos deja de ser significativo.
-* La configuración se construye mediante acciones independientes sobre un mismo objeto.
+- Se incorporaron las opciones `-i` y `-o`.
+- El orden de los argumentos deja de ser significativo.
+- La configuración se construye mediante acciones independientes sobre un mismo objeto.
 
 #### Conclusión
 
@@ -299,7 +306,7 @@ La validación de argumentos pasa a constituir una responsabilidad independiente
 
 ---
 
-## E-012
+### E-012
 
 #### Objetivo
 
@@ -321,7 +328,7 @@ La validación deja de depender de opciones específicas y pasa a utilizar la de
 
 ---
 
-## E-013
+### E-013
 
 #### Objetivo
 
@@ -333,9 +340,9 @@ Validar que el parámetro requerido por una opción no pueda ser reemplazado por
 
 #### Observaciones
 
-* Las opciones que consumen parámetros (`-i`, `-o`) verifican que el argumento siguiente no sea otra opción.
-* La validación reutiliza el registro de acciones (`cliActions`) para conocer cuántos parámetros consume cada opción.
-* Los mensajes de error quedan centralizados mediante `validatorMessages`.
+- Las opciones que consumen parámetros (`-i`, `-o`) verifican que el argumento siguiente no sea otra opción.
+- La validación reutiliza el registro `cliActions` para conocer cuántos parámetros consume cada opción.
+- Los mensajes de error quedan centralizados mediante `validatorMessages`.
 
 #### Conclusión
 
@@ -361,11 +368,11 @@ Validar que los archivos indicados por la CLI posean la extensión esperada ante
 
 #### Conclusión
 
-El módulo `validator` pasa a verificar no sólo la estructura de los argumentos, sino también restricciones sobre su formato, manteniendo desacoplada la lógica de la CLI.
+El módulo `validator` pasa a verificar no solo la estructura de los argumentos, sino también restricciones sobre su formato, manteniendo desacoplada la lógica de la CLI.
 
 ---
 
-## E-015
+### E-015
 
 #### Objetivo
 
@@ -387,7 +394,7 @@ La validación deja de depender del nombre de la opción y pasa a operar sobre e
 
 ---
 
-### E-015
+### E-016
 
 #### Objetivo
 
@@ -409,7 +416,7 @@ El módulo `validator` incorpora validaciones sobre el sistema de archivos sin a
 
 ---
 
-## E-015
+### E-017
 
 #### Objetivo
 
@@ -431,7 +438,7 @@ El Inspector pasa a ser una etapa reutilizable e independiente del proceso de ex
 
 ---
 
-## E-016
+### E-018
 
 #### Objetivo
 
@@ -453,7 +460,7 @@ El Writer deja de ser obligatorio para validar el procesamiento de una conversac
 
 ---
 
-## E-017
+### E-019
 
 #### Objetivo
 
@@ -475,7 +482,7 @@ El proyecto incorpora una infraestructura de testing automatizado que servirá c
 
 ---
 
-## E-018
+### E-020
 
 #### Objetivo
 
@@ -497,7 +504,7 @@ La arquitectura desacoplada permitió incorporar pruebas automatizadas sin modif
 
 ---
 
-## E-019
+### E-021
 
 #### Objetivo
 
@@ -519,7 +526,7 @@ El comportamiento del parser queda protegido mediante pruebas automatizadas inde
 
 ---
 
-## E-020
+### E-022
 
 #### Objetivo
 
@@ -542,6 +549,29 @@ La transformación hacia el modelo interno queda protegida mediante pruebas auto
 
 ---
 
+### E-023
+
+#### Objetivo
+
+Validar automáticamente la generación de documentos Markdown.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se incorporaron casos de prueba para el generador Markdown.
+- Se validó el encabezado de cada mensaje.
+- Se verificó la delegación del formateo de fechas, roles y bloques de cita al módulo `formatter`.
+- Se incorporó una batería independiente para validar el modo compacto.
+
+#### Conclusión
+
+El comportamiento del generador Markdown queda protegido mediante pruebas automatizadas para ambos modos de exportación.
+
+---
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -550,21 +580,16 @@ La transformación hacia el modelo interno queda protegida mediante pruebas auto
 - La alternancia de roles no está garantizada.
 - Los Canvas forman parte del árbol de conversación como mensajes propios.
 - El formateo puede desacoplarse completamente de la lógica de negocio.
-- El formateo de bloques Markdown puede desacoplarse completamente del generador.
+- El módulo `formatter` puede centralizar toda la representación textual reutilizable (fechas, roles y bloques de cita).
 - El pipeline completo funciona desde la carga del JSON hasta la escritura del archivo Markdown.
-- La versión del proyecto puede obtenerse desde una única fuente de verdad (`package.json`), evitando duplicación de información.
+- La versión del proyecto puede obtenerse desde una única fuente de verdad (`package.json`).
 - Las opciones nombradas (`-i`, `-o`) eliminan la dependencia del orden de los argumentos y facilitan la escalabilidad de la CLI.
-- La validación de argumentos puede evolucionar como un módulo independiente del parser de la CLI.
+- La validación de argumentos puede evolucionar como un módulo independiente de la CLI.
 - La propiedad `consumes` puede utilizarse como única fuente de verdad para validar opciones que requieren argumentos.
-- Un parámetro obligatorio no puede ser reemplazado por otra opción de la CLI.
-- La validación de extensiones puede reutilizar una única regla parametrizada para distintos tipos de archivo.
-- Las opciones equivalentes pueden agruparse mediante una propiedad declarativa (group), permitiendo validar alias sin depender de sus nombres.
-- La existencia de archivos y directorios puede validarse mediante una única función reutilizable.
-- El pipeline puede finalizar anticipadamente en distintas etapas sin afectar el desacoplamiento entre módulos.
-- Las pruebas manuales también pueden organizarse mediante un patrón datos + ejecutor, reutilizando un único runner para distintas baterías de pruebas.
-- La ejecución del pipeline puede finalizar en distintas etapas sin romper el desacoplamiento entre módulos.
+- Las opciones equivalentes pueden agruparse mediante una propiedad declarativa (`group`).
+- La validación de extensiones y de recursos del sistema de archivos puede reutilizar reglas genéricas.
+- El pipeline puede finalizar anticipadamente en distintas etapas sin romper el desacoplamiento entre módulos.
+- Las pruebas manuales también pueden organizarse mediante el patrón datos + ejecutor.
 - La generación del documento y su persistencia pueden validarse de forma independiente.
-- Los módulos completamente puros constituyen el punto de entrada ideal para incorporar testing automatizado.
-- La generación del documento y su persistencia pueden validarse de forma independiente.
-- Los módulos diseñados como funciones puras permiten incorporar pruebas automatizadas sin requerir modificaciones en su implementación.
-- - La normalización del modelo interno puede validarse completamente mediante pruebas unitarias sin depender del resto del pipeline.
+- Los módulos diseñados como funciones puras permiten incorporar pruebas automatizadas sin modificar su implementación.
+- El generador Markdown puede ofrecer distintos modos de exportación reutilizando la misma infraestructura de formateo.

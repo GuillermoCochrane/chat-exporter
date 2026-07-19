@@ -1,8 +1,6 @@
 # Changelog
 
-## Registro cronológico de la evolución del proyecto.
-
-Además de los cambios entre versiones, este documento conserva las principales decisiones de implementación para facilitar reconstruir el camino de desarrollo del proyecto.
+Este documento resume la evolución del proyecto versión por versión y registra las principales decisiones de implementación tomadas durante su desarrollo.
 
 ---
 
@@ -217,11 +215,25 @@ Además de los cambios entre versiones, este documento conserva las principales 
 
 ---
 
-## v0.5.10.3 - Normalizer Tests
+## v0.5.10.4- Normalizer Tests
 
 - Incorporadas pruebas automatizadas para `normalizer.js`.
 - Se valida la transformación del modelo interno.
 - Se verifica la concatenación de partes del mensaje.
 - Se valida la preservación de la estructura y del timestamp.
+
+---
+
+---
+
+## v0.5.10.5 - Markdown Tests & Compact Mode
+
+- Incorporadas pruebas automatizadas para `markdown.js`.
+- Se agregan fixtures específicos para validar la generación de documentos Markdown.
+- Se incorpora una batería independiente para verificar el modo de exportación compacta.
+- Nuevo parámetro `--compact` (`-c`) para eliminar líneas en blanco consecutivas dentro de los mensajes exportados.
+- Se incorpora el formateador `formatRole()` para centralizar la representación de los roles de la conversación.
+- Se actualiza el generador Markdown para consumir la configuración completa de la CLI.
+- Nuevo comando `npm run test:all` para ejecutar toda la suite de pruebas automatizadas.
 
 ---
