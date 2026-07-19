@@ -8,6 +8,7 @@ El proyecto sigue los principios:
 - DRY
 - SRP
 - Composición sobre complejidad
+- Configuración declarativa cuando aporta extensibilidad.
 
 Cada módulo posee una única responsabilidad.
 
@@ -17,27 +18,29 @@ Cada módulo posee una única responsabilidad.
 
 src/
 
-loader.js
+loader
 ↓
-inspector.js
+inspector
 ↓
-parser.js
+parser
 ↓
-filter.js
+filter
 ↓
-normalizer.js
+normalizer
 ↓
-formatter.js
+formatter
 ↓
-markdown.js
+markdown
 ↓
-writer.js
+writer
+
+Orquestación
+
+validator
 ↓
-validator.js
+cli
 ↓
-cli.js
-↓
-index.js
+index
 
 ---
 
@@ -49,19 +52,19 @@ Los módulos se validan de manera independiente, comenzando por aquellos complet
 
 La estrategia prevista es:
 
-Formatter
+Formatter ✔
 ↓
-Validator
+Validator ✔
 ↓
-Parser
+Parser ✔
 ↓
-Filter
+Filter ✔
 ↓
-Normalizer
+Normalizer ✔
 ↓
-Markdown
+Markdown ✔
 ↓
-Loader / Writer
+Loader / Writer (pendiente)
 
 ---
 
@@ -80,6 +83,8 @@ No interpreta datos.
 Obtiene estadísticas de la conversación.
 
 No modifica información.
+
+Puede utilizarse como punto de finalización anticipada del pipeline mediante `--inspect`.
 
 ---
 
@@ -119,10 +124,11 @@ Centraliza el formateo de datos comunes.
 
 Actualmente implementa:
 
-- Fechas
-- Bloques de cita (Markdown)
+- Formateo de fechas.
+- Formateo de bloques de cita Markdown.
+- Formateo de roles (`user` → Usuario, `assistant` → Asistente).
 
-Está preparado para incorporar nuevos formateadores sin modificar el resto del pipeline.
+Permite incorporar nuevos formateadores sin modificar el resto del pipeline.
 
 El módulo cuenta con pruebas automatizadas independientes.
 
@@ -133,6 +139,12 @@ No conoce el formato de salida (Markdown, HTML, PDF, etc.).
 ### markdown.js
 
 Convierte la conversación normalizada a Markdown.
+
+Utiliza el módulo `formatter` para delegar el formateo de fechas, roles y bloques de cita.
+
+Admite distintos modos de exportación mediante opciones de configuración (por ejemplo, modo compacto).
+
+El módulo cuenta con pruebas automatizadas independientes.
 
 No conoce el JSON original.
 
@@ -161,12 +173,13 @@ Actualmente implementa:
 - Cada acción declara el grupo lógico al que pertenece, permitiendo tratar como equivalentes las opciones cortas y largas.
 - Modo inspección (`-in`, `--inspect`).
 - Modo sin escritura (`-nw`, `--no-write`).
+- Modo compacto (`-c`, `--compact`).
 
-Las opciones se procesan mediante un registro de acciones (`cliActions`), permitiendo ampliar la interfaz agregando nuevas entradas sin modificar la lógica principal.
+Cada opción se declara mediante el registro `cliActions`, permitiendo ampliar la interfaz sin modificar el flujo principal de procesamiento.
 
 La validación de argumentos se delega completamente al módulo `validator`.
 
-No conoce la lógica del pipeline.
+No conoce la ejecución del pipeline.
 
 ---
 
@@ -183,20 +196,20 @@ Actualmente implementa:
 - Validación de extensiones.
 - Validación de existencia de archivos y directorios.
 
-Los mensajes de validación se encuentran desacoplados de la lógica mediante `validatorMessages`.
+El módulo valida las acciones declaradas por `cli.js`, sin conocer la ejecución del pipeline.
+
+Los mensajes de validación se encuentran desacoplados mediante `validatorMessages`.
 
 El módulo cuenta con pruebas automatizadas independientes.
-
-No conoce la lógica del pipeline.
 
 ---
 
 ### index.js
 
-Coordina la ejecución del pipeline.
+Coordina la ejecución completa del pipeline.
 
-Decide qué etapas ejecutar según la configuración recibida desde la CLI.
+Obtiene la configuración desde la CLI y la propaga a los módulos que la requieren.
 
 Puede finalizar anticipadamente según el modo de ejecución (`--inspect`, `--no-write`).
 
-No contiene lógica de negocio.
+No implementa lógica de transformación; únicamente orquesta el flujo de ejecución.
