@@ -209,3 +209,19 @@ Además de los cambios entre versiones, este documento conserva las principales 
 
 ---
 
+## v0.5.10.3 - Filter Tests
+
+- Incorporadas pruebas automatizadas para `filter.js`.
+- Se valida la eliminación de mensajes no conversacionales.
+- Se verifica que sólo permanezcan mensajes `user` y `assistant` con contenido `text`.
+
+---
+
+## v0.5.10.3 - Normalizer Tests
+
+- Incorporadas pruebas automatizadas para `normalizer.js`.
+- Se valida la transformación del modelo interno.
+- Se verifica la concatenación de partes del mensaje.
+- Se valida la preservación de la estructura y del timestamp.
+
+---

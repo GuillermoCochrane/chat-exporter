@@ -99,6 +99,8 @@ Elimina mensajes que no pertenecen a la conversación visible.
 
 No altera el contenido de los mensajes restantes.
 
+El módulo cuenta con pruebas automatizadas independientes.
+
 ---
 
 ### normalizer.js
@@ -106,6 +108,8 @@ No altera el contenido de los mensajes restantes.
 Transforma los mensajes filtrados al modelo interno del proyecto.
 
 Elimina la dependencia del formato original de ChatGPT.
+
+El módulo cuenta con pruebas automatizadas independientes.
 
 ---
 

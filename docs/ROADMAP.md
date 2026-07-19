@@ -8,7 +8,7 @@ Convertir conversaciones exportadas desde ChatGPT a Markdown limpio y reutilizab
 
 ## Estado actual
 
-### Versión: 0.5.10.2
+### Versión: 0.5.10.4
 
 **Estado**:
 
@@ -28,8 +28,8 @@ Convertir conversaciones exportadas desde ChatGPT a Markdown limpio y reutilizab
 - [x] Tests Formatter
 - [x] Tests Validator
 - [x] Tests Parser
-- [ ] Tests Filter
-- [ ] Tests Normalizer
+- [x] Tests Filter
+- [x] Tests Normalizer
 - [ ] Tests Markdown
 - [ ] Tests Loader / Writer
 - [ ] Primera Release

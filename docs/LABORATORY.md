@@ -519,6 +519,29 @@ El comportamiento del parser queda protegido mediante pruebas automatizadas inde
 
 ---
 
+## E-020
+
+#### Objetivo
+
+Validar automáticamente la normalización del modelo interno utilizado por el pipeline.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se incorporó una batería de pruebas automatizadas para `normalizer`.
+- Se verifica la concatenación del contenido textual.
+- Se valida la conservación de la estructura básica del mensaje.
+- Se contemplan mensajes sin contenido textual.
+
+#### Conclusión
+
+La transformación hacia el modelo interno queda protegida mediante pruebas automatizadas independientes.
+
+---
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -544,3 +567,4 @@ El comportamiento del parser queda protegido mediante pruebas automatizadas inde
 - Los módulos completamente puros constituyen el punto de entrada ideal para incorporar testing automatizado.
 - La generación del documento y su persistencia pueden validarse de forma independiente.
 - Los módulos diseñados como funciones puras permiten incorporar pruebas automatizadas sin requerir modificaciones en su implementación.
+- - La normalización del modelo interno puede validarse completamente mediante pruebas unitarias sin depender del resto del pipeline.
