@@ -13,7 +13,8 @@
     "test:validator": "node test/validator.test.js",
     "test:parser": "node test/parser.test.js",
     "test:filter": "node test/filter.test.js",
-    "test:normalizer": "node test/normalizer.test.js"
+    "test:normalizer": "node test/normalizer.test.js",
+    "test:markdown": "node test/markdown.test.js"
   },
   "engines": {
     "node": ">=20"
