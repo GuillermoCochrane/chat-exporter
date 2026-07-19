@@ -8,32 +8,48 @@ Convertir conversaciones exportadas desde ChatGPT a Markdown limpio y reutilizab
 
 ## Estado actual
 
-### Versión: 0.5.10.4
+### Versión: 0.5.10.5
 
-**Estado**:
+**Estado**
 
 - [x] Inicialización del proyecto
 - [x] Estructura de carpetas
 - [x] Pipeline definido
+
+### Pipeline
+
 - [x] Loader
 - [x] Inspector
 - [x] Parser
-- [x] Filtro de mensajes
-- [x] Normalización
+- [x] Filter
+- [x] Normalizer
 - [x] Formatter
-- [x] Generador Markdown
+- [x] Markdown Builder
 - [x] Writer
 - [x] CLI
+
+### Testing
+
 - [x] Tests manuales
 - [x] Tests Formatter
 - [x] Tests Validator
 - [x] Tests Parser
 - [x] Tests Filter
 - [x] Tests Normalizer
-- [ ] Tests Markdown
-- [ ] Tests Loader / Writer
-- [ ] Primera Release
+- [x] Tests Markdown
+- [x] Tests Markdown (modo compacto)
+- [x] Runner para ejecutar la suite completa
+- [ ] Tests Loader
+- [ ] Tests Writer
 
+### Funcionalidades
+
+- [x] Exportación Markdown
+- [x] Modo inspect
+- [x] Modo no-write
+- [x] Modo compact
+
+- [ ] Primera Release
 ---
 
 ## Pipeline previsto
@@ -60,9 +76,10 @@ Writer
 
 ## Próximos pasos
 
-1. Añadir tests del Filter.
-2. Revisar el uso de salida de markdown.js.
-3. Publicar v1.0.
+1. Implementar tests para Loader.
+2. Implementar tests para Writer.
+3. Revisar cobertura de la CLI.
+4. Preparar la primera Release..0.
 
 ---
 
@@ -77,3 +94,6 @@ Writer
 - Exportar PDF
 - Exportar Obsidian
 - Warning de sobrescritura interacitvo en la CLI
+- Modo compacto configurable desde la extensión.
+- Configuración de formatos de exportación.
+- Templates de Markdown.
