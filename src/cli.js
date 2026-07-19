@@ -1,12 +1,14 @@
 import packageJson from "../package.json" with { type: "json" };
 import { validateArguments } from "./validator.js";
 
+// Configuración utilizada cuando la CLI no recibe parámetros.
 const defaultConfig = {
   input: "./input/epistolario_SMALL.json",
   output: "./output/conversacion.md",
 
   inspect: false,
   noWrite: false,
+  compact: false,
 };
 
 const cliMessages = {
@@ -24,6 +26,7 @@ Ejemplos:
   npm start
   npm start -- -i input/epistolario_MINI.json
   npm start -- -i input/epistolario_SMALL.json -o output/prueba.md
+  npm start -- -i input/epistolario_SMALL.json -o output/prueba.md -c
 
 Opciones:
 
@@ -31,8 +34,9 @@ Opciones:
   -v, --version      Muestra la versión.
   -i, --input        Archivo de entrada.
   -o, --output       Archivo de salida.
-  -in, --inspect     Ls gajes deMuestra estadísticas de la conversación sin exportar.
-  -nw, --no-write     Ejecuta todo el pipeline sin escribir el archivo.
+  -in, --inspect     Muestra estadísticas de la conversación sin exportar.
+  -nw, --no-write    Ejecuta todo el pipeline sin escribir el archivo.
+  -c, --compact      Elimina saltos de línea extra en los mensajes.
 `,
   version: `Chat Exporter v${packageJson.version}`,
 };
@@ -102,37 +106,53 @@ const cliActions = {
     },
   },
 
-    "--inspect": {
-      group: "inspect",
-      consumes: 0,
-      handler: (_, config) => {
-        config.inspect = true;
-      },
+  "--inspect": {
+    group: "inspect",
+    consumes: 0,
+    handler: (_, config) => {
+      config.inspect = true;
     },
+  },
 
-    "-in": {
-      group: "inspect",
-      consumes: 0,
-      handler: (_, config) => {
-        config.inspect = true;
-      },
+  "-in": {
+    group: "inspect",
+    consumes: 0,
+    handler: (_, config) => {
+      config.inspect = true;
     },
+  },
 
-    "--no-write": {
-      group: "noWrite",
-      consumes: 0,
-      handler: (_, config) => {
-        config.noWrite = true;
-      },
+  "--no-write": {
+    group: "noWrite",
+    consumes: 0,
+    handler: (_, config) => {
+      config.noWrite = true;
     },
+  },
 
-    "-nw": {
-      group: "noWrite",
-      consumes: 0,
-      handler: (_, config) => {
-        config.noWrite = true;
-      },
+  "-nw": {
+    group: "noWrite",
+    consumes: 0,
+    handler: (_, config) => {
+      config.noWrite = true;
     },
+  },
+
+  "-c": {
+    group: "compact",
+    consumes: 0,
+    handler: (_, config) => {
+      config.compact = true;
+    },
+  },
+
+  "--compact": {
+    group: "compact",
+    consumes: 0,
+    handler: (_, config) => {
+      config.compact = true;
+    },
+  },
 };
 
 export function parseArguments() {
@@ -146,6 +166,8 @@ export function parseArguments() {
   // entries() devuelve pares [índice, valor].
   // Necesitamos el índice para acceder al argumento asociado a cada opción
   // (por ejemplo: "-i" -> "archivo.json") manteniendo un for...of legible.
+  // Cada opción modifica la configuración utilizando el registro declarativo
+  // definido en cliActions.
   for (const [index, arg] of args.entries()) {
     const action = cliActions[arg];
 

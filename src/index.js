@@ -9,13 +9,13 @@ import { parseArguments } from "./cli.js";
 
 async function main() {
   try {
-    const { input, output, inspect, noWrite } = parseArguments();
+    const config = parseArguments();
 
-    const conversation = await loadConversation(input);
+    const conversation = await loadConversation(config.input);
 
-    const report  = inspectConversation(conversation);
+    const report = inspectConversation(conversation);
 
-    if (inspect) {
+    if (config.inspect) {
       console.table(report);
       return;
     }
@@ -24,16 +24,16 @@ async function main() {
     const filtered = filterConversationMessages(parsed);
     const normalized = normalizeMessages(filtered);
 
-    const markdown = buildMarkdown(normalized);
+    const markdown = buildMarkdown(normalized, config);
 
-    if (noWrite) {
+    if (config.noWrite) {
       console.log("✔ Conversación procesada (modo --no-write).");
       return;
     }
 
-    await writeFileContent(output, markdown);
+    await writeFileContent(config.output, markdown);
 
-    console.log(`✔ Conversación exportada a ${output}`);
+    console.log(`✔ Conversación exportada a ${config.output}`);
   } catch (error) {
     console.error(`✖ ${error.message}`);
     process.exit(1);

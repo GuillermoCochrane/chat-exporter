@@ -1,15 +1,30 @@
-import { formatDate, formatQuote } from "./formatter.js";
+import { formatDate, formatQuote, formatRole } from "./formatter.js";
 
-export function buildMarkdown(messages, options = {}) {
-  const { dateFormat = "human" } = options;
+const MESSAGE_SEPARATOR = "\n\n";
 
+// Compacta múltiples líneas en blanco consecutivas.
+// Se utiliza opcionalmente durante la exportación.
+function compactText(text) {
+  return text.replace(/\n{2,}/g, "\n");
+}
+
+// Construye la estructura Markdown a partir de un array de mensajes.
+export function buildMarkdown(
+  messages,
+  {
+    dateFormat = "human",
+    compact = false,
+  } = {},
+) {
   return messages
-    .map(
-      (message) => `
-## ${message.role === "user" ? "Usuario" : "Asistente"} · ${formatDate(message.timestamp, dateFormat)}
+    .map(({ role, timestamp, text }) => {
+      const content = compact ? compactText(text) : text;
 
-${formatQuote(message.text)}
-`,
-    )
-    .join("\n\n---\n\n");
+      return [
+        `## ${formatRole(role)} · ${formatDate(timestamp, dateFormat)}`,
+        "",
+        formatQuote(content),
+      ].join("\n");
+    })
+    .join(MESSAGE_SEPARATOR);
 }
