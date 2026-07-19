@@ -128,7 +128,7 @@ La representación de los datos no debe depender del parser ni del generador Mar
 
 #### Consecuencia
 
-El módulo `formatter` centraliza el formateo de datos comunes (fechas y bloques de cita) y podrá ampliarse para otros tipos de datos sin modificar el resto del pipeline.
+El módulo `formatter` centraliza el formateo de datos comunes (fechas, roles y bloques de cita) y podrá ampliarse para otros tipos de datos sin modificar el resto del pipeline.
 
 #### Estado
 
@@ -256,6 +256,7 @@ La CLI obtiene la versión directamente desde `package.json`, utilizando una ún
 
 Aceptada.
 
+---
 
 ## ADR-0011
 
@@ -283,18 +284,25 @@ Aceptada.
 
 ## ADR-0012
 
-**Título**
+#### Fecha
+
+2026-07-16
+
+#### Título
 
 Separar la validación de la interpretación de argumentos.
 
-**Motivación**
+#### Motivación
 
 Interpretar argumentos y validar su consistencia son responsabilidades distintas y evolucionan de forma independiente.
 
-**Consecuencia**
+#### Consecuencia
 
 La validación se delega al módulo `validator`, permitiendo incorporar reglas reutilizables sin modificar la implementación de `cli`.
 
+#### Estado
+
+Aceptada.
 
 ---
 
@@ -322,14 +330,13 @@ Aceptada.
 
 ---
 
-
 ## ADR-0014
 
 #### Fecha
 
 2026-07-17
 
-####  Título
+#### Título
 
 Agrupar opciones equivalentes mediante un identificador común.
 
@@ -371,7 +378,7 @@ Aceptada.
 
 ---
 
-## ADR-0015
+## ADR-0016
 
 #### Fecha
 
@@ -395,7 +402,7 @@ Aceptada.
 
 ---
 
-## ADR-0016
+## ADR-0017
 
 #### Fecha
 
@@ -419,7 +426,7 @@ Aceptada.
 
 ---
 
-## ADR-0017
+## ADR-0018
 
 #### Fecha
 
@@ -443,30 +450,6 @@ Aceptada.
 
 ---
 
-## ADR-0018
-
-#### Fecha
-
-2026-07-18
-
-#### Título
-
-Incorporar testing automatizado de forma incremental.
-
-#### Motivación
-
-El proyecto alcanzó un nivel de desacoplamiento suficiente para validar cada módulo de manera independiente.
-
-#### Consecuencia
-
-Las pruebas automatizadas se incorporarán módulo por módulo, comenzando por aquellos que sean completamente puros y no dependan del sistema de archivos.
-
-#### Estado
-
-Aceptada.
-
----
-
 ## ADR-0019
 
 #### Fecha
@@ -479,7 +462,7 @@ Incorporar pruebas automatizadas de forma incremental.
 
 #### Motivación
 
-El proyecto ya posee módulos pequeños, desacoplados y con responsabilidades únicas, permitiendo validar cada uno de forma independiente.
+El proyecto alcanzó un nivel de desacoplamiento suficiente para validar cada módulo de manera independiente.
 
 #### Consecuencia
 
@@ -488,3 +471,35 @@ Las pruebas automatizadas se incorporan módulo por módulo, comenzando por aque
 #### Estado
 
 Aceptada.
+
+---
+
+## ADR-0020
+
+#### Fecha
+
+2026-07-18
+
+#### Título
+
+Declarar las opciones de la CLI mediante un registro de acciones.
+
+#### Motivación
+
+Agregar nuevas opciones no debería requerir modificar la lógica principal de interpretación.
+
+#### Consecuencia
+
+Cada opción se declara en `cliActions`, especificando:
+
+- Grupo.
+- Cantidad de argumentos consumidos.
+- Comportamiento.
+
+La CLI procesa dicho registro de forma genérica, permitiendo extender la interfaz sin modificar el flujo principal.
+
+#### Estado
+
+Aceptada.
+
+---
