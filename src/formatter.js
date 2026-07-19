@@ -35,9 +35,17 @@ export function formatDate(timestamp, format = "human", ...args) {
 }
 
 // Convierte un texto en un bloque de cita Markdown.
+// Conserva la estructura línea por línea.
 export function formatQuote(text = "") {
   return text
     .split("\n")
     .map(line => `> ${line}`)
     .join("\n");
+}
+
+// Formatea el rol de un mensaje.
+export function formatRole(role) {
+  return role === "user"
+    ? "Usuario"
+    : "Asistente";
 }
