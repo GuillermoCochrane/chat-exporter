@@ -1,6 +1,6 @@
 {
   "name": "chat-exporter",
-  "version": "0.5.10.6",
+  "version": "0.5.10.7",
   "description": "Exportador de conversaciones de ChatGPT a Markdown.",
   "license": "MIT",
   "author": "Guillermo Cochrane",
