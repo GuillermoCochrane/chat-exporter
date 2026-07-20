@@ -8,7 +8,7 @@ Convertir conversaciones exportadas desde ChatGPT a Markdown limpio y reutilizab
 
 ## Estado actual
 
-### Versión: 0.5.10.6
+### Versión: 0.5.10.7
 
 **Estado**
 
@@ -40,7 +40,7 @@ Convertir conversaciones exportadas desde ChatGPT a Markdown limpio y reutilizab
 - [x] Tests Markdown (modo compacto)
 - [x] Runner para ejecutar la suite completa
 - [x] Tests Loader
-- [ ] Tests Writer
+- [x] Tests Writer
 
 ### Funcionalidades
 
@@ -50,6 +50,7 @@ Convertir conversaciones exportadas desde ChatGPT a Markdown limpio y reutilizab
 - [x] Modo compact
 
 - [ ] Primera Release
+
 ---
 
 ## Pipeline previsto
@@ -76,23 +77,22 @@ Writer
 
 ## Próximos pasos
 
-1. Implementar tests para Writer.
-2. Revisar cobertura de la CLI.
-3. Preparar la primera Release 1.0.0.
+1. Revisar cobertura de la CLI.
+2. Preparar la primera Release 1.0.0.
 
 ---
 
 ## Ideas futuras
 
-- Convertir en extensiuon de Chrome
-- Soporte Gemini
-- Soporte DeepSeek
-- Soporte Claude
-- Soporte Modo IA de google
-- Exportar HTML
-- Exportar PDF
-- Exportar Obsidian
-- Warning de sobrescritura interacitvo en la CLI
+- Convertir en extensión de Chrome.
+- Soporte Gemini.
+- Soporte DeepSeek.
+- Soporte Claude.
+- Soporte Modo IA de Google.
+- Exportar HTML.
+- Exportar PDF.
+- Exportar Obsidian.
+- Warning de sobrescritura interactivo en la CLI.
 - Modo compacto configurable desde la extensión.
 - Configuración de formatos de exportación.
 - Templates de Markdown.

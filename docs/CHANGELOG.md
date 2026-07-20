@@ -215,7 +215,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.10.4- Normalizer Tests
+## v0.5.10.4 - Normalizer Tests
 
 - Incorporadas pruebas automatizadas para `normalizer.js`.
 - Se valida la transformación del modelo interno.
@@ -241,10 +241,21 @@ Este documento resume la evolución del proyecto versión por versión y registr
 ## v0.5.10.6 - Loader Tests
 
 - Incorporadas pruebas automatizadas para `loader.js`.
-- Se agregan fixtures específicos para validar archivos JSON válidos e inválidos.
-- Se verifica la carga correcta de conversaciones (`MINI` y `SMALL`).
-- Se valida el manejo de JSON malformado.
+- Se verifica la carga correcta de archivos JSON válidos.
+- Se incorporan fixtures específicos para validar conversaciones MINI y SMALL.
+- Se incorpora un fixture con JSON inválido para validar errores de parseo.
 - Se valida el comportamiento ante archivos inexistentes.
 - Nuevo comando `npm run test:loader` para ejecutar la batería de pruebas del módulo.
+
+---
+
+## v0.5.10.7 - Writer Tests
+
+- Incorporadas pruebas automatizadas para `writer.js`.
+- Se incorpora un caso de prueba específico para validar la escritura de archivos.
+- Se verifica que el contenido generado se escriba correctamente en disco.
+- Se valida la lectura posterior del archivo para comprobar la integridad del contenido.
+- El archivo temporal utilizado durante la prueba se elimina al finalizar la ejecución.
+- Nuevo comando `npm run test:writer` para ejecutar la batería de pruebas del módulo.
 
 ---

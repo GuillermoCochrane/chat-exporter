@@ -595,6 +595,30 @@ El módulo `loader` queda protegido mediante pruebas automatizadas que validan t
 
 ---
 
+### E-025
+
+#### Objetivo
+
+Validar automáticamente la escritura de documentos Markdown en el sistema de archivos.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se incorporó una batería de pruebas automatizadas para `writer`.
+- Se verifica la creación correcta del archivo de salida.
+- Se comprueba que el contenido escrito coincide exactamente con el esperado.
+- El archivo generado durante la prueba se elimina al finalizar la ejecución.
+- Se utiliza un directorio temporal ignorado por Git para evitar contaminar el repositorio.
+
+#### Conclusión
+
+El módulo `writer` queda protegido mediante pruebas automatizadas que validan la persistencia del documento sin dejar artefactos permanentes en el proyecto.
+
+---
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -617,3 +641,4 @@ El módulo `loader` queda protegido mediante pruebas automatizadas que validan t
 - Los módulos diseñados como funciones puras permiten incorporar pruebas automatizadas sin modificar su implementación.
 - El generador Markdown puede ofrecer distintos modos de exportación reutilizando la misma infraestructura de formateo.
 - La carga de conversaciones puede validarse completamente mediante pruebas automatizadas utilizando fixtures reales, archivos inexistentes y JSON malformado.
+- La escritura de archivos puede validarse automáticamente utilizando un directorio temporal ignorado por Git, evitando efectos secundarios sobre el repositorio.
