@@ -1,4 +1,4 @@
-import { filterConversationMessages } from "../src/filter.js";
+import { filterConversationMessages } from "../src/core/filter.js";
 import testCases from "./cases/filter-cases.js";
 
 const assertions = [

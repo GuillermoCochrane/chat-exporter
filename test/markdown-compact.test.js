@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 
-import { buildMarkdown } from "../src/markdown.js";
-import { formatDate } from "../src/formatter.js";
+import { buildMarkdown } from "../src/core/markdown.js";
+import { formatDate } from "../src/utilities/formatter.js";
 import cases from "./cases/markdown-cases.js";
 
 const output = buildMarkdown(cases, {

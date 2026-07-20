@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile, rm } from "node:fs/promises";
 
-import { writeFileContent } from "../src/writer.js";
+import { writeFileContent } from "../src/core/writer.js";
 import testCase from "./cases/writer-cases.js";
 
 await writeFileContent(testCase.outputPath, testCase.content);

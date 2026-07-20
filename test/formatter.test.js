@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { formatDate, formatQuote } from "../src/formatter.js";
+import { formatDate, formatQuote } from "../src/utilities/formatter.js";
 
 const timestamp = 1750582900.374667;
 

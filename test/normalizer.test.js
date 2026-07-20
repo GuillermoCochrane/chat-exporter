@@ -1,5 +1,5 @@
 import cases from "./cases/normalizer-cases.js";
-import { normalizeMessages } from "../src/normalizer.js";
+import { normalizeMessages } from "../src/core/normalizer.js";
 
 const normalized = normalizeMessages(cases);
 

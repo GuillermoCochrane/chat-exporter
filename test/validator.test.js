@@ -1,4 +1,4 @@
-import { validateArguments } from "../src/validator.js";
+import { validateArguments } from "../src/utilities/validator.js";
 
 const actions = {
   "-i": {

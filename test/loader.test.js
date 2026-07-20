@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 
-import { loadConversation } from "../src/loader.js";
+import { loadConversation } from "../src/core/loader.js";
 import cases from "./cases/loader-cases.js";
 
 for (const fixture of [cases.MINI, cases.SMALL]) {

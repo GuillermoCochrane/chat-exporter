@@ -1,5 +1,5 @@
-import { loadConversation } from "../src/loader.js";
-import { extractMessages } from "../src/parser.js";
+import { loadConversation } from "../src/core/loader.js";
+import { extractMessages } from "../src/core/parser.js";
 
 const tests = [
   {
