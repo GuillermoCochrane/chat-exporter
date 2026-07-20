@@ -5,9 +5,9 @@ import { filterConversationMessages } from "./filter.js";
 import { normalizeMessages } from "./normalizer.js";
 import { buildMarkdown } from "./markdown.js";
 import { writeFileContent } from "./writer.js";
-import { parseArguments } from "./cli.js";
+import { parseArguments } from "../interfaces/cli.js";
 
-async function main() {
+export async function runPipeline() {
   try {
     const config = parseArguments();
 
@@ -39,5 +39,3 @@ async function main() {
     process.exit(1);
   }
 }
-
-main();

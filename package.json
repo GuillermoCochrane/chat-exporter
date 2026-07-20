@@ -5,9 +5,9 @@
   "license": "MIT",
   "author": "Guillermo Cochrane",
   "type": "module",
-  "main": "src/index.js",
+  "main": "src/main.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node src/main.js",
     "manualtest": "bash ./run-manual-tests.sh ./test/test-cases-nowrite.sh",
     "test": "node test/all.test.js",
     "test:formatter": "node test/formatter.test.js",

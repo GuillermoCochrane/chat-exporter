@@ -1,4 +1,4 @@
-import { formatDate, formatQuote, formatRole } from "./formatter.js";
+import { formatDate, formatQuote, formatRole } from "../utilities/formatter.js";
 
 const MESSAGE_SEPARATOR = "\n\n";
 

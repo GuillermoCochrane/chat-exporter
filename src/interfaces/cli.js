@@ -1,5 +1,5 @@
-import packageJson from "../package.json" with { type: "json" };
-import { validateArguments } from "./validator.js";
+import packageJson from "../../package.json" with { type: "json" };
+import { validateArguments } from "../utilities/validator.js";
 
 // Configuración utilizada cuando la CLI no recibe parámetros.
 const defaultConfig = {
