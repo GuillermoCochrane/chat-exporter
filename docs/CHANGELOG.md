@@ -237,3 +237,14 @@ Este documento resume la evolución del proyecto versión por versión y registr
 - Nuevo comando `npm run test:all` para ejecutar toda la suite de pruebas automatizadas.
 
 ---
+
+## v0.5.10.6 - Loader Tests
+
+- Incorporadas pruebas automatizadas para `loader.js`.
+- Se agregan fixtures específicos para validar archivos JSON válidos e inválidos.
+- Se verifica la carga correcta de conversaciones (`MINI` y `SMALL`).
+- Se valida el manejo de JSON malformado.
+- Se valida el comportamiento ante archivos inexistentes.
+- Nuevo comando `npm run test:loader` para ejecutar la batería de pruebas del módulo.
+
+---

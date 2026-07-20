@@ -572,6 +572,29 @@ El comportamiento del generador Markdown queda protegido mediante pruebas automa
 
 ---
 
+### E-024
+
+#### Objetivo
+
+Validar automáticamente la carga de conversaciones desde archivos JSON.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se incorporó una batería de pruebas automatizadas para `loader`.
+- Se validó la carga correcta de conversaciones reales (`MINI` y `SMALL`).
+- Se incorporó un fixture con JSON inválido para verificar el comportamiento ante errores de parseo.
+- Se verificó el manejo de archivos inexistentes.
+
+#### Conclusión
+
+El módulo `loader` queda protegido mediante pruebas automatizadas que validan tanto el funcionamiento esperado como las condiciones de error más frecuentes.
+
+---
+
 ## Descubrimientos
 
 - La conversación completa viaja durante la carga inicial.
@@ -593,3 +616,4 @@ El comportamiento del generador Markdown queda protegido mediante pruebas automa
 - La generación del documento y su persistencia pueden validarse de forma independiente.
 - Los módulos diseñados como funciones puras permiten incorporar pruebas automatizadas sin modificar su implementación.
 - El generador Markdown puede ofrecer distintos modos de exportación reutilizando la misma infraestructura de formateo.
+- La carga de conversaciones puede validarse completamente mediante pruebas automatizadas utilizando fixtures reales, archivos inexistentes y JSON malformado.
