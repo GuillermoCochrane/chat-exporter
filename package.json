@@ -17,7 +17,8 @@
     "test:normalizer": "node test/normalizer.test.js",
     "test:markdown": "node test/markdown.test.js",
     "test:markdown:compact": "node test/markdown-compact.test.js",
-    "test:loader": "node test/loader.test.js"
+    "test:loader": "node test/loader.test.js",
+    "test:writer": "node test/writer.test.js"
   },
   "engines": {
     "node": ">=20"
