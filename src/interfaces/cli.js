@@ -3,7 +3,7 @@ import { validateArguments } from "../utilities/validator.js";
 
 // Configuración utilizada cuando la CLI no recibe parámetros.
 const defaultConfig = {
-  input: "./input/epistolario_SMALL.json",
+  input: "./input/conversation.json",
   output: "./output/conversacion.md",
 
   inspect: false,
@@ -24,9 +24,9 @@ Uso:
 Ejemplos:
 
   npm start
-  npm start -- -i input/epistolario_MINI.json
-  npm start -- -i input/epistolario_SMALL.json -o output/prueba.md
-  npm start -- -i input/epistolario_SMALL.json -o output/prueba.md -c
+  npm start -- -i input/conversation.json
+  npm start -- -i input/conversation.json -o output/prueba.md
+  npm start -- -i input/conversation.json -o output/prueba.md -c
 
 Opciones:
 

@@ -142,8 +142,10 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 
+# sensitive files
 input/*
-output/*
-
 !input/.gitkeep
+!input/conversation.json
+
+output/*
 !output/.gitkeep

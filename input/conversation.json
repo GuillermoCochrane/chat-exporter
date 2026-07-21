@@ -1,0 +1,42 @@
+{
+  "title": "Example Conversation",
+  "mapping": {
+    "user-message": {
+      "id": "user-message",
+      "message": {
+        "author": {
+          "role": "user"
+        },
+        "create_time": 1740000000,
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Hello, ChatGPT!"
+          ]
+        }
+      },
+      "parent": null,
+      "children": [
+        "assistant-message"
+      ]
+    },
+    "assistant-message": {
+      "id": "assistant-message",
+      "message": {
+        "author": {
+          "role": "assistant"
+        },
+        "create_time": 1740000005,
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Hello! This is an example conversation."
+          ]
+        }
+      },
+      "parent": "user-message",
+      "children": []
+    }
+  },
+  "current_node": "assistant-message"
+}
