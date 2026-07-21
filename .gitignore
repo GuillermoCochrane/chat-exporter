@@ -145,6 +145,7 @@ vite.config.ts.timestamp-*
 # sensitive files
 input/*
 !input/.gitkeep
+# Default sample conversation
 !input/conversation.json
 
 output/*

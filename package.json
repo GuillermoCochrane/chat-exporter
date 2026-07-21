@@ -1,11 +1,28 @@
 {
   "name": "chat-exporter",
   "version": "0.9.3",
-  "description": "Exportador de conversaciones de ChatGPT a Markdown.",
-  "license": "MIT",
+  "description": "Convert conversations exported from ChatGPT into clean, reusable Markdown documents.",
+  "keywords": [
+    "chatgpt",
+    "markdown",
+    "export",
+    "conversation",
+    "ai",
+    "cli",
+    "json"
+  ],
   "author": "Guillermo Cochrane",
+  "license": "MIT",
   "type": "module",
   "main": "src/main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GuillermoCochrane/chat-exporter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GuillermoCochrane/chat-exporter/issues"
+  },
+  "homepage": "https://github.com/GuillermoCochrane/chat-exporter",
   "scripts": {
     "start": "node src/main.js",
     "manualtest": "bash ./run-manual-tests.sh ./test/test-cases-nowrite.sh",
