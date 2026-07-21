@@ -25,7 +25,7 @@
   "homepage": "https://github.com/GuillermoCochrane/chat-exporter",
   "scripts": {
     "start": "node src/main.js",
-    "manualtest": "bash ./run-manual-tests.sh ./test/test-cases-nowrite.sh",
+    "manualtest": "bash ./run-manual-tests.sh",
     "test": "node test/all.test.js",
     "test:formatter": "node test/formatter.test.js",
     "test:validator": "node test/validator.test.js",
