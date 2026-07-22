@@ -1,14 +1,22 @@
-# Testing Manual
+# Manual de Testing
 
-## v0.5.8.1
+Este documento reúne los casos de prueba manuales utilizados para validar el comportamiento del exportador durante su desarrollo.
 
-### Ayuda larga
+Las pruebas manuales complementan la suite automatizada y se utilizan principalmente para verificar el comportamiento observable desde la interfaz de línea de comandos (CLI), la experiencia de uso y el flujo completo del pipeline.
+
+A partir de la etapa **Pre Release (v0.9.x)**, las pruebas manuales quedan desacopladas del código mediante un runner reutilizable (`run-manual-tests.sh`) y archivos independientes de casos (`test-cases-*.sh`).
+
+---
+
+# v0.5.8.1 — CLI básica
+
+## Ayuda larga
 
 **Comando**
 
 ```bash
 npm start -- --help
-````
+```
 
 **Resultado**
 
@@ -16,7 +24,7 @@ npm start -- --help
 
 ---
 
-### Ayuda corta
+## Ayuda corta
 
 **Comando**
 
@@ -30,7 +38,7 @@ npm start -- -h
 
 ---
 
-### Ejecución por defecto
+## Ejecución por defecto
 
 **Comando**
 
@@ -40,16 +48,16 @@ npm start
 
 **Resultado**
 
-✔ Exporta la conversación usando las rutas por defecto.
+✔ Exporta la conversación utilizando el archivo por defecto (`input/conversation.json`).
 
 ---
 
-### Entrada personalizada
+## Entrada personalizada
 
 **Comando**
 
 ```bash
-node src/index.js input/epistolario_MINI.json
+node src/main.js -i input/epistolario_MINI.json
 ```
 
 **Resultado**
@@ -58,12 +66,12 @@ node src/index.js input/epistolario_MINI.json
 
 ---
 
-### Entrada y salida personalizadas
+## Entrada y salida personalizadas
 
 **Comando**
 
 ```bash
-node src/index.js input/epistolario_SMALL.json output/prueba.md
+node src/main.js -i input/epistolario_SMALL.json -o output/prueba.md
 ```
 
 **Resultado**
@@ -72,7 +80,7 @@ node src/index.js input/epistolario_SMALL.json output/prueba.md
 
 ---
 
-### Versión larga
+## Versión larga
 
 **Comando**
 
@@ -86,7 +94,7 @@ npm start -- --version
 
 ---
 
-### Versión corta
+## Versión corta
 
 **Comando**
 
@@ -100,15 +108,12 @@ npm start -- -v
 
 ---
 
-
----
-
-### Entrada mediante opción
+## Entrada mediante opción
 
 **Comando**
 
 ```bash
-node src/index.js -i input/epistolario_MINI.json
+node src/main.js -i input/epistolario_MINI.json
 ```
 
 **Resultado**
@@ -117,12 +122,12 @@ node src/index.js -i input/epistolario_MINI.json
 
 ---
 
-### Entrada y salida mediante opciones
+## Entrada y salida mediante opciones
 
 **Comando**
 
 ```bash
-node src/index.js -i input/epistolario_SMALL.json -o output/prueba.md
+node src/main.js -i input/epistolario_SMALL.json -o output/prueba.md
 ```
 
 **Resultado**
@@ -131,12 +136,12 @@ node src/index.js -i input/epistolario_SMALL.json -o output/prueba.md
 
 ---
 
-### Orden independiente de las opciones
+## Orden independiente de las opciones
 
 **Comando**
 
 ```bash
-node src/index.js -o output/prueba.md -i input/epistolario_SMALL.json
+node src/main.js -o output/prueba.md -i input/epistolario_SMALL.json
 ```
 
 **Resultado**
@@ -145,14 +150,14 @@ node src/index.js -o output/prueba.md -i input/epistolario_SMALL.json
 
 ---
 
-## v0.5.9.0
+# v0.5.9.0 — Validator
 
-### Opción desconocida
+## Opción desconocida
 
 **Comando**
 
 ```bash
-node src/index.js -x
+node src/main.js -x
 ```
 
 **Resultado**
@@ -161,12 +166,12 @@ node src/index.js -x
 
 ---
 
-### Opción desconocida combinada con opciones válidas
+## Opción desconocida combinada con opciones válidas
 
 **Comando**
 
 ```bash
-node src/index.js -i input.json -x
+node src/main.js -i input.json -x
 ```
 
 **Resultado**
@@ -175,28 +180,14 @@ node src/index.js -i input.json -x
 
 ---
 
-## v0.5.9.1
+# v0.5.9.1 — Parámetros obligatorios
 
-### Parámetro obligatorio (`-i`)
-
-**Comando**
-
-```bash
-node src/index.js -i
-````
-
-**Resultado**
-
-✔ Se informa que la opción requiere un valor.
-
----
-
-### Parámetro obligatorio (`--input`)
+## Parámetro obligatorio (`-i`)
 
 **Comando**
 
 ```bash
-node src/index.js --input
+node src/main.js -i
 ```
 
 **Resultado**
@@ -205,12 +196,26 @@ node src/index.js --input
 
 ---
 
-### Opción seguida por otra opción
+## Parámetro obligatorio (`--input`)
 
 **Comando**
 
 ```bash
-node src/index.js -i -o output.md
+node src/main.js --input
+```
+
+**Resultado**
+
+✔ Se informa que la opción requiere un valor.
+
+---
+
+## Opción seguida por otra opción
+
+**Comando**
+
+```bash
+node src/main.js -i -o output.md
 ```
 
 **Resultado**
@@ -219,12 +224,12 @@ node src/index.js -i -o output.md
 
 ---
 
-### Salida seguida por otra opción
+## Salida seguida por otra opción
 
 **Comando**
 
 ```bash
-node src/index.js -o -i input.json
+node src/main.js -o -i input.json
 ```
 
 **Resultado**
@@ -233,12 +238,12 @@ node src/index.js -o -i input.json
 
 ---
 
-### Valor reemplazado por otra opción existente
+## Valor reemplazado por otra opción existente
 
 **Comando**
 
 ```bash
-node src/index.js -i --version
+node src/main.js -i --version
 ```
 
 **Resultado**
@@ -247,14 +252,14 @@ node src/index.js -i --version
 
 ---
 
-## v0.5.9.3
+# v0.5.9.3 — Validación de extensiones
 
-### Extensión válida para archivo de entrada
+## Extensión válida para archivo de entrada
 
 **Comando**
 
 ```bash
-node src/index.js -i input/epistolario_SMALL.txt
+node src/main.js -i input/epistolario_SMALL.txt
 ```
 
 **Resultado**
@@ -263,12 +268,12 @@ node src/index.js -i input/epistolario_SMALL.txt
 
 ---
 
-### Archivo sin extensión
+## Archivo sin extensión
 
 **Comando**
 
 ```bash
-node src/index.js -i input/epistolario_SMALL
+node src/main.js -i input/epistolario_SMALL
 ```
 
 **Resultado**
@@ -277,12 +282,12 @@ node src/index.js -i input/epistolario_SMALL
 
 ---
 
-### Entrada válida con salida válida
+## Entrada válida
 
 **Comando**
 
 ```bash
-node src/index.js -i input/epistolario_SMALL.json
+node src/main.js -i input/epistolario_SMALL.json
 ```
 
 **Resultado**
@@ -291,12 +296,12 @@ node src/index.js -i input/epistolario_SMALL.json
 
 ---
 
-### Extensión inválida para archivo de salida
+## Extensión inválida para archivo de salida
 
 **Comando**
 
 ```bash
-node src/index.js -i input/chat.json -o output/prueba.txt
+node src/main.js -i input/chat.json -o output/prueba.txt
 ```
 
 **Resultado**
@@ -305,12 +310,12 @@ node src/index.js -i input/chat.json -o output/prueba.txt
 
 ---
 
-### Archivo inexistente con extensión válida
+## Archivo inexistente con extensión válida
 
 **Comando**
 
 ```bash
-node src/index.js -i input/no-existe.json
+node src/main.js -i input/no-existe.json
 ```
 
 **Resultado**
@@ -319,14 +324,14 @@ node src/index.js -i input/no-existe.json
 
 ---
 
-## v0.5.9.4
+# v0.5.9.4 — Grupos de opciones
 
-### Opción repetida (`-i`)
+## Opción repetida (`-i`)
 
 **Comando**
 
 ```bash
-node src/index.js -i uno.json -i dos.json
+node src/main.js -i uno.json -i dos.json
 ```
 
 **Resultado**
@@ -335,12 +340,40 @@ node src/index.js -i uno.json -i dos.json
 
 ---
 
-### Opción repetida (`--input`)
+## Alias repetidos
 
 **Comando**
 
 ```bash
-node src/index.js --input uno.json --input dos.json
+node src/main.js -i uno.json --input dos.json
+```
+
+**Resultado**
+
+✔ Se informa que las opciones equivalentes no pueden repetirse.
+
+---
+
+## Alias repetidos (orden inverso)
+
+**Comando**
+
+```bash
+node src/main.js --input uno.json -i dos.json
+```
+
+**Resultado**
+
+✔ Se informa que las opciones equivalentes no pueden repetirse.
+
+---
+
+## Opción de salida repetida
+
+**Comando**
+
+```bash
+node src/main.js -o uno.md -o dos.md
 ```
 
 **Resultado**
@@ -349,68 +382,12 @@ node src/index.js --input uno.json --input dos.json
 
 ---
 
-### Alias repetidos
+## Opciones de grupos diferentes
 
 **Comando**
 
 ```bash
-node src/index.js -i uno.json --input dos.json
-```
-
-**Resultado**
-
-✔ Se informa que las opciones equivalentes no pueden repetirse.
-
----
-
-### Alias repetidos (orden inverso)
-
-**Comando**
-
-```bash
-node src/index.js --input uno.json -i dos.json
-```
-
-**Resultado**
-
-✔ Se informa que las opciones equivalentes no pueden repetirse.
-
----
-
-### Opción de salida repetida
-
-**Comando**
-
-```bash
-node src/index.js -o uno.md -o dos.md
-```
-
-**Resultado**
-
-✔ Se informa que la opción no puede repetirse.
-
----
-
-### Alias de salida repetidos
-
-**Comando**
-
-```bash
-node src/index.js --output uno.md -o dos.md
-```
-
-**Resultado**
-
-✔ Se informa que las opciones equivalentes no pueden repetirse.
-
----
-
-### Opciones de grupos diferentes
-
-**Comando**
-
-```bash
-node src/index.js -i input/epistolario_SMALL.json -o output/prueba.md
+node src/main.js -i input/epistolario_SMALL.json -o output/prueba.md
 ```
 
 **Resultado**
@@ -419,42 +396,28 @@ node src/index.js -i input/epistolario_SMALL.json -o output/prueba.md
 
 ---
 
-## v0.5.9.5
+# v0.5.9.5 — Validación del sistema de archivos
 
-### Archivo de entrada existente
+## Archivo de entrada existente
 
 **Comando**
 
 ```bash
-node src/index.js -i input/epistolario_SMALL.json
+node src/main.js -i input/epistolario_SMALL.json
 ```
 
 **Resultado**
 
-✔ La conversación se exporta correctamente.
+✔ Exportación correcta.
 
 ---
 
-### Archivo de entrada inexistente
+## Archivo de entrada inexistente
 
 **Comando**
 
 ```bash
-node src/index.js -i input/no-existe.json
-```
-
-**Resultado**
-
-✔ Se informa que el archivo no existe.
-
----
-
-### Archivo inexistente con salida válida
-
-**Comando**
-
-```bash
-node src/index.js -i input/no-existe.json -o output/prueba.md
+node src/main.js -i input/no-existe.json
 ```
 
 **Resultado**
@@ -463,127 +426,114 @@ node src/index.js -i input/no-existe.json -o output/prueba.md
 
 ---
 
-### Archivo con extensión inválida
+## Directorio de salida inexistente
 
 **Comando**
 
 ```bash
-node src/index.js -i input/chat.txt
-```
-
-**Resultado**
-
-✔ Se informa que el archivo de entrada debe tener extensión `.json`.
-
----
-
-### Directorio de salida inexistente
-
-**Comando**
-
-```bash
-node src/index.js -i input/epistolario_SMALL.json -o out/prueba.md
+node src/main.js -i input/epistolario_SMALL.json -o out/prueba.md
 ```
 
 **Resultado**
 
 ✔ Se informa que el directorio no existe.
 
-## v0.5.9.6
+---
 
-### Inspect
+# v0.5.9.6 — Inspector
+
+## Inspect
 
 **Comando**
 
 ```bash
-node src/index.js --inspect
+node src/main.js --inspect
 ```
 
 **Resultado**
 
-✔ Se muestran las estadísticas de la conversación sin generar el archivo Markdown.
+✔ Se muestran estadísticas de la conversación sin generar el documento Markdown.
 
 ---
 
-### Inspect corto
+## Inspect corto
 
 **Comando**
 
 ```bash
-node src/index.js -in
+node src/main.js -in
 ```
 
 **Resultado**
 
-✔ Se muestran las estadísticas de la conversación sin generar el archivo Markdown.
+✔ Se muestran estadísticas de la conversación.
 
 ---
 
-### Inspect con archivo personalizado
+## Inspect con archivo personalizado
 
 **Comando**
 
 ```bash
-node src/index.js --inspect -i input/epistolario_MINI.json
+node src/main.js --inspect -i input/epistolario_MINI.json
 ```
 
 **Resultado**
 
-✔ Se muestran las estadísticas correspondientes al archivo indicado.
+✔ Se inspecciona el archivo indicado.
 
 ---
 
-### Opción repetida
+## Opción repetida
 
 **Comando**
 
 ```bash
-node src/index.js --inspect --inspect
+node src/main.js --inspect --inspect
 ```
 
 **Resultado**
 
-✔ Se informa que la opción `--inspect` no puede repetirse.
-
+✔ Se informa que la opción no puede repetirse.
 
 ---
 
-## v0.5.9.7
+# v0.5.9.7 — No Write
 
-### No Write
+## No Write
 
 **Comando**
 
 ```bash
-node src/index.js --no-write
+node src/main.js --no-write
 ```
 
 **Resultado**
 
-✔ Se ejecuta el pipeline completo sin escribir el archivo de salida.
+✔ Se ejecuta el pipeline completo sin escribir el archivo.
 
 ---
 
-### No Write corto
+## No Write corto
 
 **Comando**
 
 ```bash
-node src/index.js -nw
+node src/main.js -nw
 ```
 
 **Resultado**
 
-✔ Se ejecuta el pipeline completo sin escribir el archivo de salida.
+✔ Se ejecuta el pipeline completo sin escribir el archivo.
 
 ---
 
-### No Write con archivo personalizado
+## No Write con archivo personalizado
 
 **Comando**
 
 ```bash
-node src/index.js --no-write -i input/epistolario_MINI.json
+node src/main.js --no-write -i input/epistolario_MINI.json
 ```
 
 **Resultado**
@@ -592,28 +542,124 @@ node src/index.js --no-write -i input/epistolario_MINI.json
 
 ---
 
-### Opción repetida
+## No Write junto a Inspect
 
 **Comando**
 
 ```bash
-node src/index.js --no-write --no-write
+node src/main.js --inspect --no-write
 ```
 
 **Resultado**
 
-✔ Se informa que la opción `--no-write` no puede repetirse.
+✔ `--inspect` tiene prioridad y finaliza la ejecución luego del Inspector.
 
 ---
 
-### No Write junto a Inspect
+# v0.9.5 — Validación de Release
+
+Durante la etapa **Pre Release** las pruebas manuales dejan de ejecutarse individualmente y pasan a organizarse mediante un **runner reutilizable**.
+
+Los casos se almacenan en archivos independientes (`test-cases-*.sh`) consumidos por `run-manual-tests.sh`.
+
+## Runner
 
 **Comando**
 
 ```bash
-node src/index.js --inspect --no-write
+npm run manualtest -- ./test/test-cases-release.sh
 ```
 
-**Resultado**
+**Resultado esperado**
 
-✔ El modo `--inspect` tiene prioridad y finaliza la ejecución luego del Inspector.
+✔ Se ejecuta la batería completa de pruebas de release.
+
+La batería actual valida:
+
+- JSON vacío.
+- Conversación mínima.
+- Conversación completa (ORIGINAL).
+- Archivo inexistente.
+- Extensión inválida.
+
+---
+
+## Validación de distribución
+
+Además de los casos anteriores, antes de publicar una versión estable debe verificarse:
+
+### Clonado limpio
+
+✔ El proyecto puede clonarse desde cero.
+
+---
+
+### Instalación
+
+```bash
+npm install
+```
+
+✔ Instala correctamente las dependencias.
+
+---
+
+### Ejecución inmediata
+
+```bash
+npm start
+```
+
+✔ Exporta correctamente `input/conversation.json` utilizando la configuración por defecto.
+
+---
+
+### Ayuda
+
+```bash
+npm start -- -h
+```
+
+✔ La ayuda refleja el estado actual de la CLI.
+
+---
+
+### Suite automatizada
+
+```bash
+npm test
+```
+
+✔ Toda la suite automatizada finaliza correctamente.
+
+---
+
+### Rutas absolutas
+
+```bash
+grep -R "C:/" .
+grep -R "D:/" .
+grep -R "/home/" .
+```
+
+✔ No existen rutas absolutas embebidas en el proyecto.
+
+---
+
+### Estado del repositorio
+
+```bash
+git status
+```
+
+✔ El árbol de trabajo permanece limpio luego de ejecutar las pruebas.
+
+---
+
+## Objetivo de la Pre Release
+
+Al finalizar esta validación debe poder responderse afirmativamente la siguiente pregunta:
+
+> **¿Puede cualquier persona clonar este repositorio y utilizar el exportador en menos de dos minutos?**
+
+Si la respuesta es **sí**, la etapa de estabilización ha cumplido su objetivo.

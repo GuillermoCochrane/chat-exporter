@@ -218,7 +218,7 @@ Aceptada.
 
 #### Título
 
-CLI autoexplicativo.
+CLI autoexplicativa.
 
 #### Motivación
 
@@ -503,3 +503,151 @@ La CLI procesa dicho registro de forma genérica, permitiendo extender la interf
 Aceptada.
 
 ---
+
+## ADR-0021
+
+#### Fecha
+
+2026-07-20
+
+#### Título
+
+Reorganizar la estructura del proyecto antes de la primera versión estable.
+
+#### Motivación
+
+La evolución del proyecto hizo evidente la necesidad de separar el núcleo del exportador, las interfaces y las utilidades auxiliares para facilitar el mantenimiento y permitir futuras interfaces sin afectar el pipeline.
+
+#### Consecuencia
+
+La estructura pasa a organizarse en:
+
+- `core/`
+- `interfaces/`
+- `utilities/`
+
+manteniendo intacta la lógica del pipeline.
+
+#### Estado
+
+Aceptada.
+
+---
+
+## ADR-0022
+
+#### Fecha
+
+2026-07-20
+
+#### Título
+
+Preparar el proyecto para distribución pública.
+
+#### Motivación
+
+El repositorio debía poder utilizarse inmediatamente después de ser clonado, sin configuraciones adicionales ni recursos externos.
+
+#### Consecuencia
+
+Se revisa la estructura del repositorio, la metadata del proyecto y la configuración por defecto para convertirlo en un paquete autocontenido.
+
+#### Estado
+
+Aceptada.
+
+---
+
+## ADR-0023
+
+#### Fecha
+
+2026-07-21
+
+#### Título
+
+Proveer una conversación mínima versionada para la primera ejecución.
+
+#### Motivación
+
+Reducir la fricción de uso inicial y permitir que `npm start` funcione inmediatamente después de clonar el repositorio.
+
+#### Consecuencia
+
+Se incorpora `input/conversation.json` como archivo de entrada por defecto y `.gitignore` se ajusta para conservar únicamente dicho archivo dentro del directorio `input`.
+
+#### Estado
+
+Aceptada.
+
+---
+
+## ADR-0024
+
+#### Fecha
+
+2026-07-21
+
+#### Título
+
+Versionar todos los recursos utilizados por las pruebas.
+
+#### Motivación
+
+Las pruebas no deben depender de archivos externos al repositorio ni del entorno del desarrollador.
+
+#### Consecuencia
+
+Todos los fixtures utilizados por pruebas manuales y automatizadas pasan a almacenarse bajo `test/fixtures`, garantizando reproducibilidad desde un clon limpio.
+
+#### Estado
+
+Aceptada.
+
+---
+
+## ADR-0025
+
+#### Fecha
+
+2026-07-21
+
+#### Título
+
+Validar la distribución desde un repositorio recién clonado.
+
+#### Motivación
+
+La única forma de garantizar una primera experiencia consistente consiste en validar el proyecto exactamente bajo las mismas condiciones que tendrá cualquier usuario.
+
+#### Consecuencia
+
+Se incorpora una batería específica de pruebas de distribución (Release Testing) que verifica el funcionamiento del proyecto utilizando exclusivamente los recursos versionados del repositorio.
+
+#### Estado
+
+Aceptada.
+
+---
+
+## ADR-0026
+
+#### Fecha
+
+2026-07-21
+
+#### Título
+
+Congelar el desarrollo funcional durante la Pre Release.
+
+#### Motivación
+
+La prioridad de la serie 0.9.x consiste en estabilizar la arquitectura, fortalecer la documentación y preparar la distribución, evitando introducir nuevas funcionalidades que incrementen el riesgo antes de la versión estable.
+
+#### Consecuencia
+
+Durante la etapa Pre Release únicamente se aceptan cambios relacionados con arquitectura, documentación, testing, configuración y distribución. Las nuevas funcionalidades quedan postergadas para versiones posteriores a la 1.0.0.
+
+#### Estado
+
+Aceptada.

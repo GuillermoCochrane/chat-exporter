@@ -2,21 +2,19 @@
 
 ## Objetivo
 
-Convertir conversaciones exportadas desde ChatGPT a Markdown limpio y reutilizable.
+Convertir conversaciones exportadas desde plataformas de inteligencia artificial en documentos Markdown abiertos, legibles y reutilizables.
 
 ---
 
-## Estado actual
+# Estado actual
 
-### Versión: 0.5.10.7
+## Versión
 
-**Estado**
+**0.9.5.2 (Pre Release)**
 
-- [x] Inicialización del proyecto
-- [x] Estructura de carpetas
-- [x] Pipeline definido
+## Estado general
 
-### Pipeline
+### Núcleo
 
 - [x] Loader
 - [x] Inspector
@@ -26,73 +24,128 @@ Convertir conversaciones exportadas desde ChatGPT a Markdown limpio y reutilizab
 - [x] Formatter
 - [x] Markdown Builder
 - [x] Writer
+
+### Interfaces
+
 - [x] CLI
 
 ### Testing
 
-- [x] Tests manuales
-- [x] Tests Formatter
-- [x] Tests Validator
-- [x] Tests Parser
-- [x] Tests Filter
-- [x] Tests Normalizer
-- [x] Tests Markdown
-- [x] Tests Markdown (modo compacto)
-- [x] Runner para ejecutar la suite completa
-- [x] Tests Loader
-- [x] Tests Writer
+#### Automatizado
 
-### Funcionalidades
+- [x] Formatter
+- [x] Validator
+- [x] Parser
+- [x] Filter
+- [x] Normalizer
+- [x] Markdown
+- [x] Markdown (modo compacto)
+- [x] Loader
+- [x] Writer
 
-- [x] Exportación Markdown
+#### Manual
+
+- [x] Casos generales
 - [x] Modo inspect
 - [x] Modo no-write
-- [x] Modo compact
+- [x] Validación de distribución
 
-- [ ] Primera Release
+### Distribución
+
+- [x] Metadata del proyecto
+- [x] README
+- [x] Configuración por defecto (`input/conversation.json`)
+- [x] Fixtures versionados
+- [x] Repositorio ejecutable inmediatamente después de clonar
+
+### Pre Release
+
+- [x] Arquitectura reorganizada
+- [x] Documentación especializada
+- [x] Validación desde clon limpio
+- [x] Preparación para distribución
+- [ ] Release 1.0.0
 
 ---
 
-## Pipeline previsto
+# Pipeline
 
+```text
 JSON
-↓
+ ↓
 Loader
-↓
+ ↓
 Inspector
-↓
+ ↓
 Parser
-↓
+ ↓
 Filter
-↓
+ ↓
 Normalizer
-↓
+ ↓
 Formatter
-↓
+ ↓
 Markdown Builder
-↓
+ ↓
 Writer
+```
 
 ---
 
-## Próximos pasos
+# Próximo objetivo
 
-1. Revisar cobertura de la CLI.
-2. Preparar la primera Release 1.0.0.
+## Versión 1.0.0
+
+La primera versión estable consistirá en:
+
+- Revisión final de toda la documentación.
+- Revisión de coherencia entre Architecture, ADR, Laboratory, Changelog y Roadmap.
+- Verificación final del proyecto desde un repositorio recién clonado.
+- Actualización definitiva de versión.
+- Creación del tag.
+- Publicación de la primera Release.
+
+No se prevén nuevas funcionalidades antes de la versión 1.0.
 
 ---
 
-## Ideas futuras
+# Evoluciones previstas
 
-- Convertir en extensión de Chrome.
-- Soporte Gemini.
-- Soporte DeepSeek.
-- Soporte Claude.
-- Soporte Modo IA de Google.
-- Exportar HTML.
-- Exportar PDF.
-- Exportar Obsidian.
-- Warning de sobrescritura interactivo en la CLI.
-- Modo compacto configurable desde la extensión.
-- Configuración de formatos de exportación.
+> Una vez estabilizado el núcleo del proyecto podrán incorporarse nuevas capacidades reutilizando el mismo pipeline.
+> Las funcionalidades listadas a continuación no forman parte del objetivo de la versión 1.0 y representan posibles líneas de evolución del proyecto.
+
+## Nuevos exportadores
+
+- HTML
+- PDF
+- Obsidian
+
+## Nuevas plataformas
+
+### Infraestructura
+
+- Detección automática del formato de conversación.
+- Selección dinámica del parser correspondiente.
+
+### Parsers previstos
+
+- ChatGPT
+- Gemini
+- Claude
+- DeepSeek
+- Google AI Mode
+
+## Nuevas interfaces
+
+- Extensión para Chrome.
+- API.
+- Aplicación de escritorio.
+
+## Mejoras futuras
+
 - Templates de Markdown.
+- Configuración avanzada de exportación.
+- Advertencia interactiva de sobrescritura en la CLI.
+- Configuración persistente de usuario.
+- Soporte para perfiles de exportación.
+- Nuevos modos de formateo Markdown.

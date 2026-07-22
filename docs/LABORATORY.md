@@ -392,8 +392,6 @@ Validar que una misma opción lógica no pueda declararse más de una vez.
 
 La validación deja de depender del nombre de la opción y pasa a operar sobre el modelo declarativo de la CLI.
 
----
-
 ### E-016
 
 #### Objetivo
@@ -619,7 +617,143 @@ El módulo `writer` queda protegido mediante pruebas automatizadas que validan l
 
 ---
 
+### E-026
+
+#### Objetivo
+
+Reorganizar la arquitectura del proyecto para separar el núcleo del exportador de sus interfaces.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se reorganizó `src` en `core`, `interfaces` y `utilities`.
+- El pipeline quedó completamente desacoplado de la CLI.
+- Los tests pudieron adaptarse actualizando únicamente los imports.
+
+#### Conclusión
+
+Una separación temprana de responsabilidades facilita la incorporación futura de nuevas interfaces sin modificar el núcleo del exportador.
+
+---
+
+### E-027
+
+#### Objetivo
+
+Evaluar si la documentación debía escribirse durante el desarrollo o al finalizar el núcleo del proyecto.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- El README se redactó una vez estabilizada la arquitectura.
+- La documentación pudo reflejar el estado real del proyecto.
+- Se evitó reescribir documentación en cada iteración funcional.
+
+#### Conclusión
+
+La documentación de alto nivel resulta más consistente cuando se redacta sobre una arquitectura estable.
+
+---
+
+### E-028
+
+#### Objetivo
+
+Preparar el proyecto para ser utilizado inmediatamente después de clonar el repositorio.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se incorporó `input/conversation.json`.
+- `npm start` funciona sin parámetros.
+- Se ajustó `.gitignore` para versionar únicamente ese archivo dentro del directorio `input`.
+
+#### Conclusión
+
+Reducir la configuración inicial mejora significativamente la experiencia del primer uso.
+
+---
+
+### E-029
+
+#### Objetivo
+
+Completar la metadata necesaria para distribuir el proyecto públicamente.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se revisó `package.json`.
+- Se completaron `author`, `license`, `engines`, `keywords` y `description`.
+- Se verificó la consistencia de los scripts disponibles.
+
+#### Conclusión
+
+La preparación para distribución requiere tanto código estable como metadata consistente.
+
+---
+
+### E-030
+
+#### Objetivo
+
+Validar el proyecto desde un repositorio recién clonado.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se creó un clon limpio del repositorio.
+- Se ejecutó `npm start`.
+- Se ejecutó la suite completa de pruebas.
+- Se verificó la ausencia de rutas absolutas.
+- Se detectó un test que dependía de un archivo fuera del repositorio.
+
+#### Conclusión
+
+Las pruebas de distribución permiten detectar dependencias implícitas que permanecen invisibles durante el desarrollo cotidiano.
+
+---
+
+### E-031
+
+#### Objetivo
+
+Eliminar dependencias de archivos externos en la suite de pruebas.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Los tests pasaron a utilizar únicamente `test/fixtures`.
+- Se eliminaron referencias a archivos externos al repositorio.
+- La batería quedó completamente reproducible desde un clon limpio.
+
+#### Conclusión
+
+Toda prueba automatizada debe depender exclusivamente de recursos versionados junto al proyecto.
+
+---
+
 ## Descubrimientos
+
+### Desarrollo
 
 - La conversación completa viaja durante la carga inicial.
 - El JSON contiene el árbol completo en `mapping`.
@@ -642,3 +776,12 @@ El módulo `writer` queda protegido mediante pruebas automatizadas que validan l
 - El generador Markdown puede ofrecer distintos modos de exportación reutilizando la misma infraestructura de formateo.
 - La carga de conversaciones puede validarse completamente mediante pruebas automatizadas utilizando fixtures reales, archivos inexistentes y JSON malformado.
 - La escritura de archivos puede validarse automáticamente utilizando un directorio temporal ignorado por Git, evitando efectos secundarios sobre el repositorio.
+
+### Pre Release
+
+- La reorganización arquitectónica puede realizarse sin modificar el comportamiento observable cuando el proyecto posee una buena cobertura de pruebas.
+- Es preferible escribir la documentación de alto nivel una vez estabilizada la arquitectura.
+- Un archivo de entrada por defecto reduce significativamente la fricción durante el primer uso del proyecto.
+- La validación desde un repositorio recién clonado constituye una prueba complementaria a la batería automatizada y permite detectar dependencias implícitas.
+- Los fixtures utilizados por las pruebas deben formar parte del repositorio para garantizar la reproducibilidad.
+- La preparación de una Release implica principalmente reducir incertidumbre, no incorporar nuevas funcionalidades.

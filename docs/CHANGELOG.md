@@ -4,7 +4,72 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.10.7 - Writer Tests
+# v0.9.5.2 — Pre Release Stabilization
+
+* Finaliza la etapa de estabilización de la Pre Release.
+* Se actualizan las pruebas automatizadas para utilizar exclusivamente fixtures versionados.
+* Se elimina la dependencia de archivos externos al repositorio.
+* Se valida el proyecto desde un repositorio recién clonado.
+* Se verifica la ejecución inmediata mediante `npm start`.
+* Se comprueba el correcto funcionamiento de la ayuda, la versión, los modos `inspect`, `no-write` y `compact`.
+* Se confirma la ausencia de rutas absolutas y dependencias locales.
+* El proyecto queda preparado para iniciar la Iteración 5 y la publicación de la versión 1.0.0.
+
+---
+
+# v0.9.5.1 — Release Validation
+
+* Se incorpora una batería específica de validación para Release (`test-cases-release.sh`).
+* Se reutiliza el runner genérico de pruebas manuales (`run-manual-tests.sh`).
+* Se agregan fixtures mínimos (`empty.json` y `single-message.json`) para validar escenarios básicos.
+* Se incorpora `input/conversation.json` como conversación por defecto para la primera ejecución.es el único archivo versionado dentro de `input/`
+* `.gitignore` conserva únicamente dicho archivo dentro del directorio `input`.
+* Se reorganizan los recursos utilizados por las pruebas en `test/fixtures`.
+* Se incorpora `.gitkeep` en `output` para preservar la estructura del proyecto.
+
+---
+
+# v0.9.4 — Project Metadata
+
+* Se completa la metadata del proyecto.
+* Se actualiza `package.json` con información para distribución pública.
+* Se revisan licencia, autor, descripción, repositorio, palabras clave y versiones soportadas de Node.js.
+
+---
+
+# v0.9.3 — Documentation
+
+* Se reescribe completamente el README.
+* Se documentan instalación, arquitectura, pipeline, testing y filosofía del proyecto.
+* Se incorpora una guía de inicio para nuevos colaboradores.
+
+---
+
+# v0.9.2 — Default Configuration
+
+* La configuración por defecto pasa a utilizar `input/conversation.json`.
+* La CLI puede ejecutarse inmediatamente mediante `npm start`.
+* Se actualiza la ayuda integrada para reflejar la nueva configuración.
+
+---
+
+# v0.9.1 — Test Migration
+
+* Se actualizan las pruebas para reflejar la nueva estructura del proyecto.
+
+---
+
+# v0.9.0 — Pre Release
+
+* Comienza oficialmente la etapa Pre Release.
+* Se reorganiza completamente la estructura del proyecto.
+* Se separan el núcleo (`core`), las interfaces (`interfaces`) y las utilidades (`utilities`).
+* El pipeline permanece sin cambios funcionales.
+* El proyecto queda preparado para futuras interfaces reutilizando el mismo motor.
+
+---
+
+## v0.5.10.7 — Writer Tests
 
 * Incorporadas pruebas automatizadas para `writer.js`.
 * Se incorpora un caso de prueba específico para validar la escritura de archivos.
@@ -15,7 +80,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.10.6 - Loader Tests
+## v0.5.10.6 — Loader Tests
 
 * Incorporadas pruebas automatizadas para `loader.js`.
 * Se verifica la carga correcta de archivos JSON válidos.
@@ -26,7 +91,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.10.5 - Markdown Tests & Compact Mode
+## v0.5.10.5 — Markdown Tests & Compact Mode
 
 * Incorporadas pruebas automatizadas para `markdown.js`.
 * Se agregan fixtures específicos para validar la generación de documentos Markdown.
@@ -38,7 +103,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.10.4 - Normalizer Tests
+## v0.5.10.4 — Normalizer Tests
 
 * Incorporadas pruebas automatizadas para `normalizer.js`.
 * Se valida la transformación del modelo interno.
@@ -47,7 +112,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.10.3 - Filter Tests
+## v0.5.10.3 — Filter Tests
 
 * Incorporadas pruebas automatizadas para `filter.js`.
 * Se valida la eliminación de mensajes no conversacionales.
@@ -55,7 +120,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.10.2 - Parser Tests
+## v0.5.10.2 — Parser Tests
 
 * Incorporadas pruebas automatizadas para `parser.js`.
 * Se verifican la estructura de los mensajes extraídos y la preservación de información relevante.
@@ -63,7 +128,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.10.1 - Validator Testing
+## v0.5.10.1 — Validator Testing
 
 * Incorporada la primera batería de pruebas automatizadas para `validator.js`.
 * Se validan casos exitosos y errores esperados.
@@ -71,7 +136,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.10.0 - Automated Testing
+## v0.5.10.0 — Automated Testing
 
 * Comienza la incorporación de pruebas automatizadas.
 * Se implementa la primera batería de tests para `formatter.js`.
@@ -80,7 +145,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.9.7 - CLI No Write
+## v0.5.9.7 — CLI No Write
 
 * Incorporado el modo `--no-write` (`-nw`).
 * El pipeline ejecuta todas las etapas excepto la escritura del archivo.
@@ -89,7 +154,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.9.6 - CLI Inspect
+## v0.5.9.6 — CLI Inspect
 
 * Incorporado el modo `--inspect` (`-in`).
 * El pipeline puede detenerse luego del Inspector.
@@ -99,7 +164,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.9.5 - CLI Path Validation
+## v0.5.9.5 — CLI Path Validation
 
 * Validación de existencia del archivo de entrada.
 * Validación de existencia del directorio de salida.
@@ -108,7 +173,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.9.4 - CLI Option Groups
+## v0.5.9.4 — CLI Option Groups
 
 * Incorporada la propiedad `group` en `cliActions`.
 * Los alias (`-i` / `--input`, `-o` / `--output`) pasan a pertenecer al mismo grupo lógico.
@@ -117,7 +182,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.9.3 - CLI File Extensions
+## v0.5.9.3 — CLI File Extensions
 
 * Incorporada la validación de extensiones para archivos de entrada y salida.
 * Los archivos de entrada deben utilizar `.json`.
@@ -127,7 +192,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.9.2 - CLI Argument Validation
+## v0.5.9.2 — CLI Argument Validation
 
 * Validación de parámetros reemplazados por otras opciones.
 * `-i -o` informa correctamente que `-i` requiere un valor.
@@ -136,7 +201,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.9.1 - CLI Required Arguments
+## v0.5.9.1 — CLI Required Arguments
 
 * Incorporada la validación de opciones que requieren argumentos.
 * La validación utiliza la propiedad `consumes` definida en `cliActions`.
@@ -144,16 +209,16 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.9.0 - CLI Validator
+## v0.5.9.0 — CLI Validator
 
 * Creado el módulo `validator.js`.
 * La validación de argumentos se desacopla de `cli.js`.
 * Primera regla implementada: detección de opciones desconocidas.
-* `index.js` incorpora manejo centralizado de errores mediante `try/catch`, mostrando mensajes amigables al usuario.
+* `main.js` incorpora manejo centralizado de errores mediante `try/catch`, mostrando mensajes amigables al usuario.
 
 ---
 
-## v0.5.8.3 - CLI Named Arguments
+## v0.5.8.3 — CLI Named Arguments
 
 * Incorporadas las opciones `-i` y `-o`.
 * Eliminada la dependencia del orden de los argumentos.
@@ -161,7 +226,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.8.2 - CLI Version
+## v0.5.8.2 — CLI Version
 
 * Soporte para `-v` y `--version`.
 * La versión se obtiene dinámicamente desde `package.json`.
@@ -169,7 +234,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.8.1 - CLI Help
+## v0.5.8.1 — CLI Help
 
 * Soporte para `-h` y `--help`.
 * La ayuda muestra ejemplos de uso y opciones disponibles.
@@ -177,16 +242,16 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.8 - CLI
+## v0.5.8 — CLI
 
 * Implementado `cli.js`.
 * Soporte para indicar archivo de entrada desde la consola.
 * Soporte para indicar archivo de salida desde la consola.
-* `index.js` deja de depender de rutas fijas.
+* El pipeline deja de depender de rutas fijas.
 
 ---
 
-## v0.5.7 - Writer
+## v0.5.7 — Writer
 
 * Implementado `writer.js`.
 * Escritura de archivos Markdown en disco.
@@ -195,7 +260,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.6 - Markdown Builder
+## v0.5.6 — Markdown Builder
 
 * Implementado el generador de Markdown.
 * El Markdown consume exclusivamente el modelo normalizado.
@@ -204,29 +269,24 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.5 - Formatter
+## v0.5.5 — Formatter
 
 * Nuevo módulo `formatter`.
 * Formateo desacoplado de fechas.
-* Soporte para formatos:
-
-  * `unix`
-  * `iso`
-  * `human`
-  * `locale`
+* Soporte para formatos `unix`, `iso`, `human` y `locale`.
 * Nuevo formateador de bloques de cita (`formatQuote`).
-* El formatter queda preparado para incorporar nuevos formateadores sin modificar el resto del pipeline.
+* El módulo queda preparado para incorporar nuevos formateadores sin modificar el resto del pipeline.
 
 ---
 
-## v0.5.4 - Normalizer
+## v0.5.4 — Normalizer
 
 * Normalización de mensajes.
 * Modelo interno desacoplado del JSON de ChatGPT.
 
 ---
 
-## v0.5.3 - Filter
+## v0.5.3 — Filter
 
 * Filtro de mensajes visibles.
 * Eliminación de mensajes de sistema.
@@ -235,7 +295,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.2 - Parser
+## v0.5.2 — Parser
 
 * Parser funcional.
 * Extracción de mensajes desde `mapping`.
@@ -243,7 +303,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.1 - Loader e Inspector
+## v0.5.1 — Loader e Inspector
 
 * Loader implementado.
 * Inspector implementado.
@@ -251,7 +311,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
-## v0.5.0 - Inicialización
+## v0.5.0 — Inicialización
 
 * Estructura inicial del proyecto.
 * Arquitectura definida.
