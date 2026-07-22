@@ -4,7 +4,7 @@
 
 AI Chat Exporter nació con un objetivo simple: preservar conversaciones de inteligencia artificial en un formato abierto, legible e independiente de la plataforma donde fueron creadas.
 
-Actualmente permite reconstruir conversaciones exportadas desde ChatGPT a partir de su archivo JSON oficial y convertirlas en documentos Markdown limpios, preservando la estructura, el orden y el contexto mediante un pipeline modular y desacoplado.
+Actualmente permite convertir conversaciones exportadas desde ChatGPT a partir de su archivo JSON oficial y convertirlas en documentos Markdown limpios, preservando la estructura, el orden y el contexto mediante un pipeline modular y desacoplado.
 
 Aunque hoy el proyecto soporta ChatGPT y Markdown, su arquitectura fue diseñada para crecer hacia nuevos asistentes, nuevos formatos de exportación y futuras integraciones sin reescribir el núcleo de la aplicación.
 
@@ -28,7 +28,7 @@ Aunque hoy el proyecto soporta ChatGPT y Markdown, su arquitectura fue diseñada
 - Modo `--inspect`.
 - Modo `--no-write`.
 - Modo `--compact`.
-- Sin dependencias externas.
+- Sin dependencias externas de npm.
 - Suite de pruebas automatizadas por módulo.
 - Documentación técnica completa.
 
