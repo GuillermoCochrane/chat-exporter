@@ -10,8 +10,8 @@ La extensión deberá capturar automáticamente el JSON recibido por la aplicaci
 
 # Estado
 
-- 🚧 Investigación
-- ⏳ Capturador
+- ✅ Investigación
+- 🚧 Capturador
 - ⏳ Persistencia
 - ⏳ Integración
 - ⏳ UX
@@ -23,13 +23,29 @@ La extensión deberá capturar automáticamente el JSON recibido por la aplicaci
 
 ## Objetivos
 
-Demostrar que una extensión Chrome (Manifest V3) puede capturar el JSON de una conversación antes de que ChatGPT lo procese.
+Implementar un capturador estable del JSON de conversación utilizando la API `fetch()` desde el contexto de la página.
 
-## Criterios de éxito
+## Estado
 
-- detectar la petición correcta;
-- capturar el `mapping` completo;
-- validar la integridad del JSON obtenido.
+**Completado (Investigación)**
+
+### Validado
+
+- ✅ Inyección de código en el contexto de la página.
+- ✅ Intercepción de `window.fetch`.
+- ✅ Identificación del endpoint correcto:
+  ```
+  /backend-api/conversation/{id}
+  ```
+- ✅ Captura del objeto completo de conversación.
+- ✅ Verificación del campo `mapping`.
+- ✅ Confirmación de que el JSON coincide con el obtenido manualmente desde DevTools.
+
+## Pendiente
+
+- encapsular el capturador;
+- eliminar código de depuración;
+- enviar el JSON al resto de la extensión.
 
 ---
 
@@ -43,14 +59,15 @@ Definir el mecanismo de almacenamiento del JSON capturado antes de iniciar la ex
 
 - `window`
 - `chrome.storage.local`
-- descarga temporal
+- comunicación mediante `window.postMessage`
 - comunicación con el Service Worker
 
 ## Criterios de éxito
 
 - conservar el JSON íntegro;
-- evitar pérdidas de información durante la exportación;
-- minimizar el consumo de recursos.
+- evitar pérdidas de información;
+- minimizar el consumo de recursos;
+- desacoplar la captura del proceso de exportación.
 
 ---
 
@@ -58,21 +75,28 @@ Definir el mecanismo de almacenamiento del JSON capturado antes de iniciar la ex
 
 ## Objetivos
 
-Integrar la extensión con el pipeline existente de AI Chat Exporter.
+Conectar la extensión con el pipeline existente de AI Chat Exporter.
 
-## Resultado esperado
+## Flujo esperado
 
 ```text
-JSON
- ↓
+ChatGPT
+      │
+      ▼
+Capturador
+      │
+      ▼
+Pipeline existente
+      │
+      ▼
 Parser
- ↓
+      ▼
 Filter
- ↓
+      ▼
 Normalizer
- ↓
+      ▼
 Markdown
- ↓
+      ▼
 Download
 ```
 
