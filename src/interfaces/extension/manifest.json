@@ -4,8 +4,16 @@
   "description": "Captura conversaciones de ChatGPT.",
   "version": "1.1.0",
 
+  "permissions": [
+    "downloads"
+  ],
+
   "background": {
     "service_worker": "background.js"
+  },
+
+  "action": {
+    "default_title": "AI Chat Exporter"
   },
 
   "content_scripts": [
