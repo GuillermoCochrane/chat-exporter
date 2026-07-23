@@ -1,3 +1,8 @@
 // Responsable de comunicarse con la página
 // e inyectar el código necesario.
-console.log("[AI Chat Exporter] Content Script iniciado.");
+
+const script = document.createElement("script");
+
+script.src = chrome.runtime.getURL("inject.js");
+
+document.documentElement.appendChild(script);
