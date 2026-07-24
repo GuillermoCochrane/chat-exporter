@@ -6,14 +6,17 @@ Eliminar la necesidad de utilizar DevTools para recuperar el JSON de una convers
 
 La extensión deberá capturar automáticamente el JSON recibido por la aplicación web y reutilizar el pipeline existente de AI Chat Exporter.
 
+El objetivo final es convertir el capturador experimental en una herramienta completa de exportación de conversaciones.
+
 ---
 
 # Estado
 
 - ✅ Investigación
-- 🚧 Capturador
-- ⏳ Persistencia
-- ⏳ Integración
+- ✅ Capturador
+- ✅ Persistencia
+- 🚧 Integración
+- ⏳ Exportadores
 - ⏳ UX
 - ⏳ Publicación
 
@@ -23,29 +26,30 @@ La extensión deberá capturar automáticamente el JSON recibido por la aplicaci
 
 ## Objetivos
 
-Implementar un capturador estable del JSON de conversación utilizando la API `fetch()` desde el contexto de la página.
+Implementar un capturador estable del JSON de conversación utilizando la API `fetch()` desde el contexto real de la página.
 
 ## Estado
 
-**Completado (Investigación)**
+**Completado**
 
 ### Validado
 
 - ✅ Inyección de código en el contexto de la página.
 - ✅ Intercepción de `window.fetch`.
 - ✅ Identificación del endpoint correcto:
+
   ```
   /backend-api/conversation/{id}
   ```
+
 - ✅ Captura del objeto completo de conversación.
-- ✅ Verificación del campo `mapping`.
+- ✅ Identificación del campo `mapping`.
+- ✅ Filtrado de respuestas para evitar sobrescrituras por metadatos o arrays vacíos.
 - ✅ Confirmación de que el JSON coincide con el obtenido manualmente desde DevTools.
 
-## Pendiente
+### Resultado
 
-- encapsular el capturador;
-- eliminar código de depuración;
-- enviar el JSON al resto de la extensión.
+La investigación demuestra que la captura automática del JSON es completamente viable bajo Manifest V3.
 
 ---
 
@@ -53,21 +57,26 @@ Implementar un capturador estable del JSON de conversación utilizando la API `f
 
 ## Objetivos
 
-Definir el mecanismo de almacenamiento del JSON capturado antes de iniciar la exportación.
+Definir un mecanismo de almacenamiento temporal desacoplado entre la captura y la exportación.
 
-## Alternativas a evaluar
+## Estado
 
-- `window`
-- `chrome.storage.local`
-- comunicación mediante `window.postMessage`
-- comunicación con el Service Worker
+**Completado**
 
-## Criterios de éxito
+### Decisión adoptada
 
-- conservar el JSON íntegro;
-- evitar pérdidas de información;
-- minimizar el consumo de recursos;
-- desacoplar la captura del proceso de exportación.
+La conversación capturada permanece en memoria mediante:
+
+```javascript
+window.__AI_CHAT_EXPORTER__.conversation
+```
+
+### Motivos
+
+- evita serialización innecesaria;
+- evita duplicación de memoria;
+- desacopla completamente la captura de la exportación;
+- simplifica la arquitectura.
 
 ---
 
@@ -77,7 +86,33 @@ Definir el mecanismo de almacenamiento del JSON capturado antes de iniciar la ex
 
 Conectar la extensión con el pipeline existente de AI Chat Exporter.
 
-## Flujo esperado
+## Estado
+
+**En progreso**
+
+### Flujo actual
+
+```text
+ChatGPT
+      │
+      ▼
+Inject Script
+      │
+      ▼
+Content Script
+      │
+      ▼
+Background
+      │
+      ▼
+conversation.json
+```
+
+### Próximo paso
+
+Reemplazar la exportación únicamente a JSON por un sistema de exportadores reutilizando el pipeline existente.
+
+Flujo objetivo:
 
 ```text
 ChatGPT
@@ -86,43 +121,65 @@ ChatGPT
 Capturador
       │
       ▼
-Pipeline existente
+Pipeline
       │
       ▼
 Parser
-      ▼
-Filter
+      │
       ▼
 Normalizer
+      │
       ▼
-Markdown
-      ▼
-Download
+Exportadores
 ```
 
 ---
 
-# Fase 4 — UX
+# Fase 4 — Exportadores
 
 ## Objetivos
 
-- botón **Export**
+Permitir múltiples formatos de salida utilizando el mismo pipeline.
+
+## Formatos previstos
+
+- JSON (original)
+- Markdown
+- HTML
+- PDF
+
+La arquitectura deberá permitir agregar nuevos formatos sin modificar el capturador.
+
+---
+
+# Fase 5 — UX
+
+## Objetivos
+
+Construir la interfaz definitiva de la extensión.
+
+## Funcionalidades previstas
+
+- botón Export
+- selector de formato
 - indicador de captura
 - indicador de progreso
-- manejo de errores
+- mensajes de error
 - configuración básica
 
 ---
 
-# Fase 5 — Publicación
+# Fase 6 — Publicación
 
 ## Objetivos
 
-Preparar la extensión para su distribución.
+Preparar la extensión para distribución.
 
 ## Alcance
 
-- revisión del código;
+- limpieza del código;
+- eliminación de logs de depuración;
+- revisión general;
 - documentación;
 - pruebas manuales;
 - empaquetado;
@@ -132,9 +189,28 @@ Preparar la extensión para su distribución.
 
 # Futuro
 
-- soporte para otros formatos de exportación;
-- soporte para otros proveedores de IA;
-- exportación directa sin archivos intermedios;
-- integración con Obsidian;
-- configuración avanzada;
-- actualización automática de proveedores compatibles.
+## Exportación
+
+- nuevos formatos;
+- exportación múltiple;
+- plantillas personalizadas.
+
+## Compatibilidad
+
+- otros proveedores de IA;
+- detección automática del proveedor;
+- actualización de proveedores compatibles.
+
+## Integraciones
+
+- Obsidian;
+- Logseq;
+- Notion;
+- GitHub.
+
+## Automatización
+
+- exportación automática;
+- exportación por conversación;
+- exportación por lote;
+- sincronización incremental.
