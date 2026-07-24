@@ -150,3 +150,5 @@ input/*
 
 output/*
 !output/.gitkeep
+
+docs/research/development/*
