@@ -1,4 +1,3 @@
-import { loadConversation } from "./loader.js";
 import { inspectConversation } from "./inspector.js";
 import { extractMessages } from "./parser.js";
 import { filterConversationMessages } from "./filter.js";
@@ -6,12 +5,19 @@ import { normalizeMessages } from "./normalizer.js";
 import { buildMarkdown } from "./markdown.js";
 import { writeFileContent } from "./writer.js";
 import { parseArguments } from "../interfaces/cli.js";
+import { conversationSources } from "./sources/index.js";
 
 export async function runPipeline() {
   try {
     const config = parseArguments();
 
-    const conversation = await loadConversation(config.input);
+    const source = conversationSources[config.source];
+
+    if (!source) {
+      throw new Error(`Fuente desconocida: ${config.source}`);
+    }
+
+    const conversation = await source(config.input);
 
     const report = inspectConversation(conversation);
 
