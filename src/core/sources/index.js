@@ -1,5 +1,5 @@
-import { loadJsonFileConversation } from "./jsonFile.js";
+import { loadConversation } from "./jsonFile.js";
 
 export const conversationSources = {
-  jsonFile: loadJsonFileConversation,
+  jsonFile: loadConversation,
 };
