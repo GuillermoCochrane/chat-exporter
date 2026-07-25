@@ -1,15 +1,10 @@
 import packageJson from "../../package.json" with { type: "json" };
 import { validateArguments } from "../utilities/validator.js";
+import { defaultPipelineConfig } from "../configuration/pipelineConfig.js";
 
-// Configuración utilizada cuando la CLI no recibe parámetros.
-const defaultConfig = {
-  input: "./input/conversation.json",
-  output: "./output/conversacion.md",
-
-  inspect: false,
-  noWrite: false,
-  compact: false,
-};
+// Copia local de la configuración base del pipeline.
+// Cada interfaz puede extenderla o sobrescribirla según sus necesidades.
+const defaultConfig = { ...defaultPipelineConfig, };
 
 const cliMessages = {
   help: `
