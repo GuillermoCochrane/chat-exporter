@@ -10,13 +10,15 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 ## Versión
 
-**0.9.5.2 (Pre Release)**
+**1.1.3 (Development)**
 
 ## Estado general
 
 ### Núcleo
 
-- [x] Loader
+- [x] Pipeline desacoplado
+- [x] Conversation Sources
+- [x] Pipeline Profiles
 - [x] Inspector
 - [x] Parser
 - [x] Filter
@@ -28,6 +30,8 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 ### Interfaces
 
 - [x] CLI
+- [ ] Chrome Extension
+- [ ] REST API
 
 ### Testing
 
@@ -58,54 +62,50 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Fixtures versionados
 - [x] Repositorio ejecutable inmediatamente después de clonar
 
-### Pre Release
+### Arquitectura
 
-- [x] Arquitectura reorganizada
-- [x] Documentación especializada
-- [x] Validación desde clon limpio
-- [x] Preparación para distribución
-- [ ] Release 1.0.0
+- [x] Core desacoplado de las interfaces
+- [x] Pipeline basado en perfiles
+- [x] Conversation Sources
+- [x] Preparado para múltiples proveedores
+
 
 ---
 
 # Pipeline
 
 ```text
-JSON
- ↓
-Loader
- ↓
+Profile
+   ↓
+Source
+   ↓
+Conversation
+   ↓
 Inspector
- ↓
+   ↓
 Parser
- ↓
+   ↓
 Filter
- ↓
+   ↓
 Normalizer
- ↓
+   ↓
 Formatter
- ↓
-Markdown Builder
- ↓
-Writer
+   ↓
+Renderer
+   ↓
+Output
 ```
 
 ---
 
-# Próximo objetivo
+## Próximo objetivo
 
-## Versión 1.0.0
+### Integración de la primera interfaz desacoplada
 
-La primera versión estable consistirá en:
-
-- Revisión final de toda la documentación.
-- Revisión de coherencia entre Architecture, ADR, Laboratory, Changelog y Roadmap.
-- Verificación final del proyecto desde un repositorio recién clonado.
-- Actualización definitiva de versión.
-- Creación del tag.
-- Publicación de la primera Release.
-
-No se prevén nuevas funcionalidades antes de la versión 1.0.
+- Integrar Chrome Extension utilizando Conversation Sources.
+- Mantener el Core completamente independiente de la interfaz.
+- Validar que CLI y Extension compartan exactamente el mismo pipeline.
+- Documentar la integración.
 
 ---
 

@@ -79,7 +79,9 @@ Algunos ejemplos son:
 - Memoria local.
 - Otros proveedores de conversaciones.
 
-La responsabilidad de una Source termina cuando entrega la conversación exactamente como fue obtenida.
+La responsabilidad de una Source termina cuando entrega una `Conversation` correspondiente al proveedor que representa.
+
+Puede obtenerla desde un archivo, una API, una extensión de navegador o cualquier otro mecanismo de adquisición.
 
 No interpreta la estructura.
 
@@ -115,6 +117,8 @@ Todas ellas representan conversaciones, aunque internamente utilicen modelos dis
 El proyecto no intenta unificarlas en esta etapa.
 
 Cada representación conserva íntegramente la estructura del proveedor que la generó.
+
+El Core nunca realiza suposiciones sobre la estructura interna de una Conversation.
 
 ---
 
@@ -168,6 +172,8 @@ El modelo interno utilizado por el proyecto es una colección de objetos `Messag
 
 Este modelo constituye el contrato compartido entre el Core y todas las implementaciones futuras.
 
+Actualmente dicho contrato está representado por `Message[]`, aunque el resto del pipeline depende del contrato y no de la implementación concreta utilizada para representarlo.
+
 A partir de este punto todas las etapas posteriores trabajan exclusivamente sobre este contrato.
 
 Ningún módulo posterior necesita conocer cómo estaba organizada la conversación original.
@@ -182,9 +188,21 @@ Esto permite que nuevas fuentes puedan incorporarse sin modificar el resto del p
 
 Una vez obtenido el modelo interno, comienza el procesamiento propio del motor.
 
-Actualmente el flujo interno está compuesto por las siguientes etapas:
+Actualmente el procesamiento interno del Core puede dividirse en dos etapas:
 
 ```text
+Conversation
+
+↓
+
+Inspector
+
+↓
+
+Parser
+
+↓
+
 Message[]
 
 ↓
@@ -194,10 +212,6 @@ Filter
 ↓
 
 Normalizer
-
-↓
-
-Inspector
 
 ↓
 
@@ -303,7 +317,7 @@ Cada nuevo proveedor debe adaptarse al mismo modelo interno.
 
 Cada nuevo formato debe consumir exactamente la misma representación de mensajes.
 
-La evolución del sistema consiste en agregar componentes alrededor del Core, intentando mantener inalterado su comportamiento interno siempre que sea posible.
+La evolución del sistema consiste en agregar componentes alrededor del Core, manteniendo inalterado su comportamiento interno siempre que sea posible.
 
 ---
 

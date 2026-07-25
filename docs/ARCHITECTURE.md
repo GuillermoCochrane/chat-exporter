@@ -12,10 +12,9 @@ El proyecto sigue los principios:
 
 Cada módulo posee una única responsabilidad.
 
-La arquitectura busca que el núcleo del exportador permanezca independiente de las interfaces de entrada y de los formatos de salida, facilitando su reutilización y evolución.
+La arquitectura busca que el núcleo del motor permanezca independiente... de las interfaces de entrada y de los formatos de salida, facilitando su reutilización y evolución.
 
 ---
-
 ## Estructura
 
 ```text
@@ -23,25 +22,37 @@ src/
 │
 ├── main.js
 │
+├── configuration/
+│   ├── pipelineConfig.js
+│   └── pipelineProfiles.js
+│
 ├── core/
 │   ├── index.js
-│   ├── loader.js
 │   ├── inspector.js
 │   ├── parser.js
 │   ├── filter.js
 │   ├── normalizer.js
 │   ├── markdown.js
-│   └── writer.js
+│   ├── writer.js
+│   │
+│   └── sources/
+│       ├── index.js
+│       └── jsonFile.js
 │
 ├── interfaces/
-│   └── cli.js
+│   ├── cli.js
+│   └── extension/
 │
 └── utilities/
     ├── formatter.js
     └── validator.js
 ```
 
-La reorganización realizada durante la serie **0.9.x** separó el núcleo del exportador de sus interfaces y utilidades auxiliares, preparando el proyecto para incorporar nuevos puntos de entrada (API, extensión de navegador u otras interfaces) sin modificar el pipeline.
+La arquitectura continúa separando el núcleo del motor de las interfaces y de los mecanismos concretos de obtención de conversaciones.
+
+La incorporación del directorio `sources` introduce el concepto de **Conversation Source**, permitiendo que distintas interfaces obtengan conversaciones sin modificar el Core.
+
+La configuración compartida también deja de pertenecer a una interfaz específica y pasa a centralizarse en el módulo `configuration`.
 
 ---
 
@@ -50,34 +61,51 @@ La reorganización realizada durante la serie **0.9.x** separó el núcleo del e
 ### Procesamiento
 
 ```text
-JSON
- ↓
-Loader
- ↓
+Conversation Source
+        │
+        ▼
+Conversation (RAW)
+        │
+        ▼
 Inspector
- ↓
+        │
+        ▼
 Parser
- ↓
+        │
+        ▼
 Filter
- ↓
+        │
+        ▼
 Normalizer
- ↓
-Markdown Builder
- ↓
-Writer
+        │
+        ▼
+Renderer (Markdown)
+        │
+        ▼
+Output
 ```
 
 ### Configuración
 
 ```text
-CLI
- ↓
-Validator
- ↓
-Configuración
- ↓
-Core (index.js)
+Interface
+
+↓
+
+Pipeline Profile
+
+↓
+
+Pipeline Config
+
+↓
+
+Core
 ```
+
+Cada interfaz únicamente construye la configuración de ejecución.
+
+El Core permanece completamente desacoplado de la forma en que esa configuración fue obtenida.
 
 ---
 
@@ -106,11 +134,32 @@ Además de la suite automatizada, el proyecto incorpora baterías de validación
 
 ## Responsabilidades
 
-### loader.js
+### sources/
 
-Carga archivos JSON.
+Implementa las distintas fuentes de conversación soportadas por el sistema.
 
-No interpreta datos.
+Cada Source conoce únicamente cómo obtener una conversación desde un origen determinado.
+
+Actualmente el proyecto implementa:
+
+- `jsonFile.js`
+
+Las Sources entregan siempre una `Conversation` sin interpretar su contenido.
+
+El Core no conoce cómo fue obtenida esa conversación.
+
+---
+
+### configuration/
+
+Centraliza la configuración compartida del pipeline.
+
+Actualmente define:
+
+- configuración base del motor;
+- perfiles de ejecución.
+
+Las interfaces reutilizan esta configuración sin duplicar valores por defecto.
 
 ---
 
@@ -196,7 +245,9 @@ No interpreta contenido.
 
 ### cli.js
 
-Interpreta las opciones de la línea de comandos y construye la configuración de ejecución.
+Construye el perfil de ejecución solicitado por el usuario a partir de los argumentos de la línea de comandos.
+
+Los valores por defecto provienen del módulo `configuration`, evitando que la interfaz sea la fuente de verdad del pipeline.
 
 Actualmente implementa:
 
@@ -242,11 +293,13 @@ Cuenta con pruebas automatizadas independientes.
 
 ### index.js
 
-Coordina la ejecución completa del núcleo del exportador.
+Coordina la ejecución completa del motor.
 
-Recibe la configuración construida por la interfaz de línea de comandos y ejecuta el pipeline respetando el modo seleccionado (`inspect`, `no-write` y `compact`).
+Su responsabilidad consiste únicamente en orquestar el pipeline utilizando la configuración recibida.
 
-No implementa reglas de negocio; únicamente orquesta el flujo entre módulos especializados.
+Resuelve la Conversation Source correspondiente, obtiene la conversación y delega el resto del procesamiento a módulos especializados.
+
+No implementa reglas de negocio ni conoce detalles de las interfaces que invocan el pipeline.
 
 ---
 

@@ -751,6 +751,52 @@ Toda prueba automatizada debe depender exclusivamente de recursos versionados ju
 
 ---
 
+### E-032
+
+#### Objetivo
+
+Desacoplar la obtención de conversaciones del resto del pipeline.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se introdujo la abstracción `Conversation Source`.
+- El Loader dejó de ser el responsable de acceder directamente al sistema de archivos.
+- El Core ahora consume conversaciones mediante una fuente declarativa.
+- La primera implementación corresponde a `jsonFile`.
+
+#### Conclusión
+
+El origen de una conversación deja de formar parte del Core y pasa a ser intercambiable, permitiendo reutilizar el mismo pipeline desde distintas interfaces.
+
+---
+
+### E-033
+
+#### Objetivo
+
+Centralizar la configuración del pipeline para reutilizarla desde distintas interfaces.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se creó `pipelineConfig` como fuente de verdad.
+- Se incorporaron `pipelineProfiles`.
+- La CLI pasó a utilizar el perfil `cli`.
+- Las futuras interfaces podrán reutilizar el mismo perfil o definir variantes propias.
+
+#### Conclusión
+
+La configuración deja de pertenecer a la CLI y pasa a formar parte de la infraestructura del pipeline.
+
+---
+
 ## Descubrimientos
 
 ### Desarrollo
@@ -785,3 +831,6 @@ Toda prueba automatizada debe depender exclusivamente de recursos versionados ju
 - La validación desde un repositorio recién clonado constituye una prueba complementaria a la batería automatizada y permite detectar dependencias implícitas.
 - Los fixtures utilizados por las pruebas deben formar parte del repositorio para garantizar la reproducibilidad.
 - La preparación de una Release implica principalmente reducir incertidumbre, no incorporar nuevas funcionalidades.
+- El origen de una conversación puede abstraerse mediante Conversation Sources sin modificar el pipeline.
+- La configuración del pipeline puede centralizarse y reutilizarse entre distintas interfaces.
+- Los perfiles permiten adaptar el comportamiento del pipeline sin duplicar configuración.
