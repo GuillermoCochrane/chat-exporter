@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 
-import { loadConversation } from "../src/core/loader.js";
+import { conversationSources } from "../src/core/sources/index.js";
 import cases from "./cases/loader-cases.js";
+
+const loadConversation = conversationSources.jsonFile;
 
 for (const fixture of [cases.MINI, cases.SMALL]) {
   const data = await loadConversation(fixture);
@@ -19,8 +21,8 @@ await assert.rejects(
   loadConversation(cases.MISSING),
 );
 
-console.log("✔ Loader carga correctamente archivos válidos.");
-console.log("✔ Loader detecta JSON inválido.");
-console.log("✔ Loader detecta archivos inexistentes.");
+console.log("✔ JsonFileSource carga correctamente archivos válidos.");
+console.log("✔ JsonFileSource detecta JSON inválido.");
+console.log("✔ JsonFileSource detecta archivos inexistentes.");
 console.log("\n4/4 tests superados.");
-console.log("\n✔ loader.test.js OK");
+console.log("\n✔ jsonFileSource.test.js OK");

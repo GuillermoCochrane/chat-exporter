@@ -5,7 +5,7 @@ import "./filter.test.js";
 import "./normalizer.test.js";
 import "./markdown.test.js";
 import "./markdown-compact.test.js";
-import "./loader.test.js";
+import "./jsonFileSource.test.js";
 import "./writer.test.js";
 
 console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");

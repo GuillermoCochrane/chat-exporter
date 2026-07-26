@@ -1,5 +1,7 @@
-import { loadConversation } from "../src/core/loader.js";
+import { conversationSources } from "../src/core/sources/index.js";
 import { extractMessages } from "../src/core/parser.js";
+
+const loadConversation = conversationSources.jsonFile;
 
 const tests = [
   {
