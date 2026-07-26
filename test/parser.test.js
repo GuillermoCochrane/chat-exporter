@@ -93,7 +93,7 @@ let passed = 0;
 
 for (const test of tests) {
   try {
-    const conversation = await loadConversation(test.input);
+    const conversation = await loadConversation({ input: test.input });
     const messages = extractMessages(conversation);
 
     if (messages.length !== test.expectedCount) {
