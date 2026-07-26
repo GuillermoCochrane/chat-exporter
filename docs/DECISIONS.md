@@ -63,15 +63,11 @@ Pipeline lineal.
 #### Arquitectura
 
 ```text
-JSON
-→ Loader
-→ Inspector
-→ Parser
-→ Filter
-→ Normalizer
-→ Formatter
-→ Markdown Builder
-→ Writer
+Conversation Source
+→ Conversation
+→ runPipeline
+→ Renderer
+→ Output
 ```
 
 #### Motivación
@@ -647,6 +643,58 @@ La prioridad de la serie 0.9.x consiste en estabilizar la arquitectura, fortalec
 #### Consecuencia
 
 Durante la etapa Pre Release únicamente se aceptan cambios relacionados con arquitectura, documentación, testing, configuración y distribución. Las nuevas funcionalidades quedan postergadas para versiones posteriores a la 1.0.0.
+
+#### Estado
+
+Aceptada.
+
+---
+
+## ADR-0027
+
+#### Fecha
+
+2026-07-22
+
+#### Título
+
+Separar la orquestación del procesamiento mediante Conversation Sources.
+
+#### Motivación
+
+El Core todavía mezclaba tres responsabilidades diferentes:
+
+- obtener la conversación;
+- procesarla;
+- generar y escribir la salida.
+
+Esto dificultaba reutilizar el motor desde nuevas interfaces, ya que el pipeline conocía detalles del entorno de ejecución.
+
+#### Consecuencia
+
+La arquitectura pasa a dividirse en dos capas claramente diferenciadas:
+
+- `runExporter`, responsable de:
+  - resolver la Conversation Source;
+  - obtener la conversación;
+  - ejecutar el pipeline;
+  - aplicar el renderer;
+  - delegar la escritura del resultado.
+
+- `runPipeline`, responsable únicamente del procesamiento del Core:
+
+  - Inspector
+  - Parser
+  - Filter
+  - Normalizer
+
+La obtención de conversaciones queda abstraída mediante `Conversation Sources`, permitiendo incorporar nuevos orígenes (extensión, API, clipboard, etc.) sin modificar el pipeline.
+
+El Core deja de conocer:
+
+- el origen de la conversación;
+- la interfaz que inició la ejecución;
+- el destino final del documento generado.
 
 #### Estado
 

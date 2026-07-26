@@ -10,7 +10,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 ## Versión
 
-**1.1.3 (Development)**
+**1.1.3.5 (Development)**
 
 ## Estado general
 
@@ -44,7 +44,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Normalizer
 - [x] Markdown
 - [x] Markdown (modo compacto)
-- [x] Loader
+- [x] JsonFileSource
 - [x] Writer
 
 #### Manual
@@ -75,11 +75,19 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 # Pipeline
 
 ```text
-Profile
+Interface
    ↓
-Source
+Pipeline Profile
+   ↓
+Pipeline Config
+   ↓
+runExporter
+   ↓
+Conversation Source
    ↓
 Conversation
+   ↓
+runPipeline
    ↓
 Inspector
    ↓
@@ -88,8 +96,6 @@ Parser
 Filter
    ↓
 Normalizer
-   ↓
-Formatter
    ↓
 Renderer
    ↓
@@ -102,9 +108,10 @@ Output
 
 ### Integración de la primera interfaz desacoplada
 
-- Integrar Chrome Extension utilizando Conversation Sources.
-- Mantener el Core completamente independiente de la interfaz.
-- Validar que CLI y Extension compartan exactamente el mismo pipeline.
+- Implementar el Conversation Source para la Chrome Extension.
+- Integrar la extensión utilizando `runExporter`.
+- Compartir exactamente el mismo pipeline entre CLI y Extension.
+- Validar el funcionamiento completo del flujo de exportación.
 - Documentar la integración.
 
 ---
@@ -127,7 +134,7 @@ Output
 - Detección automática del formato de conversación.
 - Selección dinámica del parser correspondiente.
 
-### Parsers previstos
+### Conversation Sources y Adapters previstos
 
 - ChatGPT
 - Gemini
@@ -149,3 +156,5 @@ Output
 - Configuración persistente de usuario.
 - Soporte para perfiles de exportación.
 - Nuevos modos de formateo Markdown.
+- Renderers desacoplados.
+- Outputs desacoplados.

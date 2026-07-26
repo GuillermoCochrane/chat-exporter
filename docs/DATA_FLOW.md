@@ -124,7 +124,11 @@ El Core nunca realiza suposiciones sobre la estructura interna de una Conversati
 
 ## Conversation Adapters
 
-Los Conversation Adapters conocen la estructura específica de una Conversation determinada.
+Los Conversation Adapters conocen la estructura específica de una `Conversation` determinada.
+
+Actualmente el proyecto implementa este comportamiento para conversaciones de ChatGPT mediante `parser.js`, que adapta la estructura basada en `mapping` al modelo interno `Message[]`.
+
+La arquitectura permite incorporar adaptadores adicionales para otros proveedores sin modificar el resto del Core.
 
 Su responsabilidad consiste en transformar la representación original del proveedor hacia el modelo interno utilizado por el proyecto.
 
@@ -180,15 +184,27 @@ Ningún módulo posterior necesita conocer cómo estaba organizada la conversaci
 
 Toda la lógica del proyecto opera únicamente sobre este modelo común.
 
-Esto permite que nuevas fuentes puedan incorporarse sin modificar el resto del pipeline.
+Esto permite incorporar nuevas Conversation Sources o nuevos Conversation Adapters sin modificar el resto del pipeline.
+
+Una vez construido `Message[]`, el procesamiento continúa siendo exactamente el mismo independientemente del origen de la conversación.
 
 ---
 
 ## Core
 
-Una vez obtenido el modelo interno, comienza el procesamiento propio del motor.
+Una vez obtenida la `Conversation`, el flujo se divide en dos responsabilidades claramente diferenciadas.
 
-Actualmente el procesamiento interno del Core puede dividirse en dos etapas:
+La primera corresponde al **orquestador** (`runExporter`), cuya función consiste en coordinar el proceso completo:
+
+- resolver la Conversation Source;
+- obtener la conversación;
+- ejecutar el pipeline;
+- invocar el Renderer correspondiente;
+- entregar el resultado al mecanismo de salida.
+
+La segunda corresponde al **pipeline** (`runPipeline`), que implementa exclusivamente el procesamiento interno del Core.
+
+Su flujo actual puede resumirse de la siguiente manera:
 
 ```text
 Conversation
@@ -212,19 +228,17 @@ Filter
 ↓
 
 Normalizer
-
-↓
-
-Renderer
 ```
 
 Cada módulo posee una única responsabilidad y trabaja exclusivamente sobre el contrato recibido.
 
 El Core nunca conoce el proveedor original de la conversación.
 
+Tampoco conoce cómo será exportado el resultado.
+
 Su único objetivo consiste en transformar información utilizando el modelo interno compartido.
 
----
+El Renderer y el Output forman parte de la capa de orquestación y permanecen desacoplados del procesamiento interno.
 
 ## Renderers
 
@@ -246,6 +260,8 @@ Todos reciben exactamente el mismo modelo de entrada (`Message[]`).
 
 La diferencia entre ellos reside únicamente en la representación final generada.
 
+Actualmente el renderer Markdown continúa formando parte del flujo principal de exportación, aunque la arquitectura ya se encuentra preparada para desacoplar completamente esta capa mediante el directorio `core/renderers/`.
+
 ---
 
 ## Outputs
@@ -265,6 +281,8 @@ Los mecanismos de salida tampoco forman parte del Core.
 Simplemente consumen el resultado producido por un Renderer.
 
 Esto permite reutilizar el mismo renderer independientemente del destino elegido.
+
+La responsabilidad de seleccionar el Renderer y el mecanismo de salida pertenece al orquestador (`runExporter`), manteniendo el Core completamente independiente de estas decisiones.
 
 ---
 

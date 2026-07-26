@@ -797,6 +797,30 @@ La configuración deja de pertenecer a la CLI y pasa a formar parte de la infrae
 
 ---
 
+### E-034
+
+#### Objetivo
+
+Separar la orquestación del procesamiento del pipeline para desacoplar completamente el Core de las interfaces.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se dividió el antiguo `index.js` en dos responsabilidades independientes.
+- `runPipeline()` pasó a recibir una conversación ya obtenida y una configuración, limitándose al procesamiento del Core.
+- `runExporter()` pasó a encargarse de resolver la Conversation Source, ejecutar el pipeline, renderizar el resultado y delegar la escritura.
+- `main.js` quedó reducido al punto de entrada de la aplicación.
+- El procesamiento interno puede reutilizarse desde cualquier interfaz sin conocer el origen de la conversación ni el destino del resultado.
+
+#### Conclusión
+
+Separar la orquestación del procesamiento reduce el acoplamiento del sistema y convierte al pipeline en un componente reutilizable e independiente de cualquier interfaz.
+
+---
+
 ## Descubrimientos
 
 ### Desarrollo
@@ -822,6 +846,9 @@ La configuración deja de pertenecer a la CLI y pasa a formar parte de la infrae
 - El generador Markdown puede ofrecer distintos modos de exportación reutilizando la misma infraestructura de formateo.
 - La carga de conversaciones puede validarse completamente mediante pruebas automatizadas utilizando fixtures reales, archivos inexistentes y JSON malformado.
 - La escritura de archivos puede validarse automáticamente utilizando un directorio temporal ignorado por Git, evitando efectos secundarios sobre el repositorio.
+- Separar la obtención de la conversación, el procesamiento y la salida produce un pipeline reutilizable desde cualquier interfaz.
+- La orquestación puede evolucionar independientemente del procesamiento cuando ambos componentes se comunican mediante contratos simples.
+- Resolver la Conversation Source fuera del pipeline elimina el último acoplamiento del Core con el entorno de ejecución.
 
 ### Pre Release
 
@@ -834,3 +861,5 @@ La configuración deja de pertenecer a la CLI y pasa a formar parte de la infrae
 - El origen de una conversación puede abstraerse mediante Conversation Sources sin modificar el pipeline.
 - La configuración del pipeline puede centralizarse y reutilizarse entre distintas interfaces.
 - Los perfiles permiten adaptar el comportamiento del pipeline sin duplicar configuración.
+- La separación entre orquestación (`runExporter`) y procesamiento (`runPipeline`) simplifica la incorporación de nuevas interfaces sin modificar el núcleo del proyecto.
+- Centralizar la resolución de Conversation Sources en el orquestador mantiene al Core completamente independiente del origen de los datos.

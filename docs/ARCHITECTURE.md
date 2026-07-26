@@ -12,10 +12,11 @@ El proyecto sigue los principios:
 
 Cada módulo posee una única responsabilidad.
 
-La arquitectura busca que el núcleo del motor permanezca independiente... de las interfaces de entrada y de los formatos de salida, facilitando su reutilización y evolución.
+La arquitectura busca que el núcleo del motor permanezca completamente independiente de las interfaces de entrada, las fuentes de conversación, los renderizadores y los mecanismos de salida, facilitando su reutilización y evolución.
 
 ---
-## Estructura
+
+# Estructura
 
 ```text
 src/
@@ -27,17 +28,22 @@ src/
 │   └── pipelineProfiles.js
 │
 ├── core/
-│   ├── index.js
+│   ├── exporter.js
+│   ├── pipeline.js
 │   ├── inspector.js
 │   ├── parser.js
 │   ├── filter.js
 │   ├── normalizer.js
-│   ├── markdown.js
-│   ├── writer.js
 │   │
-│   └── sources/
-│       ├── index.js
-│       └── jsonFile.js
+│   ├── sources/
+│   │   ├── index.js
+│   │   └── jsonFile.js
+│   │
+│   ├── renderers/
+│   │   └── .gitkeep
+│   │
+│   └── outputs/
+│       └── .gitkeep
 │
 ├── interfaces/
 │   ├── cli.js
@@ -48,23 +54,53 @@ src/
     └── validator.js
 ```
 
-La arquitectura continúa separando el núcleo del motor de las interfaces y de los mecanismos concretos de obtención de conversaciones.
+La arquitectura separa cuatro responsabilidades claramente diferenciadas:
 
-La incorporación del directorio `sources` introduce el concepto de **Conversation Source**, permitiendo que distintas interfaces obtengan conversaciones sin modificar el Core.
+- **Interfaces**, que construyen la configuración.
+- **Conversation Sources**, que obtienen una conversación desde cualquier origen.
+- **Core**, que procesa conversaciones sin conocer su procedencia.
+- **Renderers / Outputs**, encargados de transformar y entregar el resultado.
 
-La configuración compartida también deja de pertenecer a una interfaz específica y pasa a centralizarse en el módulo `configuration`.
+Esta separación permite incorporar nuevas interfaces, nuevas fuentes y nuevos formatos de exportación sin modificar el núcleo del motor.
 
 ---
 
-## Pipeline
+# Pipeline
 
-### Procesamiento
+## Orquestación
 
 ```text
+Interface
+        │
+        ▼
+Pipeline Profile
+        │
+        ▼
+Pipeline Config
+        │
+        ▼
+runExporter
+        │
+        ▼
 Conversation Source
         │
         ▼
-Conversation (RAW)
+Conversation
+        │
+        ▼
+runPipeline
+```
+
+`runExporter()` coordina la ejecución completa.
+
+Resuelve la fuente correspondiente, obtiene la conversación, ejecuta el pipeline, invoca el renderer adecuado y entrega el resultado mediante el mecanismo de salida correspondiente.
+
+---
+
+## Procesamiento
+
+```text
+Conversation
         │
         ▼
 Inspector
@@ -79,37 +115,18 @@ Filter
 Normalizer
         │
         ▼
-Renderer (Markdown)
-        │
-        ▼
-Output
+Normalized Conversation
 ```
 
-### Configuración
+`runPipeline()` representa el núcleo puro del proyecto.
 
-```text
-Interface
+Recibe una conversación ya cargada y únicamente ejecuta las etapas de procesamiento.
 
-↓
-
-Pipeline Profile
-
-↓
-
-Pipeline Config
-
-↓
-
-Core
-```
-
-Cada interfaz únicamente construye la configuración de ejecución.
-
-El Core permanece completamente desacoplado de la forma en que esa configuración fue obtenida.
+No conoce interfaces, fuentes, renderizadores ni mecanismos de salida.
 
 ---
 
-## Testing
+# Testing
 
 El proyecto incorpora pruebas automatizadas de forma incremental.
 
@@ -124,17 +141,17 @@ Parser ✔
 Filter ✔
 Normalizer ✔
 Markdown ✔
-Loader ✔
+JsonFileSource ✔
 Writer ✔
 ```
 
-Además de la suite automatizada, el proyecto incorpora baterías de validación manual para inspección, modos especiales y preparación de releases.
+Además de la suite automatizada, el proyecto incorpora validaciones manuales para inspección, modos especiales y preparación de releases.
 
 ---
 
-## Responsabilidades
+# Responsabilidades
 
-### sources/
+## sources/
 
 Implementa las distintas fuentes de conversación soportadas por el sistema.
 
@@ -144,38 +161,76 @@ Actualmente el proyecto implementa:
 
 - `jsonFile.js`
 
-Las Sources entregan siempre una `Conversation` sin interpretar su contenido.
+Las Sources siempre entregan una `Conversation` sin interpretar su contenido.
 
-El Core no conoce cómo fue obtenida esa conversación.
+El Core permanece completamente desacoplado del origen de los datos.
 
 ---
 
-### configuration/
+## configuration/
 
 Centraliza la configuración compartida del pipeline.
 
 Actualmente define:
 
-- configuración base del motor;
+- configuración base;
 - perfiles de ejecución.
 
 Las interfaces reutilizan esta configuración sin duplicar valores por defecto.
 
 ---
 
-### inspector.js
+## exporter.js
+
+Coordina la ejecución completa del proceso de exportación.
+
+Su responsabilidad consiste en:
+
+- resolver la Conversation Source;
+- obtener la conversación;
+- ejecutar `runPipeline`;
+- seleccionar el renderer correspondiente;
+- delegar el mecanismo de salida.
+
+No implementa procesamiento de conversaciones.
+
+---
+
+## pipeline.js
+
+Representa el núcleo del motor.
+
+Ejecuta exclusivamente el procesamiento interno:
+
+- Inspector
+- Parser
+- Filter
+- Normalizer
+
+Devuelve la conversación normalizada y el reporte generado por el Inspector.
+
+No conoce:
+
+- interfaces;
+- fuentes;
+- renderizadores;
+- mecanismos de salida.
+
+---
+
+## inspector.js
 
 Obtiene estadísticas de la conversación.
 
 No modifica información.
 
-Puede utilizarse como punto de finalización anticipada del pipeline mediante `--inspect`.
+Puede utilizarse como punto de finalización anticipada mediante `--inspect`.
 
 ---
 
-### parser.js
+## parser.js
 
-Transforma el árbol de conversación (`mapping`) en una lista de mensajes.
+Transforma el árbol (`mapping`) en una lista de mensajes.
 
 No filtra ni modifica contenido.
 
@@ -183,17 +238,17 @@ Cuenta con pruebas automatizadas independientes.
 
 ---
 
-### filter.js
+## filter.js
 
 Elimina mensajes que no pertenecen a la conversación visible.
 
-No altera el contenido de los mensajes restantes.
+No altera el contenido restante.
 
 Cuenta con pruebas automatizadas independientes.
 
 ---
 
-### normalizer.js
+## normalizer.js
 
 Transforma los mensajes filtrados al modelo interno del proyecto.
 
@@ -203,115 +258,120 @@ Cuenta con pruebas automatizadas independientes.
 
 ---
 
-### formatter.js
+## formatter.js
 
-Centraliza el formateo de datos comunes.
+Centraliza el formateo reutilizable.
 
 Actualmente implementa:
 
-- Formateo de fechas.
-- Formateo de bloques de cita Markdown.
-- Formateo de roles (`user` → Usuario, `assistant` → Asistente).
+- fechas;
+- bloques de cita;
+- nombres de roles.
 
-Permite incorporar nuevos formateadores sin modificar el resto del pipeline.
-
-Cuenta con pruebas automatizadas independientes.
-
-No conoce el formato de salida (Markdown, HTML, PDF, etc.).
-
----
-
-### markdown.js
-
-Convierte la conversación normalizada a Markdown.
-
-Utiliza `formatter` para delegar el formateo de fechas, roles y bloques de cita.
-
-Admite distintos modos de exportación mediante opciones de configuración (por ejemplo, modo compacto).
+No conoce ningún formato de salida.
 
 Cuenta con pruebas automatizadas independientes.
 
-No conoce el JSON original.
+---
+
+## renderers/
+
+Contendrá los distintos renderizadores soportados por el proyecto.
+
+Actualmente se encuentra preparado mediante `.gitkeep`.
+
+El primer renderer previsto es Markdown.
 
 ---
 
-### writer.js
+## outputs/
 
-Escribe archivos en disco.
+Contendrá los distintos mecanismos de salida.
+
+Ejemplos futuros:
+
+- escritura en disco;
+- descarga desde extensión;
+- respuesta HTTP;
+- clipboard.
+
+Actualmente se encuentra preparado mediante `.gitkeep`.
+
+---
+
+## writer.js
+
+Implementa la escritura de archivos en disco.
 
 No interpreta contenido.
 
+Representa únicamente uno de los posibles mecanismos de salida.
+
 ---
 
-### cli.js
+## cli.js
 
-Construye el perfil de ejecución solicitado por el usuario a partir de los argumentos de la línea de comandos.
+Construye el perfil de ejecución solicitado por el usuario.
 
-Los valores por defecto provienen del módulo `configuration`, evitando que la interfaz sea la fuente de verdad del pipeline.
+Los valores por defecto provienen del módulo `configuration`.
 
 Actualmente implementa:
 
-- Lectura de argumentos.
-- Valores por defecto.
-- Ayuda integrada (`-h`, `--help`).
-- Consulta de versión (`-v`, `--version`).
-- Selección del archivo de entrada (`-i`, `--input`).
-- Selección del archivo de salida (`-o`, `--output`).
-- Agrupación lógica de opciones equivalentes (`group`).
-- Modo inspección (`-in`, `--inspect`).
-- Modo sin escritura (`-nw`, `--no-write`).
-- Modo compacto (`-c`, `--compact`).
+- lectura de argumentos;
+- ayuda;
+- versión;
+- entrada;
+- salida;
+- inspección;
+- modo sin escritura;
+- modo compacto.
 
-Cada opción se declara mediante el registro `cliActions`, permitiendo ampliar la interfaz sin modificar el flujo principal de procesamiento.
-
-La validación de argumentos se delega completamente al módulo `validator`.
+La validación se delega completamente a `validator.js`.
 
 No conoce la ejecución del pipeline.
 
 ---
 
-### validator.js
+## validator.js
 
-Centraliza las validaciones de la interfaz de línea de comandos.
+Centraliza todas las validaciones de la CLI.
 
 Actualmente implementa:
 
-- Opciones válidas.
-- Parámetros obligatorios.
-- Verificación de que un parámetro obligatorio no sea otra opción.
-- Detección de opciones repetidas mediante grupos lógicos.
-- Validación de extensiones.
-- Validación de existencia de archivos y directorios.
+- opciones válidas;
+- parámetros obligatorios;
+- opciones repetidas;
+- extensiones;
+- existencia de archivos y directorios.
 
-Valida las acciones declaradas por `cli.js` sin conocer la ejecución del pipeline.
-
-Los mensajes de validación se encuentran desacoplados mediante `validatorMessages`.
+No conoce el pipeline.
 
 Cuenta con pruebas automatizadas independientes.
 
 ---
 
-### index.js
+## main.js
 
-Coordina la ejecución completa del motor.
+Punto de entrada mínimo de la aplicación.
 
-Su responsabilidad consiste únicamente en orquestar el pipeline utilizando la configuración recibida.
+Su única responsabilidad consiste en:
 
-Resuelve la Conversation Source correspondiente, obtiene la conversación y delega el resto del procesamiento a módulos especializados.
+- obtener la configuración desde la interfaz;
+- invocar `runExporter()`.
 
-No implementa reglas de negocio ni conoce detalles de las interfaces que invocan el pipeline.
+No contiene lógica de negocio.
 
 ---
 
-## Distribución
+# Distribución
 
-Durante la serie **0.9.x** la arquitectura se preparó para distribución pública.
+Durante la serie **1.1.x** la arquitectura terminó de desacoplar el núcleo del proyecto.
 
-Actualmente el proyecto puede ejecutarse inmediatamente después de ser clonado gracias a:
+Actualmente cualquier interfaz puede reutilizar el mismo motor proporcionando únicamente:
 
-- configuración por defecto;
-- conversación mínima versionada (`input/conversation.json`);
-- directorios persistentes mediante `.gitkeep`;
-- pruebas reproducibles utilizando únicamente recursos versionados (`test/fixtures`).
+- un perfil de configuración;
+- una Conversation Source;
+- un renderer;
+- un mecanismo de salida.
 
-Esta organización permite que futuras interfaces o exportadores reutilicen el mismo núcleo del proyecto sin introducir dependencias entre capas.
+Esta organización permite incorporar nuevas interfaces (como la extensión de Chrome), nuevos formatos y nuevas salidas sin modificar el Core.

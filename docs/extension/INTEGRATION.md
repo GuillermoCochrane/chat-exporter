@@ -41,23 +41,48 @@ stdin
             │
             ▼
 
-──────────── CORE ────────────
+──── Pipeline Profile ────
 
-Conversation
+            │
+            ▼
 
-↓
+──── Pipeline Config ─────
+
+            │
+            ▼
+
+──────── runExporter ─────
+
+            │
+            ▼
+
+── Conversation Source ───
+
+            │
+            ▼
+
+Conversation (RAW)
+
+            │
+            ▼
+
+──────── runPipeline ─────
+
+Inspector
+
+  ↓
 
 Parser
 
-↓
+  ↓
 
 Filter
 
-↓
+  ↓
 
 Normalizer
 
-↓
+  ↓
 
 Modelo canónico
 
@@ -79,7 +104,7 @@ PDF
             │
             ▼
 
-────────── Outputs ───────────
+────────── Outputs ──────────
 
 Archivo
 
@@ -91,20 +116,17 @@ HTTP Response
 
 ...
 ```
-
----
-
 # Contratos
 
 ## Conversation
 
-Es el modelo de entrada consumido por el Core.
+Representa el modelo de conversación entregado por una Conversation Source.
 
-Actualmente corresponde al JSON exportado por ChatGPT.
+Actualmente corresponde a una conversación exportada desde ChatGPT mediante `JsonFileSource`.
 
-Toda nueva interfaz debe producir una estructura compatible con este contrato.
+El Core nunca conoce cómo fue obtenida esa conversación.
 
-El Core nunca conoce el origen de la conversación.
+Cada nueva interfaz únicamente debe producir una `Conversation` compatible con el contrato esperado por el pipeline.
 
 ---
 
@@ -172,8 +194,10 @@ El renderer no conoce cómo se entrega el resultado.
 Responsabilidades:
 
 - interpretar argumentos;
-- seleccionar archivos de entrada y salida;
-- invocar el pipeline.
+- construir la configuración del pipeline;
+- invocar `runExporter`.
+
+No conoce cómo se obtiene la conversación.
 
 No contiene lógica de procesamiento.
 
@@ -183,11 +207,12 @@ No contiene lógica de procesamiento.
 
 Responsabilidades:
 
-- capturar automáticamente el JSON de conversación;
-- construir el objeto `Conversation`;
-- invocar el mismo pipeline utilizado por la CLI.
+- capturar automáticamente la conversación;
+- producir una `Conversation`;
+- utilizar un Conversation Source propio;
+- invocar `runExporter`.
 
-No debe duplicar lógica del Core.
+No duplica ninguna lógica del Core.
 
 ---
 
@@ -199,7 +224,7 @@ El Core nunca conoce:
 - de dónde proviene la conversación;
 - cómo será entregado el resultado.
 
-Las interfaces únicamente adaptan datos de entrada.
+Las interfaces únicamente construyen la configuración de ejecución y delegan la obtención de la conversación en una Conversation Source.
 
 Los renderers únicamente transforman el modelo interno.
 
@@ -211,16 +236,18 @@ Cada módulo mantiene una única responsabilidad.
 
 # Fase 3
 
-La Fase 3 consiste en integrar la extensión utilizando los contratos ya definidos.
-
-El objetivo no es modificar el Core, sino reemplazar la interfaz de entrada.
+La Fase 3 consiste en integrar la extensión reutilizando exactamente el mismo flujo del Core.
 
 CLI:
 
 ```text
-JSON
+CLI
  ↓
-Loader
+Pipeline Profile
+ ↓
+runExporter
+ ↓
+JsonFileSource
  ↓
 Conversation
 ```
@@ -228,35 +255,39 @@ Conversation
 Extensión:
 
 ```text
-ChatGPT
+Chrome Extension
  ↓
-Inject Script
+Pipeline Profile
  ↓
-Content Script
+runExporter
  ↓
-Background
+ExtensionSource
  ↓
 Conversation
 ```
 
-A partir del objeto `Conversation`, ambos caminos reutilizan exactamente el mismo pipeline.
+Ambos caminos producen exactamente el mismo contrato (`Conversation`) y reutilizan el mismo `runPipeline`.
 
 ---
 
 # Próximos pasos
 
-1. Implementar un Loader para la extensión.
-2. Definir el punto de entrada compartido del Core.
-3. Reutilizar el Parser existente sin modificaciones.
-4. Mantener el desacoplamiento entre Interfaces, Core, Renderers y Outputs.
-5. Incorporar nuevos renderers y nuevas interfaces sin alterar el pipeline principal.
+1. Implementar `ExtensionSource`.
+2. Integrar la Chrome Extension con `runExporter`.
+3. Validar que CLI y Extension reutilicen exactamente el mismo pipeline.
+4. Incorporar nuevos Conversation Sources sin modificar el Core.
+5. Incorporar nuevos Renderers y Outputs manteniendo el desacoplamiento actual.
 
 ---
 
 # Conclusión
 
-La extensión no representa un segundo proyecto ni una bifurcación de AI Chat Exporter.
+Las interfaces no forman parte del Core.
 
-Constituye una nueva interfaz de entrada para el mismo motor de procesamiento.
+Cada interfaz únicamente construye la configuración de ejecución y utiliza una Conversation Source para obtener una conversación.
 
-El Core permanece independiente del origen de los datos y del mecanismo de entrega del resultado, permitiendo que nuevas interfaces y nuevos formatos de salida puedan incorporarse sin modificar el pipeline existente.
+A partir de ese momento, todo el procesamiento es responsabilidad compartida de `runExporter` y `runPipeline`.
+
+Esta arquitectura permite incorporar nuevos proveedores, nuevas interfaces, nuevos renderers y nuevos mecanismos de salida sin modificar el comportamiento interno del motor.
+
+---
