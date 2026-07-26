@@ -116,17 +116,48 @@ HTTP Response
 
 ...
 ```
+
 # Contratos
+
+## Conversation Source
+
+Representa cualquier mecanismo capaz de obtener una conversación.
+
+Cada Source recibe el objeto `config` completo y extrae lo que necesita para obtener la conversación.
+
+Actualmente existen:
+
+- `jsonFile`: extrae `config.input` y lee el archivo del sistema.
+- `extensionSource`: extrae `config.conversation` (capturada por la extensión).
+
+Todas las Sources devuelven una `Conversation` compatible con el contrato esperado por el pipeline.
+
+El Core nunca conoce cómo fue obtenida esa conversación.
+
+---
+
+## OutputHandler
+
+El mecanismo de salida se inyecta desde la interfaz mediante `config.outputHandler`.
+
+El orquestador (`runExporter`) no importa ni conoce el módulo de escritura.
+
+Cada interfaz provee su propio handler:
+
+- **CLI**: escribe el Markdown en disco usando `writer.js`.
+- **Extensión**: descargará el Markdown usando `chrome.downloads`.
+
+Esto permite que el Core permanezca completamente independiente del entorno de ejecución (Node, navegador, etc.).
+
+---
 
 ## Conversation
 
 Representa el modelo de conversación entregado por una Conversation Source.
 
-Actualmente corresponde a una conversación exportada desde ChatGPT mediante `JsonFileSource`.
+Actualmente corresponde a una conversación exportada desde ChatGPT.
 
 El Core nunca conoce cómo fue obtenida esa conversación.
-
-Cada nueva interfaz únicamente debe producir una `Conversation` compatible con el contrato esperado por el pipeline.
 
 ---
 
@@ -174,11 +205,11 @@ Los outputs se encargan únicamente del destino final del contenido generado.
 
 Actualmente:
 
-- Escritura de archivo (`writer.js`)
+- Escritura de archivo (`writer.js`) — usada por la CLI.
+- Descarga desde la extensión — próximamente.
 
 Futuros outputs:
 
-- Descarga desde la extensión
 - Clipboard
 - HTTP Response
 - Otros
@@ -195,6 +226,7 @@ Responsabilidades:
 
 - interpretar argumentos;
 - construir la configuración del pipeline;
+- inyectar `outputHandler` que escribe en disco;
 - invocar `runExporter`.
 
 No conoce cómo se obtiene la conversación.
@@ -209,7 +241,8 @@ Responsabilidades:
 
 - capturar automáticamente la conversación;
 - producir una `Conversation`;
-- utilizar un Conversation Source propio;
+- utilizar `ExtensionSource`;
+- inyectar `outputHandler` que descarga el archivo;
 - invocar `runExporter`.
 
 No duplica ninguna lógica del Core.
@@ -272,11 +305,11 @@ Ambos caminos producen exactamente el mismo contrato (`Conversation`) y reutiliz
 
 # Próximos pasos
 
-1. Implementar `ExtensionSource`.
-2. Integrar la Chrome Extension con `runExporter`.
-3. Validar que CLI y Extension reutilicen exactamente el mismo pipeline.
-4. Incorporar nuevos Conversation Sources sin modificar el Core.
-5. Incorporar nuevos Renderers y Outputs manteniendo el desacoplamiento actual.
+1. [x] Implementar `ExtensionSource`.
+2. [ ] Integrar la Chrome Extension con `runExporter`.
+3. [ ] Validar que CLI y Extension reutilicen exactamente el mismo pipeline.
+4. [ ] Incorporar nuevos Conversation Sources sin modificar el Core.
+5. [ ] Incorporar nuevos Renderers y Outputs manteniendo el desacoplamiento actual.
 
 ---
 
@@ -289,5 +322,6 @@ Cada interfaz únicamente construye la configuración de ejecución y utiliza un
 A partir de ese momento, todo el procesamiento es responsabilidad compartida de `runExporter` y `runPipeline`.
 
 Esta arquitectura permite incorporar nuevos proveedores, nuevas interfaces, nuevos renderers y nuevos mecanismos de salida sin modificar el comportamiento interno del motor.
+
 
 ---

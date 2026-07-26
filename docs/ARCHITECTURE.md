@@ -37,7 +37,8 @@ src/
 │   │
 │   ├── sources/
 │   │   ├── index.js
-│   │   └── jsonFile.js
+│   │   ├── jsonFile.js
+│   │   └── extensionSource.js
 │   │
 │   ├── renderers/
 │   │   └── .gitkeep
@@ -93,7 +94,7 @@ runPipeline
 
 `runExporter()` coordina la ejecución completa.
 
-Resuelve la fuente correspondiente, obtiene la conversación, ejecuta el pipeline, invoca el renderer adecuado y entrega el resultado mediante el mecanismo de salida correspondiente.
+Resuelve la fuente correspondiente, obtiene la conversación, ejecuta el pipeline, invoca el renderer adecuado y entrega el resultado mediante el mecanismo de salida inyectado por la interfaz.
 
 ---
 
@@ -155,11 +156,12 @@ Además de la suite automatizada, el proyecto incorpora validaciones manuales pa
 
 Implementa las distintas fuentes de conversación soportadas por el sistema.
 
-Cada Source conoce únicamente cómo obtener una conversación desde un origen determinado.
+Cada Source recibe el objeto `config` completo y extrae lo que necesita para obtener la conversación.
 
 Actualmente el proyecto implementa:
 
 - `jsonFile.js`
+- `extensionSource.js`
 
 Las Sources siempre entregan una `Conversation` sin interpretar su contenido.
 
@@ -190,9 +192,11 @@ Su responsabilidad consiste en:
 - obtener la conversación;
 - ejecutar `runPipeline`;
 - seleccionar el renderer correspondiente;
-- delegar el mecanismo de salida.
+- delegar el mecanismo de salida mediante `config.outputHandler`.
 
 No implementa procesamiento de conversaciones.
+
+No conoce el mecanismo concreto de salida (archivo, descarga, etc.).
 
 ---
 
@@ -357,6 +361,7 @@ Punto de entrada mínimo de la aplicación.
 Su única responsabilidad consiste en:
 
 - obtener la configuración desde la interfaz;
+- inyectar el mecanismo de salida correspondiente;
 - invocar `runExporter()`.
 
 No contiene lógica de negocio.
@@ -375,3 +380,5 @@ Actualmente cualquier interfaz puede reutilizar el mismo motor proporcionando ú
 - un mecanismo de salida.
 
 Esta organización permite incorporar nuevas interfaces (como la extensión de Chrome), nuevos formatos y nuevas salidas sin modificar el Core.
+
+---

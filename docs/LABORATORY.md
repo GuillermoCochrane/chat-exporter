@@ -818,6 +818,52 @@ Separar la orquestación del procesamiento del pipeline para desacoplar completa
 #### Conclusión
 
 Separar la orquestación del procesamiento reduce el acoplamiento del sistema y convierte al pipeline en un componente reutilizable e independiente de cualquier interfaz.
+---
+
+## E-035 (nuevo)
+
+#### Objetivo
+
+Desacoplar completamente el mecanismo de salida del orquestador para permitir que el Core funcione en entornos sin Node.js.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se eliminó la importación de `writer.js` desde `exporter.js`.
+- El orquestador ahora recibe una función `config.outputHandler` inyectada por la interfaz.
+- La CLI define su propio handler usando `writeFileContent`.
+- La extensión podrá definir el suyo usando `chrome.downloads`.
+- El Core dejó de depender de `fs` y puede ejecutarse en cualquier entorno.
+
+#### Conclusión
+
+Inyectar el mecanismo de salida elimina la última dependencia del Core con Node.js y permite reutilizar el pipeline desde la extensión sin modificaciones.
+
+---
+
+## E-036 (nuevo)
+
+#### Objetivo
+
+Unificar el contrato de las Conversation Sources para que el orquestador no necesite conocer los detalles de cada fuente.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Todas las fuentes pasaron a recibir el objeto `config` completo.
+- `jsonFile` extrae `config.input`, `extensionSource` extrae `config.conversation`.
+- El orquestador invoca a todas las fuentes de manera uniforme: `source(config)`.
+- Se creó `ExtensionSource` para conversaciones capturadas por la extensión.
+
+#### Conclusión
+
+Unificar el contrato permite agregar nuevas fuentes sin modificar el orquestador. Cada fuente extrae del `config` lo que necesita.
 
 ---
 
@@ -849,6 +895,9 @@ Separar la orquestación del procesamiento reduce el acoplamiento del sistema y 
 - Separar la obtención de la conversación, el procesamiento y la salida produce un pipeline reutilizable desde cualquier interfaz.
 - La orquestación puede evolucionar independientemente del procesamiento cuando ambos componentes se comunican mediante contratos simples.
 - Resolver la Conversation Source fuera del pipeline elimina el último acoplamiento del Core con el entorno de ejecución.
+- Inyectar el mecanismo de salida mediante `config.outputHandler` desacopla completamente el Core del entorno de ejecución.
+- Unificar el contrato de las fuentes (recibir `config` completo) permite incorporar nuevos orígenes de datos sin modificar el orquestador.
+- Los tests existentes facilitan validar refactors arquitectónicos sin miedo a regresiones.
 
 ### Pre Release
 

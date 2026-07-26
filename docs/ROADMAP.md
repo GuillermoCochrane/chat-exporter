@@ -10,7 +10,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 ## Versión
 
-**1.1.3.5 (Development)**
+**1.1.3.6 (Development)**
 
 ## Estado general
 
@@ -68,6 +68,9 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Pipeline basado en perfiles
 - [x] Conversation Sources
 - [x] Preparado para múltiples proveedores
+- [x] OutputHandler inyectado
+- [x] Contrato unificado de fuentes (reciben `config` completo)
+- [x] ExtensionSource
 
 
 ---
@@ -118,8 +121,8 @@ Output
 
 # Evoluciones previstas
 
-> Una vez estabilizado el núcleo del proyecto podrán incorporarse nuevas capacidades reutilizando el mismo pipeline.
-> Las funcionalidades listadas a continuación no forman parte del objetivo de la versión 1.0 y representan posibles líneas de evolución del proyecto.
+Una vez estabilizado el núcleo del proyecto podrán incorporarse nuevas capacidades reutilizando el mismo pipeline.
+Las funcionalidades listadas a continuación no forman parte del objetivo de la versión 1.0 y representan posibles líneas de evolución del proyecto.
 
 ## Nuevos exportadores
 
@@ -158,3 +161,4 @@ Output
 - Nuevos modos de formateo Markdown.
 - Renderers desacoplados.
 - Outputs desacoplados.
+- Conversacion solo usuario - solo asistente

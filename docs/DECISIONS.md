@@ -699,3 +699,64 @@ El Core deja de conocer:
 #### Estado
 
 Aceptada.
+
+
+---
+
+## ADR-0028
+
+#### Fecha
+
+2026-07-26
+
+#### Título
+
+Inyectar el mecanismo de salida desde la interfaz.
+
+#### Motivación
+
+El orquestador (`exporter.js`) importaba directamente `writer.js`, que depende de `fs`. Esto impedía reutilizar el core desde la extensión de Chrome, donde `fs` no existe. Para integrar la extensión sin modificar el pipeline, era necesario que el core no conociera el mecanismo concreto de salida.
+
+#### Consecuencia
+
+El orquestador delega la salida en `config.outputHandler`, una función inyectada por cada interfaz:
+
+- La CLI inyecta `writeFileContent`.
+- La extensión inyectará una función que descarga el archivo.
+
+El core deja de importar `writer.js` y se vuelve completamente independiente del entorno de ejecución.
+
+#### Estado
+
+Aceptada.
+
+---
+
+## ADR-0029
+
+#### Fecha
+
+2026-07-26
+
+#### Título
+
+Unificar el contrato de las Conversation Sources.
+
+#### Motivación
+
+Originalmente cada fuente recibía `config.input` directamente. Esto asumía que toda conversación provenía de un archivo. La `ExtensionSource` necesitaba recibir la conversación capturada, no una ruta. Mantener firmas distintas por fuente obligaba al orquestador a conocer detalles de cada una.
+
+#### Consecuencia
+
+Todas las fuentes reciben el objeto `config` completo y extraen lo que necesitan:
+
+- `jsonFile` extrae `config.input`.
+- `extensionSource` extrae `config.conversation`.
+
+El orquestador invoca a todas las fuentes de manera uniforme: `source(config)`.
+
+#### Estado
+
+Aceptada.
+
+---
