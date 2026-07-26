@@ -1,5 +1,5 @@
 export const defaultPipelineConfig = {
-  source: "jsonFile",
+  source: "inventada",
   input: "./input/conversation.json",
   output: "./output/conversacion.md",
 
