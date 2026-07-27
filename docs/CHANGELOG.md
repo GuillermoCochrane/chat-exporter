@@ -4,6 +4,87 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
+# v1.1.4 — Extensión integrada
+
+* La extensión de Chrome queda completamente integrada con el pipeline de exportación.
+* Se desacopla el mecanismo de salida del orquestador: el Core deja de importar `writer.js` y recibe `config.outputHandler` desde la interfaz.
+* Se unifica el contrato de las Conversation Sources: todas reciben el objeto `config` completo.
+* Se agrega `ExtensionSource` para conversaciones capturadas por la extensión.
+* `background.js` construye la configuración del pipeline y descarga el Markdown generado mediante `chrome.downloads`.
+* Se implementa el build automatizado de la extensión con esbuild, incluyendo un plugin para reemplazar `jsonFile.js` por un stub que evita dependencias de Node.js.
+* Se agregan íconos iniciales para la extensión.
+* Se reorganiza la estructura de carpetas del proyecto: `input/`, `output/`, `docs/research/` y `scripts/` pasan a `assets/`.
+* Se actualiza la documentación general del proyecto (ARCHITECTURE, INTEGRATION, ROADMAP, LABORATORY, DECISIONS).
+
+---
+
+# v1.1.3.6 — Preparación para la integración
+
+* Se completa el refactor del Core necesario para integrar la extensión.
+* El orquestador (`exporter.js`) deja de importar `writer.js` y delega la salida en `config.outputHandler`.
+* Todas las Conversation Sources pasan a recibir el objeto `config` completo.
+* Se crea `ExtensionSource` para conversaciones capturadas por la extensión.
+* Se ajustan los tests al nuevo contrato de fuentes.
+* Se actualiza la documentación del Core (ARCHITECTURE, ROADMAP, INTEGRATION, DECISIONS, LABORATORY).
+
+---
+
+# v1.1.3.5 — Arquitectura desacoplada del pipeline
+
+* Se documenta la nueva arquitectura con Conversation Sources, Pipeline Profiles y OutputHandler.
+* El Core queda completamente preparado para múltiples proveedores e interfaces.
+
+---
+
+# v1.1.3 — Desacoplamiento de la orquestación
+
+* Se separa la orquestación (`runExporter`) del procesamiento (`runPipeline`).
+* `runExporter` coordina la fuente, el pipeline y el renderer.
+* `runPipeline` ejecuta exclusivamente el procesamiento interno del Core.
+* Se implementa el sistema de Conversation Sources.
+* `jsonFileSource` se convierte en la primera implementación.
+* La CLI pasa a utilizar la configuración base compartida del pipeline.
+* Se adaptan los tests al nuevo modelo de fuentes.
+* Se implementan nombres genéricos en `jsonFile` para eliminar referencias específicas a ChatGPT.
+
+---
+
+# v1.1.2 — Extensión: captura automática
+
+* La extensión logra capturar automáticamente la conversación completa de ChatGPT.
+* Se implementa el script `inject.js` que intercepta `window.fetch()` en el contexto de la página.
+* Se filtra la respuesta por la presencia de `mapping` para identificar la conversación.
+* Se valida que el JSON capturado es equivalente al descargado manualmente desde DevTools.
+* Se reorganiza y actualiza la documentación de la extensión.
+
+---
+
+# v1.1.1 — Extensión: interceptación del JSON
+
+* Se intercepta el JSON completo de conversaciones desde el endpoint `/backend-api/conversation/{id}`.
+* Se implementa la inyección de scripts en el contexto de la página mediante `content.js`.
+* Se valida la estrategia de captura y se actualiza la documentación.
+
+---
+
+# v1.1.0 — Infraestructura base de la extensión
+
+* Se crea la arquitectura inicial del módulo de extensión.
+* Se implementa la infraestructura base: `manifest.json`, `background.js`, `content.js`, `inject.js`.
+* Se incorpora la documentación inicial de la extensión (ROADMAP, ARCHITECTURE, CAPTURE_RESEARCH).
+* Comienza la investigación formal sobre la viabilidad de capturar el JSON automáticamente.
+
+---
+
+# v1.0.0 — Primera versión estable
+
+* Se publica la versión 1.0.0.
+* README completo con instalación, uso, arquitectura y filosofía del proyecto.
+* Documentación actualizada para la Pre Release.
+* El proyecto queda preparado para distribución pública.
+
+---
+
 # v0.9.5.2 — Pre Release Stabilization
 
 * Finaliza la etapa de estabilización de la Pre Release.
@@ -22,7 +103,7 @@ Este documento resume la evolución del proyecto versión por versión y registr
 * Se incorpora una batería específica de validación para Release (`test-cases-release.sh`).
 * Se reutiliza el runner genérico de pruebas manuales (`run-manual-tests.sh`).
 * Se agregan fixtures mínimos (`empty.json` y `single-message.json`) para validar escenarios básicos.
-* Se incorpora `input/conversation.json` como conversación por defecto para la primera ejecución.es el único archivo versionado dentro de `input/`
+* Se incorpora `input/conversation.json` como conversación por defecto para la primera ejecución. Es el único archivo versionado dentro de `input/`.
 * `.gitignore` conserva únicamente dicho archivo dentro del directorio `input`.
 * Se reorganizan los recursos utilizados por las pruebas en `test/fixtures`.
 * Se incorpora `.gitkeep` en `output` para preservar la estructura del proyecto.
