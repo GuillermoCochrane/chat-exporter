@@ -867,6 +867,102 @@ Unificar el contrato permite agregar nuevas fuentes sin modificar el orquestador
 
 ---
 
+### E-037
+
+#### Objetivo
+
+Desacoplar completamente el mecanismo de salida del orquestador para permitir que el Core funcione en entornos sin Node.js.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se eliminó la importación de `writer.js` desde `exporter.js`.
+- El orquestador ahora recibe una función `config.outputHandler` inyectada por la interfaz.
+- La CLI define su propio handler usando `writeFileContent`.
+- La extensión define el suyo usando `chrome.downloads`.
+- El Core dejó de depender de `fs` y puede ejecutarse en cualquier entorno.
+
+#### Conclusión
+
+Inyectar el mecanismo de salida elimina la última dependencia del Core con Node.js y permite reutilizar el pipeline desde la extensión sin modificaciones.
+
+---
+
+### E-038
+
+#### Objetivo
+
+Unificar el contrato de las Conversation Sources para que el orquestador no necesite conocer los detalles de cada fuente.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Todas las fuentes pasaron a recibir el objeto `config` completo.
+- `jsonFile` extrae `config.input`, `extensionSource` extrae `config.conversation`.
+- El orquestador invoca a todas las fuentes de manera uniforme: `source(config)`.
+- Se creó `ExtensionSource` para conversaciones capturadas por la extensión.
+
+#### Conclusión
+
+Unificar el contrato permite agregar nuevas fuentes sin modificar el orquestador. Cada fuente extrae del `config` lo que necesita.
+
+---
+
+### E-039
+
+#### Objetivo
+
+Empaquetar el Core para que pueda ejecutarse dentro del service worker de una extensión Manifest V3.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- El Core utiliza módulos ES, incompatibles con service workers.
+- Se implementó `extensionCore.js` como punto de entrada que expone `runExporter` en `globalThis`.
+- Se utilizó esbuild para generar un bundle único en formato IIFE.
+- Se creó un plugin que reemplaza `jsonFile.js` por `jsonFile.stub.js` para evitar dependencias de Node.js.
+- `background.js` carga el bundle mediante `importScripts`.
+- El build se automatizó con el script `assets/scripts/buildExtension.js` y el comando `npm run build:extension`.
+
+#### Conclusión
+
+El bundling con esbuild permite reutilizar el Core completo en la extensión sin modificar su arquitectura interna. El stub de `jsonFile.js` aísla las dependencias de Node sin romper el registro de fuentes.
+
+---
+
+### E-040
+
+#### Objetivo
+
+Integrar la extensión de Chrome con el pipeline de exportación para descargar Markdown directamente desde ChatGPT.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- `background.js` construye un `config` con `source: "extension"` y un `outputHandler` basado en `chrome.downloads`.
+- La extensión invoca `runExporter`, que utiliza `ExtensionSource` para obtener la conversación capturada.
+- El pipeline procesa la conversación completa (parser → filter → normalizer → markdown).
+- El Markdown generado se descarga automáticamente como `conversacion.md`.
+- Se verificó que CLI y Extension reutilizan exactamente el mismo pipeline.
+
+#### Conclusión
+
+La extensión pasó de descargar JSON crudo a exportar Markdown procesado, reutilizando el 100% del Core sin modificaciones. La arquitectura desacoplada demostró ser correcta.
+
+---
+
 ## Descubrimientos
 
 ### Desarrollo
@@ -898,6 +994,13 @@ Unificar el contrato permite agregar nuevas fuentes sin modificar el orquestador
 - Inyectar el mecanismo de salida mediante `config.outputHandler` desacopla completamente el Core del entorno de ejecución.
 - Unificar el contrato de las fuentes (recibir `config` completo) permite incorporar nuevos orígenes de datos sin modificar el orquestador.
 - Los tests existentes facilitan validar refactors arquitectónicos sin miedo a regresiones.
+- Inyectar el mecanismo de salida mediante `config.outputHandler` desacopla completamente el Core del entorno de ejecución.
+- Unificar el contrato de las fuentes (recibir `config` completo) permite incorporar nuevos orígenes de datos sin modificar el orquestador.
+- Los tests existentes facilitan validar refactors arquitectónicos sin miedo a regresiones.
+- esbuild con un plugin de reemplazo permite empaquetar el Core para el navegador sin modificar su estructura interna.
+- Un stub de fuente es suficiente para aislar dependencias de Node en el bundle de la extensión.
+- `importScripts` en el service worker permite cargar bundles IIFE generados externamente.
+- La arquitectura de Conversation Sources + OutputHandler inyectado funciona correctamente en dos entornos completamente distintos (Node y Chrome Extension).
 
 ### Pre Release
 

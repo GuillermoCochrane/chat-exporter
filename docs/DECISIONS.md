@@ -760,3 +760,97 @@ El orquestador invoca a todas las fuentes de manera uniforme: `source(config)`.
 Aceptada.
 
 ---
+
+### ADR-0028
+
+#### Fecha
+
+2026-07-27
+
+#### Título
+
+Inyectar el mecanismo de salida desde la interfaz.
+
+#### Motivación
+
+El orquestador (`exporter.js`) importaba directamente `writer.js`, que depende de `fs`. Esto impedía reutilizar el core desde la extensión de Chrome, donde `fs` no existe. Para integrar la extensión sin modificar el pipeline, era necesario que el core no conociera el mecanismo concreto de salida.
+
+#### Consecuencia
+
+El orquestador delega la salida en `config.outputHandler`, una función inyectada por cada interfaz:
+
+- La CLI inyecta `writeFileContent`.
+- La extensión inyecta una función que descarga el archivo mediante `chrome.downloads`.
+
+El core deja de importar `writer.js` y se vuelve completamente independiente del entorno de ejecución.
+
+#### Estado
+
+Aceptada.
+
+---
+
+### ADR-0029
+
+#### Fecha
+
+2026-07-27
+
+#### Título
+
+Unificar el contrato de las Conversation Sources.
+
+#### Motivación
+
+Originalmente cada fuente recibía `config.input` directamente. Esto asumía que toda conversación provenía de un archivo. La `ExtensionSource` necesitaba recibir la conversación capturada, no una ruta. Mantener firmas distintas por fuente obligaba al orquestador a conocer detalles de cada una.
+
+#### Consecuencia
+
+Todas las fuentes reciben el objeto `config` completo y extraen lo que necesitan:
+
+- `jsonFile` extrae `config.input`.
+- `extensionSource` extrae `config.conversation`.
+
+El orquestador invoca a todas las fuentes de manera uniforme: `source(config)`.
+
+#### Estado
+
+Aceptada.
+
+---
+
+### ADR-0030
+
+#### Fecha
+
+2026-07-27
+
+#### Título
+
+Empaquetar el Core con esbuild para la extensión de Chrome.
+
+#### Motivación
+
+El Core utiliza módulos ES (`import`/`export`), pero el service worker de Manifest V3 no los soporta. Además, `jsonFile.js` importa `node:fs/promises`, que no existe en el navegador. Era necesario un mecanismo para ejecutar el Core dentro de la extensión sin modificar su arquitectura interna.
+
+#### Alternativas consideradas
+
+- **Migrar el Core a un solo archivo sin módulos**: descartado por pérdida de modularidad.
+- **Usar un bundler como Rollup o Webpack**: viables, pero con mayor configuración.
+- **esbuild con plugin de reemplazo**: mínima configuración, rápido, genera un único archivo IIFE.
+
+#### Consecuencia
+
+- Se creó `extensionCore.js` como punto de entrada que expone `runExporter` en `globalThis`.
+- esbuild empaqueta el Core completo en `dist/extensionBundle.js` en formato IIFE.
+- Un plugin reemplaza `jsonFile.js` por `jsonFile.stub.js` para evitar dependencias de Node.
+- `background.js` carga el bundle mediante `importScripts`.
+- El build se automatizó con `npm run build:extension`.
+
+La arquitectura interna del Core permanece inalterada. El stub es transparente para el registro de fuentes.
+
+#### Estado
+
+Aceptada.
+
+---

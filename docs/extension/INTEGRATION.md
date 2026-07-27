@@ -14,7 +14,7 @@ AI Chat Exporter no depende de una interfaz específica.
 
 La CLI fue la primera interfaz implementada.
 
-La extensión de Chrome será la segunda.
+La extensión de Chrome es la segunda, ya integrada.
 
 En el futuro podrán incorporarse otras interfaces (API REST, Clipboard, stdin, etc.) reutilizando exactamente el mismo Core.
 
@@ -145,7 +145,7 @@ El orquestador (`runExporter`) no importa ni conoce el módulo de escritura.
 Cada interfaz provee su propio handler:
 
 - **CLI**: escribe el Markdown en disco usando `writer.js`.
-- **Extensión**: descargará el Markdown usando `chrome.downloads`.
+- **Extensión**: descarga el Markdown usando `chrome.downloads`.
 
 Esto permite que el Core permanezca completamente independiente del entorno de ejecución (Node, navegador, etc.).
 
@@ -206,7 +206,7 @@ Los outputs se encargan únicamente del destino final del contenido generado.
 Actualmente:
 
 - Escritura de archivo (`writer.js`) — usada por la CLI.
-- Descarga desde la extensión — próximamente.
+- Descarga desde la extensión (`chrome.downloads`) — usada por la Chrome Extension.
 
 Futuros outputs:
 
@@ -239,11 +239,12 @@ No contiene lógica de procesamiento.
 
 Responsabilidades:
 
-- capturar automáticamente la conversación;
-- producir una `Conversation`;
-- utilizar `ExtensionSource`;
-- inyectar `outputHandler` que descarga el archivo;
-- invocar `runExporter`.
+- capturar automáticamente la conversación mediante `inject.js`;
+- actuar como puente entre la página y el background mediante `content.js`;
+- construir la configuración del pipeline en `background.js`;
+- utilizar `ExtensionSource` para entregar la conversación al core;
+- inyectar `outputHandler` que descarga el archivo mediante `chrome.downloads`;
+- invocar `runExporter` desde el bundle generado por esbuild.
 
 No duplica ninguna lógica del Core.
 
@@ -267,9 +268,26 @@ Cada módulo mantiene una única responsabilidad.
 
 ---
 
+# Build de la extensión
+
+La extensión requiere un paso de build para funcionar.
+
+El core utiliza módulos ES y la extensión se ejecuta como service worker, que no soporta `import`/`export` nativamente.
+
+La solución consiste en:
+
+- `extensionCore.js`: punto de entrada que importa `runExporter` y lo expone en `globalThis`.
+- `buildExtension.js`: script que utiliza esbuild para empaquetar `extensionCore.js` junto con todas sus dependencias en un único archivo `dist/extensionBundle.js` en formato IIFE.
+- Un plugin de esbuild reemplaza `jsonFile.js` por `jsonFile.stub.js` para evitar dependencias de Node.js (`fs`) en el bundle.
+- `background.js` carga el bundle mediante `importScripts("extensionBundle.js")` e invoca `runExporter` desde `globalThis.__AI_CHAT_EXPORTER__`.
+
+El comando `npm run build:extension` genera el directorio `dist/` listo para cargar como extensión en Chrome.
+
+---
+
 # Fase 3
 
-La Fase 3 consiste en integrar la extensión reutilizando exactamente el mismo flujo del Core.
+La Fase 3 consistió en integrar la extensión reutilizando exactamente el mismo flujo del Core.
 
 CLI:
 
@@ -301,12 +319,14 @@ Conversation
 
 Ambos caminos producen exactamente el mismo contrato (`Conversation`) y reutilizan el mismo `runPipeline`.
 
+**Estado: completada.**
+
 ---
 
 # Próximos pasos
 
 1. [x] Implementar `ExtensionSource`.
-2. [ ] Integrar la Chrome Extension con `runExporter`.
+2. [x] Integrar la Chrome Extension con `runExporter`.
 3. [ ] Validar que CLI y Extension reutilicen exactamente el mismo pipeline.
 4. [ ] Incorporar nuevos Conversation Sources sin modificar el Core.
 5. [ ] Incorporar nuevos Renderers y Outputs manteniendo el desacoplamiento actual.
@@ -322,6 +342,5 @@ Cada interfaz únicamente construye la configuración de ejecución y utiliza un
 A partir de ese momento, todo el procesamiento es responsabilidad compartida de `runExporter` y `runPipeline`.
 
 Esta arquitectura permite incorporar nuevos proveedores, nuevas interfaces, nuevos renderers y nuevos mecanismos de salida sin modificar el comportamiento interno del motor.
-
 
 ---

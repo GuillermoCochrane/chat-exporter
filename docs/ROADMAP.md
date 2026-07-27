@@ -10,7 +10,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 ## Versión
 
-**1.1.3.6 (Development)**
+**1.1.4 (Development)**
 
 ## Estado general
 
@@ -30,7 +30,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 ### Interfaces
 
 - [x] CLI
-- [ ] Chrome Extension
+- [x] Chrome Extension
 - [ ] REST API
 
 ### Testing
@@ -71,6 +71,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] OutputHandler inyectado
 - [x] Contrato unificado de fuentes (reciben `config` completo)
 - [x] ExtensionSource
+- [x] Build de extensión con esbuild
 
 
 ---
@@ -107,15 +108,15 @@ Output
 
 ---
 
-## Próximo objetivo
+## Integración de la extensión
 
-### Integración de la primera interfaz desacoplada
+La Chrome Extension ya está integrada con el pipeline.
 
-- Implementar el Conversation Source para la Chrome Extension.
-- Integrar la extensión utilizando `runExporter`.
-- Compartir exactamente el mismo pipeline entre CLI y Extension.
-- Validar el funcionamiento completo del flujo de exportación.
-- Documentar la integración.
+- [x] ExtensionSource implementada.
+- [x] Extensión integrada con `runExporter`.
+- [x] Build automatizado con esbuild.
+- [x] CLI y Extension reutilizan exactamente el mismo pipeline.
+- [x] Descarga de Markdown desde la extensión.
 
 ---
 
@@ -161,4 +162,5 @@ Las funcionalidades listadas a continuación no forman parte del objetivo de la 
 - Nuevos modos de formateo Markdown.
 - Renderers desacoplados.
 - Outputs desacoplados.
-- Conversacion solo usuario - solo asistente
+
+---

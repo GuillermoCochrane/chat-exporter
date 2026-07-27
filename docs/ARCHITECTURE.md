@@ -1,3 +1,4 @@
+
 # Arquitectura
 
 ## Filosofía
@@ -38,6 +39,7 @@ src/
 │   ├── sources/
 │   │   ├── index.js
 │   │   ├── jsonFile.js
+│   │   ├── jsonFile.stub.js
 │   │   └── extensionSource.js
 │   │
 │   ├── renderers/
@@ -49,6 +51,12 @@ src/
 ├── interfaces/
 │   ├── cli.js
 │   └── extension/
+│       ├── background.js
+│       ├── content.js
+│       ├── extensionCore.js
+│       ├── inject.js
+│       ├── manifest.json
+│       └── icons/
 │
 └── utilities/
     ├── formatter.js
@@ -63,6 +71,11 @@ La arquitectura separa cuatro responsabilidades claramente diferenciadas:
 - **Renderers / Outputs**, encargados de transformar y entregar el resultado.
 
 Esta separación permite incorporar nuevas interfaces, nuevas fuentes y nuevos formatos de exportación sin modificar el núcleo del motor.
+
+El proyecto incluye además:
+
+- `assets/scripts/buildExtension.js`: script de build que empaqueta el core para la extensión mediante esbuild.
+- `assets/img/`: variantes de íconos exploradas durante el diseño de la extensión.
 
 ---
 
@@ -160,8 +173,9 @@ Cada Source recibe el objeto `config` completo y extrae lo que necesita para obt
 
 Actualmente el proyecto implementa:
 
-- `jsonFile.js`
-- `extensionSource.js`
+- `jsonFile.js`: carga una conversación desde un archivo JSON en disco.
+- `extensionSource.js`: obtiene una conversación capturada por la extensión de Chrome.
+- `jsonFile.stub.js`: reemplazo de `jsonFile.js` para el bundle de la extensión, donde el sistema de archivos no está disponible.
 
 Las Sources siempre entregan una `Conversation` sin interpretar su contenido.
 
@@ -368,6 +382,43 @@ No contiene lógica de negocio.
 
 ---
 
+## extensionCore.js
+
+Punto de entrada del core para la extensión de Chrome.
+
+Importa `runExporter` y lo expone en el ámbito global para que `background.js` pueda invocarlo mediante `importScripts`.
+
+Este archivo es empaquetado por esbuild junto con todas las dependencias del pipeline, generando `dist/extensionBundle.js`.
+
+---
+
+## background.js
+
+Coordina la extensión de Chrome.
+
+Sus responsabilidades:
+
+- iniciar la captura de la conversación cuando el usuario hace clic en el ícono;
+- recibir el JSON capturado desde el content script;
+- construir la configuración del pipeline (`source: "extension"`, `outputHandler` que descarga el archivo);
+- invocar `runExporter` desde el bundle.
+
+No interpreta la conversación ni genera Markdown directamente.
+
+---
+
+## buildExtension.js
+
+Script de build para la extensión.
+
+Utiliza esbuild para empaquetar `extensionCore.js` junto con todas las dependencias del core en un único archivo `dist/extensionBundle.js`.
+
+Incorpora un plugin que reemplaza `jsonFile.js` por `jsonFile.stub.js` para evitar dependencias de Node.js en el contexto del navegador.
+
+Copia los archivos estáticos de la extensión (manifest, background, content, inject, íconos) al directorio `dist/`.
+
+---
+
 # Distribución
 
 Durante la serie **1.1.x** la arquitectura terminó de desacoplar el núcleo del proyecto.
@@ -380,5 +431,7 @@ Actualmente cualquier interfaz puede reutilizar el mismo motor proporcionando ú
 - un mecanismo de salida.
 
 Esta organización permite incorporar nuevas interfaces (como la extensión de Chrome), nuevos formatos y nuevas salidas sin modificar el Core.
+
+La extensión de Chrome ya utiliza este mecanismo: captura el JSON, lo entrega al core mediante `ExtensionSource`, y recibe el Markdown generado para descargarlo mediante un `outputHandler` basado en `chrome.downloads`.
 
 ---
