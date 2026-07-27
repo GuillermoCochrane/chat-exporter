@@ -1,5 +1,7 @@
 // Responsable de coordinar la extensión
-// y responder a las acciones del usuario.
+// y delegar la exportación al core.
+
+importScripts("extensionBundle.js");
 
 console.log("[AI Chat Exporter] Background iniciado.");
 
@@ -11,18 +13,29 @@ chrome.action.onClicked.addListener((tab) => {
   });
 });
 
-chrome.runtime.onMessage.addListener((message) => {
+chrome.runtime.onMessage.addListener(async (message) => {
   if (message.type !== "DOWNLOAD_JSON") {
     return;
   }
 
-  const json = JSON.stringify(message.conversation, null, 2);
+  const config = {
+    source: "extension",
+    conversation: message.conversation,
+    compact: true,
 
-  const url = "data:application/json;charset=utf-8," + encodeURIComponent(json);
+    outputHandler: async (markdown) => {
+      const url = "data:text/markdown;charset=utf-8," + encodeURIComponent(markdown);
+      await chrome.downloads.download({
+        url,
+        filename: "conversacion.md",
+        saveAs: true,
+      });
+    },
+  };
 
-  chrome.downloads.download({
-    url,
-    filename: "conversation.json",
-    saveAs: true,
-  });
+  try {
+    await globalThis.__AI_CHAT_EXPORTER__.runExporter(config);
+  } catch (error) {
+    console.error("[AI Chat Exporter]", error.message);
+  }
 });

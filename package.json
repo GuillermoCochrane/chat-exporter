@@ -35,7 +35,11 @@
     "test:markdown": "node test/markdown.test.js",
     "test:markdown:compact": "node test/markdown-compact.test.js",
     "test:loader": "node test/jsonFileSource.test.js",
-    "test:writer": "node test/writer.test.js"
+    "test:writer": "node test/writer.test.js",
+    "build:extension": "node assets/scripts/buildExtension.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
   },
   "engines": {
     "node": ">=20"
