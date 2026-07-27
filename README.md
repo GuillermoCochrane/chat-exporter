@@ -90,7 +90,7 @@ AI Chat Exporter utiliza el mismo JSON que recibe la aplicación web durante la 
 
 Abrí la conversación que querés exportar desde ChatGPT Web.
 
-![Conversación abierta](docs/img/walkthrough_1.png)
+![Conversación abierta](assets/img/readme/walkthrough_1.png)
 
 ---
 
@@ -110,7 +110,7 @@ Ctrl + Shift + I
 
 Luego seleccioná la pestaña **Network**.
 
-![Pestaña Network](docs/img/walkthrough_2.png)
+![Pestaña Network](assets/img/readme/walkthrough_2.png)
 
 ---
 
@@ -138,7 +138,7 @@ conversation
 
 Generalmente aparecerá como una petición de tipo **Fetch/XHR**.
 
-![Petición de conversación](docs/img/walkthrough_3.png)
+![Petición de conversación](assets/img/readme/walkthrough_3.png)
 
 ---
 
@@ -152,7 +152,19 @@ Response
 
 Allí aparecerá el documento JSON completo.
 
-![Respuesta JSON](docs/img/walkthrough_4.png)
+![Respuesta JSON](assets/img/readme/walkthrough_4.png)
+
+---
+
+## Paso 6 — Copiar la respuesta
+
+Hacé clic derecho dentro del contenido y seleccioná:
+
+```text
+Copy response
+```
+
+![Copy Response](assets/img/readme/walkthrough_5.png)
 
 ---
 

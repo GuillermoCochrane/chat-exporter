@@ -1,7 +1,7 @@
 export const defaultPipelineConfig = {
   source: "jsonFile",
-  input: "./input/conversation.json",
-  output: "./output/conversacion.md",
+  input: "./assets/input/conversation.json",
+  output: "./assets/output/conversacion.md",
 
   inspect: false,
   noWrite: false,

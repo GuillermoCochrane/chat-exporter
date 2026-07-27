@@ -1,4 +1,4 @@
 export default {
-  outputPath: "./output/test_output.md",
+  outputPath: "./assets/output/test_output.md",
   content: "# Hola\n\nEste es un archivo de prueba.",
 };
