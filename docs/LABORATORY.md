@@ -963,6 +963,54 @@ La extensión pasó de descargar JSON crudo a exportar Markdown procesado, reuti
 
 ---
 
+### E-041
+
+#### Objetivo
+
+Agregar un popup a la extensión con selector de formato de exportación (Markdown / JSON).
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se crearon `popup.html` y `popup.js` como interfaz de usuario de la extensión.
+- El popup envía un mensaje `EXPORT` al background con el formato elegido.
+- Se implementó un sistema de handlers declarativos en `background.js` para despachar la exportación según el formato (`json`, `md`).
+- Se eliminó el listener `chrome.action.onClicked`, reemplazado por `default_popup` en el manifest.
+- Se actualizó el script de build para copiar los archivos del popup a `dist/`.
+
+#### Conclusión
+
+El popup permite al usuario elegir el formato de salida antes de exportar, mejorando la usabilidad de la extensión. La arquitectura declarativa de handlers facilita la incorporación de nuevos formatos en el futuro.
+
+---
+
+### E-042
+
+#### Objetivo
+
+Simplificar el flujo de comunicación entre `inject.js`, `content.js` y `background.js` eliminando la dependencia de una solicitud explícita de captura.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Anteriormente, `content.js` solo enviaba la conversación al background cuando recibía un mensaje `DOWNLOAD_CONVERSATION` (disparado por `chrome.action.onClicked`).
+- Al migrar a popup, ese mensaje dejó de enviarse, rompiendo la comunicación.
+- Se modificó `inject.js` para que, al capturar una conversación, envíe inmediatamente un `postMessage` con tipo `CONVERSATION` hacia `content.js`.
+- `content.js` se simplificó a un único listener pasivo que reenvía cualquier `CONVERSATION` al background como `DOWNLOAD_JSON`.
+- El flujo ahora es automático: `inject` captura → `content` retransmite → `background` almacena.
+
+#### Conclusión
+
+La comunicación automática elimina la necesidad de coordinación manual entre los componentes y asegura que la conversación esté siempre disponible cuando el usuario abre el popup. Cada módulo conserva una única responsabilidad bien definida.
+
+---
+
 ## Descubrimientos
 
 ### Desarrollo
@@ -1001,6 +1049,10 @@ La extensión pasó de descargar JSON crudo a exportar Markdown procesado, reuti
 - Un stub de fuente es suficiente para aislar dependencias de Node en el bundle de la extensión.
 - `importScripts` en el service worker permite cargar bundles IIFE generados externamente.
 - La arquitectura de Conversation Sources + OutputHandler inyectado funciona correctamente en dos entornos completamente distintos (Node y Chrome Extension).
+- Un popup de extensión no puede ejecutar lógica de procesamiento pesada; debe delegar al background mediante mensajes.
+- `chrome.runtime.sendMessage` desde el popup requiere devolver `true` en el listener del background si la respuesta es asíncrona.
+- El evento `chrome.tabs.onUpdated` puede interferir con la persistencia de datos si se dispara con cada cambio de estado de carga de la SPA.
+- La comunicación `inject → content → background` debe ser automática (push) y no depender de solicitudes explícitas para evitar desconexiones al cambiar la interfaz de usuario de la extensión.
 
 ### Pre Release
 

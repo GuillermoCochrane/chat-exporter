@@ -10,7 +10,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 ## Versión
 
-**1.1.4 (Development)**
+**1.2.1 (Development)**
 
 ## Estado general
 
@@ -30,7 +30,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 ### Interfaces
 
 - [x] CLI
-- [x] Chrome Extension
+- [x] Chrome Extension (con popup y selector de formato)
 - [ ] REST API
 
 ### Testing
@@ -58,7 +58,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 - [x] Metadata del proyecto
 - [x] README
-- [x] Configuración por defecto (`input/conversation.json`)
+- [x] Configuración por defecto (`assets/input/conversation.json`)
 - [x] Fixtures versionados
 - [x] Repositorio ejecutable inmediatamente después de clonar
 
@@ -72,6 +72,13 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Contrato unificado de fuentes (reciben `config` completo)
 - [x] ExtensionSource
 - [x] Build de extensión con esbuild
+
+### Extensión — UX
+
+- [x] Popup con selector de formato (Markdown / JSON)
+- [ ] Modo compacto en popup
+- [ ] Filtro de roles en popup
+- [ ] Indicador de progreso y manejo de errores visual
 
 
 ---
@@ -108,15 +115,13 @@ Output
 
 ---
 
-## Integración de la extensión
+## Próximo objetivo
 
-La Chrome Extension ya está integrada con el pipeline.
+### Extensión: opciones avanzadas de exportación
 
-- [x] ExtensionSource implementada.
-- [x] Extensión integrada con `runExporter`.
-- [x] Build automatizado con esbuild.
-- [x] CLI y Extension reutilizan exactamente el mismo pipeline.
-- [x] Descarga de Markdown desde la extensión.
+- Agregar modo compacto como opción en el popup.
+- Agregar filtro de roles (todos / solo usuario / solo asistente) en el popup.
+- Mejorar la comunicación visual de estado (progreso, errores) en el popup.
 
 ---
 
@@ -152,7 +157,7 @@ Las funcionalidades listadas a continuación no forman parte del objetivo de la 
 - API.
 - Aplicación de escritorio.
 
-## Mejoras futuras
+## Mejores futuras
 
 - Templates de Markdown.
 - Configuración avanzada de exportación.

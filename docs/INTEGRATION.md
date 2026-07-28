@@ -237,89 +237,82 @@ No contiene lógica de procesamiento.
 
 ## Chrome Extension
 
-Responsabilidades:
+### Captura
 
-- capturar automáticamente la conversación mediante `inject.js`;
-- actuar como puente entre la página y el background mediante `content.js`;
-- construir la configuración del pipeline en `background.js`;
-- utilizar `ExtensionSource` para entregar la conversación al core;
-- inyectar `outputHandler` que descarga el archivo mediante `chrome.downloads`;
-- invocar `runExporter` desde el bundle generado por esbuild.
-
-No duplica ninguna lógica del Core.
-
----
-
-# Principios
-
-El Core nunca conoce:
-
-- quién inició el proceso;
-- de dónde proviene la conversación;
-- cómo será entregado el resultado.
-
-Las interfaces únicamente construyen la configuración de ejecución y delegan la obtención de la conversación en una Conversation Source.
-
-Los renderers únicamente transforman el modelo interno.
-
-Los outputs únicamente entregan el resultado.
-
-Cada módulo mantiene una única responsabilidad.
-
----
-
-# Build de la extensión
-
-La extensión requiere un paso de build para funcionar.
-
-El core utiliza módulos ES y la extensión se ejecuta como service worker, que no soporta `import`/`export` nativamente.
-
-La solución consiste en:
-
-- `extensionCore.js`: punto de entrada que importa `runExporter` y lo expone en `globalThis`.
-- `buildExtension.js`: script que utiliza esbuild para empaquetar `extensionCore.js` junto con todas sus dependencias en un único archivo `dist/extensionBundle.js` en formato IIFE.
-- Un plugin de esbuild reemplaza `jsonFile.js` por `jsonFile.stub.js` para evitar dependencias de Node.js (`fs`) en el bundle.
-- `background.js` carga el bundle mediante `importScripts("extensionBundle.js")` e invoca `runExporter` desde `globalThis.__AI_CHAT_EXPORTER__`.
-
-El comando `npm run build:extension` genera el directorio `dist/` listo para cargar como extensión en Chrome.
-
----
-
-# Fase 3
-
-La Fase 3 consistió en integrar la extensión reutilizando exactamente el mismo flujo del Core.
-
-CLI:
+La captura de la conversación sigue el flujo:
 
 ```text
-CLI
- ↓
-Pipeline Profile
- ↓
-runExporter
- ↓
-JsonFileSource
- ↓
-Conversation
+ChatGPT (fetch)
+    │
+    ▼
+inject.js
+    │
+    ▼
+postMessage(CONVERSATION)
+    │
+    ▼
+content.js
+    │
+    ▼
+runtime.sendMessage(DOWNLOAD_JSON)
+    │
+    ▼
+background.js
+    │
+capturedConversation
 ```
 
-Extensión:
+- `inject.js` intercepta `window.fetch()` en el contexto de la página y, al detectar una respuesta que contiene `mapping`, envía la conversación completa a `content.js` mediante `window.postMessage`.
+- `content.js` actúa como puente pasivo: escucha mensajes `CONVERSATION` y los reenvía al `background.js` como `DOWNLOAD_JSON`.
+- `background.js` almacena la conversación en `capturedConversation`, lista para ser exportada cuando el usuario lo solicite.
+
+Este flujo es automático y no requiere que el usuario haga clic en el ícono para capturar la conversación. La captura ocurre durante la carga inicial de la página.
+
+### Exportación
+
+La exportación se inicia desde el popup:
 
 ```text
-Chrome Extension
- ↓
-Pipeline Profile
- ↓
-runExporter
- ↓
-ExtensionSource
- ↓
-Conversation
+popup.js
+    │
+    ▼
+runtime.sendMessage(EXPORT)
+    │
+    ▼
+background.js
+    │
+    ▼
+exportHandlers[format]()
+    │
+    ├── json → descarga directa
+    │
+    └── md   → runExporter → outputHandler → descarga
 ```
 
-Ambos caminos producen exactamente el mismo contrato (`Conversation`) y reutilizan el mismo `runPipeline`.
+- `popup.js` presenta un selector de formato (Markdown / JSON) y envía un mensaje `EXPORT` con la opción elegida.
+- `background.js` recibe el mensaje, verifica que exista una conversación capturada y ejecuta el handler correspondiente:
+  - **JSON**: serializa la conversación y la descarga directamente.
+  - **Markdown**: construye un `config` con `source: "extension"`, `conversation`, y un `outputHandler` que descarga el archivo `.md`.
+- La descarga utiliza `chrome.downloads.download` con `saveAs: true` para que el usuario elija la ubicación.
+
+### Principios
+
+- El popup no conoce el pipeline; solo envía la intención del usuario.
+- El background no interpreta la conversación; solo coordina y despacha al Core cuando es necesario.
+- El content script no toma decisiones; solo retransmite mensajes.
+- El inject script no sabe de la existencia del popup ni del background; solo captura y envía.
+
+---
+
+# Fase 3 — Integración
 
 **Estado: completada.**
+
+La extensión reutiliza el mismo `runExporter` y `runPipeline` que la CLI. La comunicación entre componentes se basa en mensajes desacoplados:
+
+- `CONVERSATION`: inject → content.
+- `DOWNLOAD_JSON`: content → background.
+- `EXPORT`: popup → background.
 
 ---
 
@@ -327,9 +320,11 @@ Ambos caminos producen exactamente el mismo contrato (`Conversation`) y reutiliz
 
 1. [x] Implementar `ExtensionSource`.
 2. [x] Integrar la Chrome Extension con `runExporter`.
-3. [ ] Validar que CLI y Extension reutilicen exactamente el mismo pipeline.
-4. [ ] Incorporar nuevos Conversation Sources sin modificar el Core.
-5. [ ] Incorporar nuevos Renderers y Outputs manteniendo el desacoplamiento actual.
+3. [x] Validar que CLI y Extension reutilicen exactamente el mismo pipeline.
+4. [x] Incorporar selector de formato (MD/JSON) en el popup.
+5. [ ] Agregar opciones avanzadas al popup (modo compacto, filtro de roles).
+6. [ ] Incorporar nuevos Conversation Sources sin modificar el Core.
+7. [ ] Incorporar nuevos Renderers y Outputs manteniendo el desacoplamiento actual.
 
 ---
 

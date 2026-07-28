@@ -1,4 +1,3 @@
-
 # Arquitectura
 
 ## Filosofía
@@ -56,6 +55,8 @@ src/
 │       ├── extensionCore.js
 │       ├── inject.js
 │       ├── manifest.json
+│       ├── popup.html
+│       ├── popup.js
 │       └── icons/
 │
 └── utilities/
@@ -392,18 +393,51 @@ Este archivo es empaquetado por esbuild junto con todas las dependencias del pip
 
 ---
 
+## inject.js
+
+Script inyectado en el contexto de la página de ChatGPT.
+
+Intercepta `window.fetch()` para capturar la respuesta del endpoint de conversación, filtrando por la presencia de `mapping`.
+
+Al detectar una conversación completa, la envía inmediatamente al `content.js` mediante `window.postMessage` con el tipo `CONVERSATION`.  
+Ya no espera una solicitud explícita; el envío es automático ante cada nueva captura.
+
+---
+
+## content.js
+
+Actúa como puente entre la página y la extensión.
+
+- Inyecta `inject.js` en el contexto de la página.
+- Escucha los mensajes `CONVERSATION` provenientes de `inject.js` y los reenvía al `background.js` con el tipo `DOWNLOAD_JSON`.
+
+No procesa datos; solo retransmite.
+
+---
+
 ## background.js
 
 Coordina la extensión de Chrome.
 
 Sus responsabilidades:
 
-- iniciar la captura de la conversación cuando el usuario hace clic en el ícono;
-- recibir el JSON capturado desde el content script;
-- construir la configuración del pipeline (`source: "extension"`, `outputHandler` que descarga el archivo);
-- invocar `runExporter` desde el bundle.
+- Recibir la conversación capturada desde `content.js` y almacenarla en memoria.
+- Atender las solicitudes de exportación enviadas por el popup (`EXPORT`).
+- Según el formato solicitado (JSON o Markdown), ejecutar la exportación correspondiente:
+  - JSON: descarga directa del objeto almacenado.
+  - Markdown: construye un `config` con `source: "extension"` y un `outputHandler` basado en `chrome.downloads`, y llama a `runExporter`.
+- No interpreta la conversación ni genera Markdown directamente; toda la lógica de procesamiento se delega al Core.
 
-No interpreta la conversación ni genera Markdown directamente.
+---
+
+## popup.html / popup.js
+
+Interfaz de usuario de la extensión.
+
+`popup.html` define el layout con un selector de formato (Markdown / JSON) y un botón Exportar.  
+`popup.js` captura la selección del usuario y envía un mensaje `EXPORT` al `background.js` con el formato elegido.
+
+La comunicación es unidireccional: el popup solo envía la orden de exportación y recibe confirmación de éxito o error.
 
 ---
 
@@ -415,7 +449,7 @@ Utiliza esbuild para empaquetar `extensionCore.js` junto con todas las dependenc
 
 Incorpora un plugin que reemplaza `jsonFile.js` por `jsonFile.stub.js` para evitar dependencias de Node.js en el contexto del navegador.
 
-Copia los archivos estáticos de la extensión (manifest, background, content, inject, íconos) al directorio `dist/`.
+Copia los archivos estáticos de la extensión (manifest, background, content, inject, popup, íconos) al directorio `dist/`.
 
 ---
 
@@ -432,6 +466,6 @@ Actualmente cualquier interfaz puede reutilizar el mismo motor proporcionando ú
 
 Esta organización permite incorporar nuevas interfaces (como la extensión de Chrome), nuevos formatos y nuevas salidas sin modificar el Core.
 
-La extensión de Chrome ya utiliza este mecanismo: captura el JSON, lo entrega al core mediante `ExtensionSource`, y recibe el Markdown generado para descargarlo mediante un `outputHandler` basado en `chrome.downloads`.
+La extensión de Chrome ya utiliza este mecanismo: captura el JSON, lo entrega al core mediante `ExtensionSource`, y recibe el Markdown generado para descargarlo mediante un `outputHandler` basado en `chrome.downloads`. Ahora incluye un popup que permite al usuario seleccionar el formato de salida antes de exportar.
 
 ---

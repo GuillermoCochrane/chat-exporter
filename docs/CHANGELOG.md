@@ -2,7 +2,27 @@
 
 Este documento resume la evolución del proyecto versión por versión y registra las principales decisiones de implementación tomadas durante su desarrollo.
 
+# v1.2.1 — Popup y selector de formato en la extensión
+
+* Se agrega un popup a la extensión con selector de formato de exportación (Markdown / JSON).
+* Se implementa un sistema de handlers declarativos en `background.js` para despachar la exportación según el formato elegido.
+* Se simplifica el flujo de comunicación entre `inject.js`, `content.js` y `background.js`:
+  - `inject.js` ahora envía automáticamente la conversación capturada al content script mediante `window.postMessage`.
+  - `content.js` se reduce a un listener pasivo que reenvía cualquier conversación al background.
+  - `background.js` almacena la conversación y espera la solicitud de exportación desde el popup.
+* Se elimina el listener `chrome.action.onClicked`, reemplazado por `default_popup` en el manifest.
+* Se actualiza el script de build para copiar `popup.html` y `popup.js` a `dist/`.
+* Se actualiza la documentación general y de la extensión para reflejar los cambios.
+
 ---
+
+# v1.2.0 — Release de la v1.2.0
+
+* Se publica la versión estable 1.2.0.
+* Se actualiza la documentación general y de la extensión para reflejar los cambios.
+
+---
+
 
 # v1.1.4 — Extensión integrada
 

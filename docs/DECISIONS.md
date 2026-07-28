@@ -854,3 +854,42 @@ La arquitectura interna del Core permanece inalterada. El stub es transparente p
 Aceptada.
 
 ---
+
+### ADR-0031
+
+#### Fecha
+
+2026-07-28
+
+#### Título
+
+Comunicación automática entre inject, content y background en la extensión.
+
+#### Motivación
+
+La arquitectura original de la extensión requería un mensaje explícito (`DOWNLOAD_CONVERSATION`) enviado desde el background hacia el content script para solicitar la conversación capturada. Este mensaje se disparaba con `chrome.action.onClicked`. Al migrar la interfaz a un popup, el evento `onClicked` dejó de existir y la cadena de comunicación se rompió: el content script nunca recibía la orden de enviar la conversación, por lo que `capturedConversation` siempre era `null`.
+
+Era necesario rediseñar el flujo para que la captura se comunicara de forma automática, sin depender de la interfaz de usuario que iniciara la exportación.
+
+#### Alternativas consideradas
+
+- **Mantener el mensaje `DOWNLOAD_CONVERSATION` y enviarlo desde el popup**: el popup no tiene acceso directo a la pestaña activa para enviar mensajes al content script de manera confiable. Además, agregaba un paso innecesario.
+- **Enviar la conversación automáticamente desde `inject.js`**: la solución más simple y alineada con el principio de responsabilidad única.
+
+#### Consecuencia
+
+- `inject.js` ahora envía la conversación capturada inmediatamente después de almacenarla, mediante `window.postMessage` con tipo `CONVERSATION`.
+- `content.js` se redujo a un listener pasivo que reenvía cualquier `CONVERSATION` al background como `DOWNLOAD_JSON`, sin lógica condicional.
+- `background.js` ya no necesita solicitar la captura; simplemente almacena la conversación cuando llega.
+- Se eliminó el listener `chrome.action.onClicked` del background.
+- La arquitectura resultante es más simple y cada componente tiene una única responsabilidad claramente definida:
+  - **inject**: captura y envía.
+  - **content**: retransmite.
+  - **background**: almacena y exporta.
+  - **popup**: solicita exportación.
+
+#### Estado
+
+Aceptada.
+
+---
