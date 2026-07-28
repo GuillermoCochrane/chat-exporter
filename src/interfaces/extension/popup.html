@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>AI Chat Exporter</title>
+  <style>
+    body {
+      width: 220px;
+      padding: 12px;
+      font-family: system-ui, sans-serif;
+      font-size: 13px;
+    }
+    select, button {
+      width: 100%;
+      padding: 6px;
+      margin-top: 6px;
+      box-sizing: border-box;
+    }
+    button {
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #status {
+      margin-top: 8px;
+      font-size: 11px;
+      color: #555;
+      min-height: 14px;
+    }
+  </style>
+</head>
+<body>
+  <label for="format">Formato:</label>
+  <select id="format">
+    <option value="md">Markdown</option>
+    <option value="json">JSON</option>
+  </select>
+
+  <button id="exportBtn">Exportar</button>
+  <p id="status"></p>
+
+  <script src="popup.js"></script>
+</body>
+</html>

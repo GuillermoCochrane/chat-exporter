@@ -1,5 +1,5 @@
 // Script de build para la extensión de Chrome.
-// Empaqueta el core usando esbuild y copia los archivos estáticos a dist/.
+// Empaqueta el core usando esbuild y copia los archivos estáticos a dist/.exportHandlers
 
 import * as esbuild from "esbuild";
 import { copyFileSync, mkdirSync } from "node:fs";
@@ -42,7 +42,10 @@ const staticFiles = [
   "background.js",
   "content.js",
   "inject.js",
+  "popup.html",
+  "popup.js",
 ];
+
 for (const file of staticFiles) {
   copyFileSync(
     resolve(root, "src/interfaces/extension", file),
