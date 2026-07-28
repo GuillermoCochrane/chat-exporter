@@ -23,9 +23,17 @@ window.fetch = async (...args) => {
       if (json?.mapping) {
         window.__AI_CHAT_EXPORTER__.conversation = json;
 
+        // Enviar automáticamente la conversación capturada al content script
+        window.postMessage(
+          {
+            source: "AI_CHAT_EXPORTER",
+            type: "CONVERSATION",
+            conversation: json,
+          },
+          "*",
+        );
+
         console.log("[AI Chat Exporter] Conversación completa almacenada.");
-      } else {
-        console.log("[AI Chat Exporter] Respuesta ignorada.");
       }
     } catch {
       console.warn("[AI Chat Exporter] No se pudo capturar la conversación.");

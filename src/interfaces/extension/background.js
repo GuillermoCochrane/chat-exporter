@@ -1,41 +1,109 @@
-// Responsable de coordinar la extensión
-// y delegar la exportación al core.
+// Coordina la extensión: recibe la conversación capturada y
+// atiende las solicitudes de exportación del popup.
 
 importScripts("extensionBundle.js");
 
 console.log("[AI Chat Exporter] Background iniciado.");
 
-chrome.action.onClicked.addListener((tab) => {
-  if (!tab.id) return;
+// ---------------------------------------------------------------------------
+// Estado interno
+// ---------------------------------------------------------------------------
 
-  chrome.tabs.sendMessage(tab.id, {
-    type: "DOWNLOAD_CONVERSATION",
+let capturedConversation = null;
+
+// ---------------------------------------------------------------------------
+// Utilidades de descarga
+// ---------------------------------------------------------------------------
+
+const buildDataUrl = (content, mimeType) =>
+  `data:${mimeType};charset=utf-8,${encodeURIComponent(content)}`;
+
+const downloadFile = (dataUrl, extension) =>
+  chrome.downloads.download({
+    url: dataUrl,
+    filename: `conversation.${extension}`,
+    saveAs: true,
   });
-});
 
-chrome.runtime.onMessage.addListener(async (message) => {
-  if (message.type !== "DOWNLOAD_JSON") {
-    return;
-  }
+// ---------------------------------------------------------------------------
+// Handlers de formato de exportación
+// ---------------------------------------------------------------------------
 
-  const config = {
-    source: "extension",
-    conversation: message.conversation,
-    compact: true,
+const exportHandlers = {
+  // Descarga el JSON original sin procesar.
+  json: () => {
+    const jsonStr = JSON.stringify(capturedConversation, null, 2);
+    const url = buildDataUrl(jsonStr, "application/json");
+    return downloadFile(url, "json");
+  },
 
-    outputHandler: async (markdown) => {
-      const url = "data:text/markdown;charset=utf-8," + encodeURIComponent(markdown);
-      await chrome.downloads.download({
-        url,
-        filename: "conversacion.md",
-        saveAs: true,
-      });
-    },
-  };
+  // Procesa la conversación con el pipeline y descarga Markdown.
+  md: async () => {
+    const config = {
+      source: "extension",
+      conversation: capturedConversation,
+      compact: true,
 
-  try {
+      outputHandler: async (markdown) => {
+        const url = buildDataUrl(markdown, "text/markdown");
+        await downloadFile(url, "md");
+      },
+    };
+
     await globalThis.__AI_CHAT_EXPORTER__.runExporter(config);
-  } catch (error) {
-    console.error("[AI Chat Exporter]", error.message);
-  }
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Handlers de mensajes entrantes
+// ---------------------------------------------------------------------------
+
+const messageHandlers = {
+  // El content script envía la conversación recién capturada.
+  DOWNLOAD_JSON: (message) => {
+    capturedConversation = message.conversation;
+    console.log("[AI Chat Exporter] Conversación almacenada.");
+  },
+
+  // El popup solicita una exportación.
+  EXPORT: (message, sendResponse) => {
+    if (!capturedConversation) {
+      sendResponse({
+        success: false,
+        error: "No hay conversación capturada.",
+      });
+      return;
+    }
+
+    const handler = exportHandlers[message.format];
+    if (!handler) {
+      sendResponse({
+        success: false,
+        error: `Formato desconocido: ${message.format}`,
+      });
+      return;
+    }
+
+    // Ejecutar el handler (síncrono o asíncrono)
+    Promise.resolve(handler())
+      .then(() => sendResponse({ success: true }))
+      .catch((error) => {
+        console.error("[AI Chat Exporter]", error);
+        sendResponse({ success: false, error: error.message });
+      });
+
+    // Mantiene el canal abierto para respuesta asíncrona
+    return true;
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Listener principal
+// ---------------------------------------------------------------------------
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  const handler = messageHandlers[message.type];
+  if (!handler) return;
+
+  return handler(message, sendResponse);
 });
