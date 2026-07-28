@@ -24,16 +24,7 @@ Aunque hoy el proyecto soporta ChatGPT y Markdown, su arquitectura fue diseñada
   - [Build](#build)
   - [Instalación en Chrome](#instalación-en-chrome)
   - [Uso](#uso)
-- [Obtener una conversación desde ChatGPT](#obtener-una-conversación-desde-chatgpt)
-  - [Paso 1 — Abrir la conversación](#paso-1--abrir-la-conversación)
-  - [Paso 2 — Abrir DevTools](#paso-2--abrir-devtools)
-  - [Paso 3 — Recargar la página](#paso-3--recargar-la-página)
-  - [Paso 4 — Buscar la petición](#paso-4--buscar-la-petición)
-  - [Paso 5 — Abrir la respuesta](#paso-5--abrir-la-respuesta)
-  - [Paso 6 — Copiar la respuesta](#paso-6--copiar-la-respuesta)
-  - [Paso 7 — Guardar el archivo](#paso-7--guardar-el-archivo)
-  - [Paso 8 — Exportar](#paso-8--exportar)
-- [Uso](#uso-1)
+- [Uso de la CLI](#uso-de-la-cli)
   - [Exportación básica](#exportación-básica)
   - [Archivo de entrada personalizado](#archivo-de-entrada-personalizado)
   - [Archivo de salida personalizado](#archivo-de-salida-personalizado)
@@ -53,7 +44,7 @@ Aunque hoy el proyecto soporta ChatGPT y Markdown, su arquitectura fue diseñada
 
 # Estado
 
-- ✅ Versión estable 1.1.4
+- ✅ Versión estable 1.2.1
 - ✅ CLI funcional
 - ✅ Extensión de Chrome integrada
 - ✅ Soporte para ChatGPT
@@ -67,7 +58,7 @@ Aunque hoy el proyecto soporta ChatGPT y Markdown, su arquitectura fue diseñada
 - Conversión de conversaciones exportadas desde ChatGPT a Markdown.
 - Pipeline modular y desacoplado.
 - Interfaz de línea de comandos (CLI).
-- Extensión de Chrome que captura conversaciones automáticamente y exporta Markdown.
+- Extensión de Chrome con popup para exportar conversaciones en formato Markdown o JSON.
 - Modo `--inspect`.
 - Modo `--no-write`.
 - Modo `--compact`.
@@ -119,144 +110,14 @@ Esto genera la carpeta `dist/` con todos los archivos necesarios.
 ## Uso
 
 1. Andá a `https://chatgpt.com/` y abrí una conversación.
-2. Click en el ícono de la extensión.
-3. El archivo `conversacion.md` se descargará automáticamente.
+2. Hacé clic en el ícono de la extensión para abrir el popup.
+3. Seleccioná el formato de exportación (Markdown o JSON).
+4. Hacé clic en **Exportar**.
+5. El archivo se descargará automáticamente.
 
 ---
 
-# Obtener una conversación desde ChatGPT
-
-1. [Abrir la conversación](#paso-1--abrir-la-conversación)
-2. [Abrir DevTools](#paso-2--abrir-devtools)
-3. [Recargar la página](#paso-3--recargar-la-página)
-4. [Buscar la petición](#paso-4--buscar-la-petición)
-5. [Abrir la respuesta](#paso-5--abrir-la-respuesta)
-6. [Copiar la respuesta](#paso-6--copiar-la-respuesta)
-7. [Guardar el archivo](#paso-7--guardar-el-archivo)
-8. [Exportar](#paso-8--exportar)
-
-Actualmente ChatGPT no ofrece un archivo JSON descargable para una conversación individual.
-
-AI Chat Exporter utiliza el mismo JSON que recibe la aplicación web durante la carga inicial de una conversación.
-
----
-
-## Paso 1 — Abrir la conversación
-
-Abrí la conversación que querés exportar desde ChatGPT Web.
-
-![Conversación abierta](assets/img/readme/walkthrough_1.png)
-
----
-
-## Paso 2 — Abrir DevTools
-
-Presioná:
-
-```text
-F12
-```
-
-o
-
-```text
-Ctrl + Shift + I
-```
-
-Luego seleccioná la pestaña **Network**.
-
-![Pestaña Network](assets/img/readme/walkthrough_2.png)
-
----
-
-## Paso 3 — Recargar la página
-
-Con la pestaña **Network** abierta, recargá la conversación.
-
-```text
-F5
-```
-
-o utilizando el botón de recarga del navegador.
-
-Esto permitirá capturar la petición que contiene la conversación.
-
----
-
-## Paso 4 — Buscar la petición
-
-Buscá la petición cuyo nombre contiene:
-
-```text
-conversation
-```
-
-Generalmente aparecerá como una petición de tipo **Fetch/XHR**.
-
-![Petición de conversación](assets/img/readme/walkthrough_3.png)
-
----
-
-## Paso 5 — Abrir la respuesta
-
-Seleccioná la petición y abrí la pestaña:
-
-```text
-Response
-```
-
-Allí aparecerá el documento JSON completo.
-
-![Respuesta JSON](assets/img/readme/walkthrough_4.png)
-
----
-
-## Paso 6 — Copiar la respuesta
-
-Hacé clic derecho dentro del contenido y seleccioná:
-
-```text
-Copy response
-```
-
-![Copy Response](assets/img/readme/walkthrough_5.png)
-
----
-
-## Paso 7 — Guardar el archivo
-
-Pegá el contenido en un archivo llamado:
-
-```text
-conversation.json
-```
-
-y guardalo dentro del directorio:
-
-```text
-assets/input/
-└── conversation.json
-```
-
----
-
-## Paso 8 — Exportar
-
-Desde la raíz del proyecto ejecutá:
-
-```bash
-npm start
-```
-
-El documento Markdown será generado automáticamente en:
-
-```text
-assets/output/conversacion.md
-```
-
----
-
-# Uso
+# Uso de la CLI
 
 ## Exportación básica
 
@@ -410,7 +271,9 @@ src/
 │       ├── content.js
 │       ├── extensionCore.js
 │       ├── inject.js
-│       └── manifest.json
+│       ├── manifest.json
+│       ├── popup.html
+│       ├── popup.js
 └── utilities/
     ├── formatter.js
     └── validator.js
