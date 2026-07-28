@@ -15,9 +15,10 @@ El objetivo final es convertir el capturador experimental en una herramienta com
 - ✅ Investigación
 - ✅ Capturador
 - ✅ Persistencia
-- 🚧 Integración
-- ⏳ Exportadores
-- ⏳ UX
+- ✅ Integración
+- ✅ Popup con selector de formato (MD/JSON)
+- 🚧 Opciones avanzadas (compact, roles)
+- ⏳ UX completa
 - ⏳ Publicación
 
 ---
@@ -65,11 +66,7 @@ Definir un mecanismo de almacenamiento temporal desacoplado entre la captura y l
 
 ### Decisión adoptada
 
-La conversación capturada permanece en memoria mediante:
-
-```javascript
-window.__AI_CHAT_EXPORTER__.conversation
-```
+La conversación capturada permanece en memoria en `capturedConversation` dentro del background.
 
 ### Motivos
 
@@ -88,7 +85,7 @@ Conectar la extensión con el pipeline existente de AI Chat Exporter.
 
 ## Estado
 
-**En progreso**
+**Completado**
 
 ### Flujo actual
 
@@ -105,33 +102,14 @@ Content Script
 Background
       │
       ▼
-conversation.json
+Popup → EXPORT
+      │
+      ├── JSON → descarga directa
+      │
+      └── MD   → runExporter → descarga
 ```
 
-### Próximo paso
-
-Reemplazar la exportación únicamente a JSON por un sistema de exportadores reutilizando el pipeline existente.
-
-Flujo objetivo:
-
-```text
-ChatGPT
-      │
-      ▼
-Capturador
-      │
-      ▼
-Pipeline
-      │
-      ▼
-Parser
-      │
-      ▼
-Normalizer
-      │
-      ▼
-Exportadores
-```
+La extensión reutiliza el pipeline del Core y ofrece al usuario un popup para seleccionar el formato de exportación.
 
 ---
 
@@ -141,14 +119,21 @@ Exportadores
 
 Permitir múltiples formatos de salida utilizando el mismo pipeline.
 
-## Formatos previstos
+## Estado
 
-- JSON (original)
-- Markdown
+**En progreso**
+
+### Formatos implementados
+
+- ✅ JSON (original)
+- ✅ Markdown
+
+### Formatos previstos
+
 - HTML
 - PDF
 
-La arquitectura deberá permitir agregar nuevos formatos sin modificar el capturador.
+La arquitectura permite agregar nuevos formatos sin modificar el capturador.
 
 ---
 
@@ -158,14 +143,21 @@ La arquitectura deberá permitir agregar nuevos formatos sin modificar el captur
 
 Construir la interfaz definitiva de la extensión.
 
-## Funcionalidades previstas
+## Estado
 
-- botón Export
-- selector de formato
-- indicador de captura
-- indicador de progreso
-- mensajes de error
-- configuración básica
+**En progreso**
+
+### Implementado
+
+- ✅ Popup con selector de formato
+- ✅ Mensajes de estado (éxito / error)
+
+### Pendiente
+
+- ⏳ Modo compacto
+- ⏳ Filtro de roles
+- ⏳ Indicador de progreso
+- ⏳ Configuración básica
 
 ---
 
@@ -175,7 +167,11 @@ Construir la interfaz definitiva de la extensión.
 
 Preparar la extensión para distribución.
 
-## Alcance
+## Estado
+
+**Pendiente**
+
+### Alcance
 
 - limpieza del código;
 - eliminación de logs de depuración;
@@ -214,3 +210,5 @@ Preparar la extensión para distribución.
 - exportación por conversación;
 - exportación por lote;
 - sincronización incremental.
+
+---

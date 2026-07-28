@@ -70,9 +70,13 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 │ • Filtra respuestas                   │
 │ • Conserva únicamente el JSON         │
 │   que contiene `mapping`              │
+│ • Envía automáticamente la            │
+│   conversación capturada al           │
+│   content script                      │
 └───────────────────────────────────────┘
                   │
           window.postMessage()
+          tipo: CONVERSATION
                   │
                   ▼
 ┌───────────────────────────────────────┐
@@ -80,18 +84,35 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 │                                       │
 │ • Inyecta inject.js                   │
 │ • Actúa como puente                   │
-│ • Comunica página ↔ extensión         │
+│ • Reenvía CONVERSATION al             │
+│   background como DOWNLOAD_JSON       │
 └───────────────────────────────────────┘
                   │
       chrome.runtime.sendMessage()
+          tipo: DOWNLOAD_JSON
                   │
                   ▼
 ┌───────────────────────────────────────┐
 │          background.js                │
 │                                       │
-│ • Coordina la extensión               │
-│ • Gestiona la descarga                │
-│ • Decide el exportador                │
+│ • Almacena la última conversación     │
+│ • Responde al popup                   │
+│ • Ejecuta exportHandlers              │
+│ • Invoca al Core si es Markdown       │
+│ • Descarga el archivo                 │
+└───────────────────────────────────────┘
+                  ▲
+                  │
+      chrome.runtime.sendMessage()
+          tipo: EXPORT
+                  │
+                  │
+┌───────────────────────────────────────┐
+│          popup.html / popup.js        │
+│                                       │
+│ • Selector de formato (MD / JSON)     │
+│ • Botón Exportar                      │
+│ • Muestra estado de la operación      │
 └───────────────────────────────────────┘
 ```
 
@@ -106,7 +127,8 @@ Responsabilidades:
 - interceptar `window.fetch`;
 - detectar la respuesta correcta del endpoint de conversación;
 - validar la presencia de `mapping`;
-- conservar el JSON completo en memoria.
+- conservar el JSON completo en memoria;
+- enviar automáticamente la conversación capturada al content script mediante `window.postMessage`.
 
 No debe:
 
@@ -120,14 +142,15 @@ No debe:
 
 Responsabilidades:
 
-- inyectar `inject.js`;
-- actuar como puente entre la página y la extensión;
-- reenviar mensajes entre ambos contextos.
+- inyectar `inject.js` en el contexto de la página;
+- actuar como puente pasivo entre la página y la extensión;
+- reenviar cualquier conversación recibida de `inject.js` al `background.js`.
 
 No debe:
 
 - procesar conversaciones;
-- exportar archivos.
+- exportar archivos;
+- tomar decisiones sobre el flujo de datos.
 
 ---
 
@@ -135,15 +158,32 @@ No debe:
 
 Responsabilidades:
 
-- coordinar la extensión;
-- iniciar la exportación;
-- recibir el JSON capturado;
-- invocar el pipeline correspondiente.
+- recibir y almacenar la conversación capturada enviada por el content script;
+- atender las solicitudes de exportación provenientes del popup;
+- despachar la exportación según el formato solicitado:
+  - JSON: descarga directa del objeto almacenado;
+  - Markdown: construir configuración del pipeline, invocar `runExporter` y descargar el resultado mediante `outputHandler`.
 
 No debe:
 
 - interpretar la conversación;
 - modificar el JSON.
+
+---
+
+## Popup
+
+Responsabilidades:
+
+- presentar al usuario un selector de formato de exportación (Markdown / JSON);
+- enviar la orden de exportación al background con el formato elegido;
+- mostrar el estado de la operación (procesando, éxito, error).
+
+No debe:
+
+- acceder directamente al Core;
+- ejecutar lógica de procesamiento;
+- manipular la conversación.
 
 ---
 
@@ -164,13 +204,13 @@ La arquitectura sigue una separación estricta de responsabilidades.
 
 Cada componente tiene una única función:
 
-- **Inject** captura.
-- **Content** comunica.
-- **Background** coordina.
+- **Inject** captura y envía.
+- **Content** retransmite.
+- **Background** coordina y exporta.
+- **Popup** presenta opciones y solicita.
 - **Core** procesa.
-- **Exportadores** generan la salida.
 
-Esta separación permite incorporar nuevos formatos de exportación sin modificar el mecanismo de captura.
+Esta separación permite incorporar nuevos formatos de exportación sin modificar el mecanismo de captura, ni la comunicación entre componentes.
 
 ---
 
@@ -178,4 +218,6 @@ Esta separación permite incorporar nuevos formatos de exportación sin modifica
 
 Arquitectura validada.
 
-La captura automática del JSON funciona correctamente y el pipeline existente puede reutilizarse sin modificaciones.
+La extensión captura automáticamente el JSON, ofrece un popup con selector de formato y exporta tanto Markdown como JSON reutilizando el pipeline existente sin modificaciones.
+
+---
