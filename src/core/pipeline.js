@@ -13,7 +13,7 @@ export function runPipeline(conversation, config) {
   }
 
   const parsed = extractMessages(conversation);
-  const filtered = filterConversationMessages(parsed);
+  const filtered = filterConversationMessages(parsed, config.roleFilter ?? "all");
   const normalized = normalizeMessages(filtered);
 
   return {
