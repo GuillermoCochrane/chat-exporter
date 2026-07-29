@@ -76,7 +76,7 @@ Parser
 
   ↓
 
-Filter
+Filter (por rol opcional)
 
   ↓
 
@@ -229,6 +229,15 @@ Responsabilidades:
 - inyectar `outputHandler` que escribe en disco;
 - invocar `runExporter`.
 
+Opciones soportadas:
+
+- `-i`, `--input`: archivo de entrada.
+- `-o`, `--output`: archivo de salida.
+- `-c`, `--compact`: modo compacto.
+- `-r`, `--role`: filtro por rol (`all`, `user`, `assistant`).
+- `-in`, `--inspect`: inspeccionar conversación.
+- `-nw`, `--no-write`: pipeline sin escritura.
+
 No conoce cómo se obtiene la conversación.
 
 No contiene lógica de procesamiento.
@@ -289,10 +298,10 @@ exportHandlers[format]()
     └── md   → runExporter → outputHandler → descarga
 ```
 
-- `popup.js` presenta un selector de formato (Markdown / JSON) y envía un mensaje `EXPORT` con la opción elegida.
+- `popup.js` presenta opciones de exportación (formato, modo compacto, filtro de roles) y envía un mensaje `EXPORT` con las opciones elegidas.
 - `background.js` recibe el mensaje, verifica que exista una conversación capturada y ejecuta el handler correspondiente:
   - **JSON**: serializa la conversación y la descarga directamente.
-  - **Markdown**: construye un `config` con `source: "extension"`, `conversation`, y un `outputHandler` que descarga el archivo `.md`.
+  - **Markdown**: construye un `config` con `source: "extension"`, `conversation`, `compact`, `roleFilter`, y un `outputHandler` que descarga el archivo `.md`.
 - La descarga utiliza `chrome.downloads.download` con `saveAs: true` para que el usuario elija la ubicación.
 
 ### Principios
@@ -322,9 +331,10 @@ La extensión reutiliza el mismo `runExporter` y `runPipeline` que la CLI. La co
 2. [x] Integrar la Chrome Extension con `runExporter`.
 3. [x] Validar que CLI y Extension reutilicen exactamente el mismo pipeline.
 4. [x] Incorporar selector de formato (MD/JSON) en el popup.
-5. [ ] Agregar opciones avanzadas al popup (modo compacto, filtro de roles).
-6. [ ] Incorporar nuevos Conversation Sources sin modificar el Core.
-7. [ ] Incorporar nuevos Renderers y Outputs manteniendo el desacoplamiento actual.
+5. [x] Agregar opciones avanzadas al popup (modo compacto, filtro de roles).
+6. [ ] Mejorar feedback visual en el popup (spinner, errores detallados).
+7. [ ] Incorporar nuevos Conversation Sources sin modificar el Core.
+8. [ ] Incorporar nuevos Renderers y Outputs manteniendo el desacoplamiento actual.
 
 ---
 

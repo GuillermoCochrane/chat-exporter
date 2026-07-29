@@ -1011,6 +1011,58 @@ La comunicación automática elimina la necesidad de coordinación manual entre 
 
 ---
 
+### E-043
+
+#### Objetivo
+
+Mejorar el modo compacto para preservar la estructura Markdown (reglas horizontales, listas, bloques de código) mientras se reduce el espaciado vertical excesivo.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- La implementación inicial con `text.replace(/\n{2,}/g, "\n")` rompía reglas horizontales (`---`) y listas, ya que Markdown requiere una línea en blanco antes de estos elementos.
+- Se probó una regex con mirada negativa (`(?!\n*---)`) que protegía las reglas horizontales pero no las listas.
+- Se descubrió que las listas también requieren una línea en blanco previa para que el parser de Markdown las interprete correctamente.
+- Se intentó extender la mirada negativa para cubrir listas (`(?!\n*(- |\d+\. |---))`), pero no cubría el caso de la transición lista→párrafo.
+- La solución final utiliza un sistema de placeholders:
+  1. Se protege la separación lista→párrafo reemplazando `\n\n` por `__LIST_BREAK__`.
+  2. Se aplica la regex con mirada negativa para todo lo demás.
+  3. Se restaura el placeholder a `\n\n`.
+- Se creó un JSON de pruebas de estrés con casos borde (reglas, listas, bloques de código, espaciado excesivo, saltos de línea simples) para validar la solución.
+
+#### Conclusión
+
+El modo compacto ahora reduce significativamente el espaciado vertical sin romper la estructura Markdown. La técnica de placeholders resultó más efectiva y mantenible que una regex única compleja.
+
+---
+
+### E-044
+
+#### Objetivo
+
+Agregar filtro por rol (`user`, `assistant`, `all`) al pipeline y a la CLI.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Inicialmente se consideró crear un nuevo módulo `filterByRole.js`, pero se optó por extender `filter.js` con un parámetro opcional `targetRole`.
+- `filterConversationMessages(messages, targetRole)` ahora acepta `"all"` (por defecto), `"user"` o `"assistant"`.
+- Se integró en `pipeline.js` usando `config.roleFilter`.
+- Se agregó la opción `--role` / `-r` a la CLI con validación en `validator.js`.
+- Se agregaron tests automatizados para los tres casos (`all`, `user`, `assistant`).
+
+#### Conclusión
+
+Extender un módulo existente en lugar de crear uno nuevo mantuvo el código más simple (KISS) y reutilizó las validaciones de roles que ya existían. La CLI ahora permite exportar conversaciones filtradas por rol.
+
+---
+
 ## Descubrimientos
 
 ### Desarrollo
@@ -1053,6 +1105,10 @@ La comunicación automática elimina la necesidad de coordinación manual entre 
 - `chrome.runtime.sendMessage` desde el popup requiere devolver `true` en el listener del background si la respuesta es asíncrona.
 - El evento `chrome.tabs.onUpdated` puede interferir con la persistencia de datos si se dispara con cada cambio de estado de carga de la SPA.
 - La comunicación `inject → content → background` debe ser automática (push) y no depender de solicitudes explícitas para evitar desconexiones al cambiar la interfaz de usuario de la extensión.
+- Markdown requiere una línea en blanco antes de reglas horizontales (`---`) y listas (`- ` o `1. `) para interpretarlas correctamente.
+- Una regex con mirada negativa puede proteger múltiples patrones, pero no cubre todos los casos de borde (como la transición lista→párrafo).
+- La técnica de placeholders (proteger→procesar→restaurar) es una alternativa KISS efectiva cuando las reglas de reemplazo son contextuales.
+- Extender un módulo existente con un parámetro opcional es preferible a crear un nuevo archivo cuando la responsabilidad es la misma (filtrar mensajes).
 
 ### Pre Release
 

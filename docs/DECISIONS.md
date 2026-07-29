@@ -893,3 +893,36 @@ Era necesario rediseñar el flujo para que la captura se comunicara de forma aut
 Aceptada.
 
 ---
+
+### ADR-0032
+
+#### Fecha
+
+2026-07-29
+
+#### Título
+
+Extender el módulo `filter.js` en lugar de crear un nuevo módulo para el filtro por rol.
+
+#### Motivación
+
+Se necesitaba una funcionalidad para filtrar mensajes por rol (`user`, `assistant`, `all`). La primera intuición fue crear un nuevo módulo `filterByRole.js` siguiendo el patrón de responsabilidad única. Sin embargo, `filter.js` ya contenía las validaciones de roles válidos y el filtrado de contenido textual. Agregar un segundo módulo habría duplicado la lógica de validación o creado una dependencia innecesaria entre ambos.
+
+#### Alternativas consideradas
+
+- **Crear `filterByRole.js` como módulo independiente**: más alineado con SRP en teoría, pero en la práctica duplicaba la validación de roles o requería importar `filter.js` como dependencia.
+- **Extender `filterConversationMessages` con un parámetro opcional `targetRole`**: mantenía toda la lógica de filtrado en un solo lugar, sin duplicación, y el parámetro por defecto (`"all"`) preservaba la compatibilidad hacia atrás.
+
+#### Consecuencia
+
+- `filterConversationMessages(messages, targetRole)` ahora acepta un segundo argumento opcional.
+- Los tests existentes no requirieron modificación (el parámetro por defecto mantiene el comportamiento original).
+- Se agregaron tests adicionales para `"user"` y `"assistant"`.
+- La CLI incorporó la opción `--role` con validación en `validator.js`.
+- El pipeline pasó a usar `config.roleFilter` para controlar el filtrado.
+
+#### Estado
+
+Aceptada.
+
+---

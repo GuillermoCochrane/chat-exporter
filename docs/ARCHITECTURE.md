@@ -259,9 +259,11 @@ Cuenta con pruebas automatizadas independientes.
 
 ## filter.js
 
-Elimina mensajes que no pertenecen a la conversación visible.
+Filtra los mensajes conversacionales.
 
-No altera el contenido restante.
+- Conserva únicamente mensajes con rol `user` o `assistant` y contenido de tipo `text`.
+- Opcionalmente, puede filtrar por un rol específico (`user`, `assistant`) mediante el parámetro `targetRole`.
+- Descarta mensajes de sistema, contextos internos y cualquier contenido que no sea texto.
 
 Cuenta con pruebas automatizadas independientes.
 
@@ -343,7 +345,8 @@ Actualmente implementa:
 - salida;
 - inspección;
 - modo sin escritura;
-- modo compacto.
+- modo compacto;
+- filtro por rol (`--role`).
 
 La validación se delega completamente a `validator.js`.
 
@@ -361,7 +364,8 @@ Actualmente implementa:
 - parámetros obligatorios;
 - opciones repetidas;
 - extensiones;
-- existencia de archivos y directorios.
+- existencia de archivos y directorios;
+- valores válidos para `--role`.
 
 No conoce el pipeline.
 
@@ -466,6 +470,6 @@ Actualmente cualquier interfaz puede reutilizar el mismo motor proporcionando ú
 
 Esta organización permite incorporar nuevas interfaces (como la extensión de Chrome), nuevos formatos y nuevas salidas sin modificar el Core.
 
-La extensión de Chrome ya utiliza este mecanismo: captura el JSON, lo entrega al core mediante `ExtensionSource`, y recibe el Markdown generado para descargarlo mediante un `outputHandler` basado en `chrome.downloads`. Ahora incluye un popup que permite al usuario seleccionar el formato de salida antes de exportar.
+La extensión de Chrome ya utiliza este mecanismo: captura el JSON, lo entrega al core mediante `ExtensionSource`, y recibe el Markdown generado para descargarlo mediante un `outputHandler` basado en `chrome.downloads`. Incluye un popup que permite al usuario seleccionar el formato de salida antes de exportar.
 
 ---

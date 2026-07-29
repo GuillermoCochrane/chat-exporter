@@ -2,6 +2,17 @@
 
 Este documento resume la evolución del proyecto versión por versión y registra las principales decisiones de implementación tomadas durante su desarrollo.
 
+# v1.2.2 — Filtro por rol y mejora del modo compacto
+
+* Se extiende `filter.js` para aceptar un parámetro opcional `targetRole` que permite filtrar mensajes por `user`, `assistant` o conservar todos (`all`).
+* Se integra el filtro por rol en `pipeline.js` mediante `config.roleFilter`.
+* Se agrega la opción `--role` / `-r` a la CLI con validación en `validator.js`.
+* Se mejora el modo compacto del generador Markdown:
+  - Ahora preserva las reglas horizontales (`---`) y las listas (`- `, `1. `) que requieren espaciado específico en Markdown.
+  - Se implementa una técnica de placeholders (proteger → procesar → restaurar) para manejar casos borde como la transición lista→párrafo.
+* Se agregan tests automatizados para el filtro por rol.
+* Se actualiza la documentación general para reflejar los cambios.
+
 # v1.2.1 — Popup y selector de formato en la extensión
 
 * Se agrega un popup a la extensión con selector de formato de exportación (Markdown / JSON).

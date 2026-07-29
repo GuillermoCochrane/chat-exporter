@@ -10,7 +10,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 ## Versión
 
-**1.2.1 (Development)**
+**1.2.2 (Development)**
 
 ## Estado general
 
@@ -22,6 +22,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Inspector
 - [x] Parser
 - [x] Filter
+- [x] Filtro por rol (user/assistant/all)
 - [x] Normalizer
 - [x] Formatter
 - [x] Markdown Builder
@@ -41,6 +42,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Validator
 - [x] Parser
 - [x] Filter
+- [x] Filter (filtro por rol)
 - [x] Normalizer
 - [x] Markdown
 - [x] Markdown (modo compacto)
@@ -76,8 +78,8 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 ### Extensión — UX
 
 - [x] Popup con selector de formato (Markdown / JSON)
-- [ ] Modo compacto en popup
-- [ ] Filtro de roles en popup
+- [x] Modo compacto en popup
+- [x] Filtro de roles en popup
 - [ ] Indicador de progreso y manejo de errores visual
 
 
@@ -117,11 +119,11 @@ Output
 
 ## Próximo objetivo
 
-### Extensión: opciones avanzadas de exportación
+### Extensión: mejoras visuales y manejo de estado
 
-- Agregar modo compacto como opción en el popup.
-- Agregar filtro de roles (todos / solo usuario / solo asistente) en el popup.
-- Mejorar la comunicación visual de estado (progreso, errores) en el popup.
+- Mejorar la comunicación visual de estado en el popup (spinner, errores detallados).
+- Agregar indicador de progreso durante la exportación de Markdown.
+- Ajustes de estilo para una apariencia más profesional.
 
 ---
 
