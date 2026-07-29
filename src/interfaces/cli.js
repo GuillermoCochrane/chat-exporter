@@ -4,7 +4,7 @@ import { defaultPipelineConfig } from "../configuration/pipelineConfig.js";
 
 // Copia local de la configuración base del pipeline.
 // Cada interfaz puede extenderla o sobrescribirla según sus necesidades.
-const defaultConfig = { ...defaultPipelineConfig, };
+const defaultConfig = { ...defaultPipelineConfig };
 
 const cliMessages = {
   help: `
@@ -32,6 +32,7 @@ Opciones:
   -in, --inspect     Muestra estadísticas de la conversación sin exportar.
   -nw, --no-write    Ejecuta todo el pipeline sin escribir el archivo.
   -c, --compact      Elimina saltos de línea extra en los mensajes.
+  -r, --role         Filtrar por rol: all, user o assistant.
 `,
   version: `Chat Exporter v${packageJson.version}`,
 };
@@ -146,6 +147,21 @@ const cliActions = {
     consumes: 0,
     handler: (_, config) => {
       config.compact = true;
+    },
+  },
+
+  "--role": {
+    group: "role",
+    consumes: 1,
+    handler: (value, config) => {
+      config.roleFilter = value;
+    },
+  },
+  "-r": {
+    group: "role",
+    consumes: 1,
+    handler: (value, config) => {
+      config.roleFilter = value;
     },
   },
 };
