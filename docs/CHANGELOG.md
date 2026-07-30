@@ -2,7 +2,20 @@
 
 Este documento resume la evolución del proyecto versión por versión y registra las principales decisiones de implementación tomadas durante su desarrollo.
 
-# v1.2.2 — Filtro por rol y mejora del modo compacto
+# v1.2.3 — Modo compacto y filtro de roles en la extensión
+
+* Se agregan opciones avanzadas al popup de la extensión:
+  - Checkbox para modo compacto.
+  - Radio buttons para filtrar por rol (`all`, `user`, `assistant`).
+* Las opciones específicas de Markdown se ocultan al seleccionar JSON.
+* Se extrae el CSS del popup a un archivo independiente (`popup.css`).
+* Se actualiza `background.js` para propagar `compact` y `roleFilter` al pipeline.
+* Se actualiza el build de la extensión para incluir `popup.css`.
+* Se actualiza la documentación general y de la extensión.
+
+---
+
+# v1.2.2 — Filtro por rol y mejora del modo compacto en CLI
 
 * Se extiende `filter.js` para aceptar un parámetro opcional `targetRole` que permite filtrar mensajes por `user`, `assistant` o conservar todos (`all`).
 * Se integra el filtro por rol en `pipeline.js` mediante `config.roleFilter`.
@@ -12,6 +25,8 @@ Este documento resume la evolución del proyecto versión por versión y registr
   - Se implementa una técnica de placeholders (proteger → procesar → restaurar) para manejar casos borde como la transición lista→párrafo.
 * Se agregan tests automatizados para el filtro por rol.
 * Se actualiza la documentación general para reflejar los cambios.
+
+---
 
 # v1.2.1 — Popup y selector de formato en la extensión
 

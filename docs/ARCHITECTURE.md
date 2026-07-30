@@ -1,5 +1,41 @@
 # Arquitectura
 
+## Índice
+
+- [Arquitectura](#arquitectura)
+  - [Índice](#índice)
+  - [Filosofía](#filosofía)
+- [Estructura](#estructura)
+- [Pipeline](#pipeline)
+  - [Orquestación](#orquestación)
+  - [Procesamiento](#procesamiento)
+- [Testing](#testing)
+- [Responsabilidades](#responsabilidades)
+  - [sources/](#sources)
+  - [configuration/](#configuration)
+  - [exporter.js](#exporterjs)
+  - [pipeline.js](#pipelinejs)
+  - [inspector.js](#inspectorjs)
+  - [parser.js](#parserjs)
+  - [filter.js](#filterjs)
+  - [normalizer.js](#normalizerjs)
+  - [formatter.js](#formatterjs)
+  - [renderers/](#renderers)
+  - [outputs/](#outputs)
+  - [writer.js](#writerjs)
+  - [cli.js](#clijs)
+  - [validator.js](#validatorjs)
+  - [main.js](#mainjs)
+  - [extensionCore.js](#extensioncorejs)
+  - [inject.js](#injectjs)
+  - [content.js](#contentjs)
+  - [background.js](#backgroundjs)
+  - [popup.html / popup.js / popup.css](#popuphtml--popupjs--popupcss)
+  - [buildExtension.js](#buildextensionjs)
+- [Distribución](#distribución)
+
+---
+
 ## Filosofía
 
 El proyecto sigue los principios:
@@ -57,6 +93,7 @@ src/
 │       ├── manifest.json
 │       ├── popup.html
 │       ├── popup.js
+│       ├── popup.css
 │       └── icons/
 │
 └── utilities/
@@ -426,22 +463,26 @@ Coordina la extensión de Chrome.
 Sus responsabilidades:
 
 - Recibir la conversación capturada desde `content.js` y almacenarla en memoria.
-- Atender las solicitudes de exportación enviadas por el popup (`EXPORT`).
-- Según el formato solicitado (JSON o Markdown), ejecutar la exportación correspondiente:
+- Atender las solicitudes de exportación enviadas por el popup (`EXPORT`), que incluyen formato, modo compacto y filtro de roles.
+- Despachar al handler correspondiente según el formato:
   - JSON: descarga directa del objeto almacenado.
-  - Markdown: construye un `config` con `source: "extension"` y un `outputHandler` basado en `chrome.downloads`, y llama a `runExporter`.
+  - Markdown: construye un `config` con `source: "extension"`, `compact`, `roleFilter` y un `outputHandler` basado en `chrome.downloads`, y llama a `runExporter`.
 - No interpreta la conversación ni genera Markdown directamente; toda la lógica de procesamiento se delega al Core.
 
 ---
 
-## popup.html / popup.js
+## popup.html / popup.js / popup.css
 
 Interfaz de usuario de la extensión.
 
-`popup.html` define el layout con un selector de formato (Markdown / JSON) y un botón Exportar.  
-`popup.js` captura la selección del usuario y envía un mensaje `EXPORT` al `background.js` con el formato elegido.
+`popup.html` define el layout con:
+- Selector de formato (Markdown / JSON).
+- Opciones exclusivas de Markdown: checkbox de modo compacto y radio buttons para filtro de roles (`all`, `user`, `assistant`).
+- Las opciones de Markdown se ocultan automáticamente al seleccionar JSON.
 
-La comunicación es unidireccional: el popup solo envía la orden de exportación y recibe confirmación de éxito o error.
+`popup.js` captura las opciones elegidas por el usuario y envía un mensaje `EXPORT` al `background.js` con todos los parámetros.
+
+`popup.css` contiene los estilos independientes del popup, incluyendo la regla para ocultar las opciones de Markdown cuando no aplican.
 
 ---
 
@@ -453,7 +494,7 @@ Utiliza esbuild para empaquetar `extensionCore.js` junto con todas las dependenc
 
 Incorpora un plugin que reemplaza `jsonFile.js` por `jsonFile.stub.js` para evitar dependencias de Node.js en el contexto del navegador.
 
-Copia los archivos estáticos de la extensión (manifest, background, content, inject, popup, íconos) al directorio `dist/`.
+Copia los archivos estáticos de la extensión (manifest, background, content, inject, popup, CSS, íconos) al directorio `dist/`.
 
 ---
 
@@ -470,6 +511,6 @@ Actualmente cualquier interfaz puede reutilizar el mismo motor proporcionando ú
 
 Esta organización permite incorporar nuevas interfaces (como la extensión de Chrome), nuevos formatos y nuevas salidas sin modificar el Core.
 
-La extensión de Chrome ya utiliza este mecanismo: captura el JSON, lo entrega al core mediante `ExtensionSource`, y recibe el Markdown generado para descargarlo mediante un `outputHandler` basado en `chrome.downloads`. Incluye un popup que permite al usuario seleccionar el formato de salida antes de exportar.
+La extensión de Chrome ya utiliza este mecanismo: captura el JSON, lo entrega al core mediante `ExtensionSource`, y recibe el Markdown generado para descargarlo mediante un `outputHandler` basado en `chrome.downloads`. Incluye un popup con opciones avanzadas de exportación (formato, modo compacto, filtro de roles).
 
 ---

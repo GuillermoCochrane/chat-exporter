@@ -108,10 +108,12 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
                   │
                   │
 ┌───────────────────────────────────────┐
-│          popup.html / popup.js        │
+│   popup.html / popup.js / popup.css   │
 │                                       │
 │ • Selector de formato (MD / JSON)     │
-│ • Botón Exportar                      │
+│ • Modo compacto (checkbox)            │
+│ • Filtro de roles (radio buttons)     │
+│ • Opciones MD se ocultan en JSON      │
 │ • Muestra estado de la operación      │
 └───────────────────────────────────────┘
 ```
@@ -175,8 +177,12 @@ No debe:
 
 Responsabilidades:
 
-- presentar al usuario un selector de formato de exportación (Markdown / JSON);
-- enviar la orden de exportación al background con el formato elegido;
+- presentar al usuario las opciones de exportación:
+  - selector de formato (Markdown / JSON);
+  - checkbox de modo compacto (solo visible en Markdown);
+  - radio buttons para filtro de roles: `all`, `user`, `assistant` (solo visible en Markdown).
+- ocultar automáticamente las opciones de Markdown cuando se selecciona JSON;
+- enviar la orden de exportación al background con todas las opciones elegidas;
 - mostrar el estado de la operación (procesando, éxito, error).
 
 No debe:
@@ -184,7 +190,6 @@ No debe:
 - acceder directamente al Core;
 - ejecutar lógica de procesamiento;
 - manipular la conversación.
-
 ---
 
 ## AI Chat Exporter Core
@@ -207,7 +212,7 @@ Cada componente tiene una única función:
 - **Inject** captura y envía.
 - **Content** retransmite.
 - **Background** coordina y exporta.
-- **Popup** presenta opciones y solicita.
+- **Popup** presenta opciones y solicita (HTML + JS + CSS).
 - **Core** procesa.
 
 Esta separación permite incorporar nuevos formatos de exportación sin modificar el mecanismo de captura, ni la comunicación entre componentes.

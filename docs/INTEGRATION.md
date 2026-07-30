@@ -298,10 +298,11 @@ exportHandlers[format]()
     └── md   → runExporter → outputHandler → descarga
 ```
 
-- `popup.js` presenta opciones de exportación (formato, modo compacto, filtro de roles) y envía un mensaje `EXPORT` con las opciones elegidas.
+- `popup.js` presenta opciones de exportación: formato (MD/JSON), modo compacto y filtro de roles (`all`, `user`, `assistant`). Las opciones específicas de Markdown se ocultan al elegir JSON.
+- Envía un mensaje `EXPORT` con todos los parámetros (`format`, `compact`, `roleFilter`).
 - `background.js` recibe el mensaje, verifica que exista una conversación capturada y ejecuta el handler correspondiente:
   - **JSON**: serializa la conversación y la descarga directamente.
-  - **Markdown**: construye un `config` con `source: "extension"`, `conversation`, `compact`, `roleFilter`, y un `outputHandler` que descarga el archivo `.md`.
+  - **Markdown**: construye un `config` con `source: "extension"`, `compact`, `roleFilter` y un `outputHandler` que descarga el archivo `.md`.
 - La descarga utiliza `chrome.downloads.download` con `saveAs: true` para que el usuario elija la ubicación.
 
 ### Principios

@@ -1,5 +1,21 @@
 # Laboratory
 
+## Índice
+
+- [Hipótesis](#hipótesis)
+- [Experimentos](#experimentos)
+  - [v0.5.x — Core inicial](#v05x--core-inicial)
+  - [v0.9.x — Pre-release y arquitectura](#v09x--pre-release-y-arquitectura)
+  - [v1.1.x — Integración de la extensión](#v11x--integración-de-la-extensión)
+  - [v1.2.1 — Popup y selector de formato](#v121--popup-y-selector-de-formato)
+  - [v1.2.2 — Filtro por rol y modo compacto (CLI)](#v122--filtro-por-rol-y-modo-compacto-cli)
+  - [v1.2.3 — Opciones avanzadas en la extensión](#v123--opciones-avanzadas-en-la-extensión)
+- [Descubrimientos](#descubrimientos)
+  - [Desarrollo](#desarrollo)
+  - [Pre Release](#pre-release)
+
+---
+
 ## Hipótesis
 
 ### H-001
@@ -59,6 +75,8 @@ La respuesta ya había sido consumida por la aplicación antes de instalar el ho
 ---
 
 ## Experimentos
+
+### v0.5.x — Core inicial
 
 ### E-001
 
@@ -392,6 +410,8 @@ Validar que una misma opción lógica no pueda declararse más de una vez.
 
 La validación deja de depender del nombre de la opción y pasa a operar sobre el modelo declarativo de la CLI.
 
+---
+
 ### E-016
 
 #### Objetivo
@@ -617,6 +637,8 @@ El módulo `writer` queda protegido mediante pruebas automatizadas que validan l
 
 ---
 
+### v0.9.x — Pre-release y arquitectura
+
 ### E-026
 
 #### Objetivo
@@ -818,9 +840,12 @@ Separar la orquestación del procesamiento del pipeline para desacoplar completa
 #### Conclusión
 
 Separar la orquestación del procesamiento reduce el acoplamiento del sistema y convierte al pipeline en un componente reutilizable e independiente de cualquier interfaz.
+
 ---
 
-## E-035 (nuevo)
+### v1.1.x — Integración de la extensión
+
+### E-035
 
 #### Objetivo
 
@@ -844,7 +869,7 @@ Inyectar el mecanismo de salida elimina la última dependencia del Core con Node
 
 ---
 
-## E-036 (nuevo)
+### E-036
 
 #### Objetivo
 
@@ -963,6 +988,8 @@ La extensión pasó de descargar JSON crudo a exportar Markdown procesado, reuti
 
 ---
 
+### v1.2.1 — Popup y selector de formato
+
 ### E-041
 
 #### Objetivo
@@ -1010,6 +1037,8 @@ Simplificar el flujo de comunicación entre `inject.js`, `content.js` y `backgro
 La comunicación automática elimina la necesidad de coordinación manual entre los componentes y asegura que la conversación esté siempre disponible cuando el usuario abre el popup. Cada módulo conserva una única responsabilidad bien definida.
 
 ---
+
+### v1.2.2 — Filtro por rol y modo compacto (CLI)
 
 ### E-043
 
@@ -1063,6 +1092,33 @@ Extender un módulo existente en lugar de crear uno nuevo mantuvo el código má
 
 ---
 
+### v1.2.3 — Opciones avanzadas en la extensión
+
+### E-045
+
+#### Objetivo
+
+Integrar las opciones de modo compacto y filtro de roles en el popup de la extensión.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se agregó un checkbox para modo compacto y radio buttons para filtro de roles (`all`, `user`, `assistant`) en `popup.html`.
+- Las opciones específicas de Markdown se ocultan automáticamente al seleccionar JSON, usando la propiedad nativa `hidden`.
+- Se extrajo el CSS del popup a un archivo independiente (`popup.css`).
+- `popup.js` envía todas las opciones (`format`, `compact`, `roleFilter`) en el mensaje `EXPORT`.
+- Se corrigió `background.js` para que los handlers `md` y `json` reciban el mensaje completo y propaguen `compact` y `roleFilter` al `config` del pipeline.
+- Se actualizó el build para incluir `popup.css` y el manifest para declararlo como recurso accesible.
+
+#### Conclusión
+
+La extensión ahora ofrece las mismas opciones de exportación que la CLI, manteniendo la coherencia entre ambas interfaces. La separación de responsabilidades (popup solo envía intención, background solo coordina, core solo procesa) se mantuvo intacta.
+
+---
+
 ## Descubrimientos
 
 ### Desarrollo
@@ -1091,9 +1147,6 @@ Extender un módulo existente en lugar de crear uno nuevo mantuvo el código má
 - Separar la obtención de la conversación, el procesamiento y la salida produce un pipeline reutilizable desde cualquier interfaz.
 - La orquestación puede evolucionar independientemente del procesamiento cuando ambos componentes se comunican mediante contratos simples.
 - Resolver la Conversation Source fuera del pipeline elimina el último acoplamiento del Core con el entorno de ejecución.
-- Inyectar el mecanismo de salida mediante `config.outputHandler` desacopla completamente el Core del entorno de ejecución.
-- Unificar el contrato de las fuentes (recibir `config` completo) permite incorporar nuevos orígenes de datos sin modificar el orquestador.
-- Los tests existentes facilitan validar refactors arquitectónicos sin miedo a regresiones.
 - Inyectar el mecanismo de salida mediante `config.outputHandler` desacopla completamente el Core del entorno de ejecución.
 - Unificar el contrato de las fuentes (recibir `config` completo) permite incorporar nuevos orígenes de datos sin modificar el orquestador.
 - Los tests existentes facilitan validar refactors arquitectónicos sin miedo a regresiones.

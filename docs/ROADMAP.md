@@ -10,7 +10,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 ## Versión
 
-**1.2.2 (Development)**
+**1.2.3 (Development)**
 
 ## Estado general
 
@@ -31,7 +31,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 ### Interfaces
 
 - [x] CLI
-- [x] Chrome Extension (con popup y selector de formato)
+- [x] Chrome Extension (con popup y opciones avanzadas)
 - [ ] REST API
 
 ### Testing

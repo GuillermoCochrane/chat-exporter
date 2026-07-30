@@ -17,8 +17,8 @@ El objetivo final es convertir el capturador experimental en una herramienta com
 - ✅ Persistencia
 - ✅ Integración
 - ✅ Popup con selector de formato (MD/JSON)
-- 🚧 Opciones avanzadas (compact, roles)
-- ⏳ UX completa
+- ✅ Opciones avanzadas (compact, roles)
+- 🚧 UX completa
 - ⏳ Publicación
 
 ---
@@ -137,7 +137,7 @@ La arquitectura permite agregar nuevos formatos sin modificar el capturador.
 
 ---
 
-# Fase 5 — UX
+## Fase 5 — UX
 
 ## Objetivos
 
@@ -150,13 +150,15 @@ Construir la interfaz definitiva de la extensión.
 ### Implementado
 
 - ✅ Popup con selector de formato
+- ✅ Modo compacto (checkbox)
+- ✅ Filtro de roles (radio buttons: all / user / assistant)
+- ✅ Opciones de Markdown se ocultan al seleccionar JSON
 - ✅ Mensajes de estado (éxito / error)
 
 ### Pendiente
 
-- ⏳ Modo compacto
-- ⏳ Filtro de roles
-- ⏳ Indicador de progreso
+- ⏳ Indicador de progreso (spinner)
+- ⏳ Mejora visual de errores
 - ⏳ Configuración básica
 
 ---
