@@ -1,0 +1,42 @@
+body {
+  width: 240px;
+  padding: 12px;
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+}
+
+label {
+  display: block;
+  margin: 6px 0 2px;
+}
+
+select, button {
+  width: 100%;
+  padding: 6px;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+button {
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+fieldset {
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  padding: 6px 8px;
+}
+
+legend {
+  font-weight: bold;
+  padding: 0 4px;
+}
+
+#status {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #555;
+  min-height: 14px;
+}

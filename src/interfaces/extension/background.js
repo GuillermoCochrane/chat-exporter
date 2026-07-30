@@ -27,22 +27,24 @@ const downloadFile = (dataUrl, extension) =>
 
 // ---------------------------------------------------------------------------
 // Handlers de formato de exportación
+// Cada handler recibe el mensaje completo del popup y extrae lo que necesita.
 // ---------------------------------------------------------------------------
 
 const exportHandlers = {
   // Descarga el JSON original sin procesar.
-  json: () => {
+  json: (message) => {
     const jsonStr = JSON.stringify(capturedConversation, null, 2);
     const url = buildDataUrl(jsonStr, "application/json");
     return downloadFile(url, "json");
   },
 
   // Procesa la conversación con el pipeline y descarga Markdown.
-  md: async () => {
+  md: (message) => {
     const config = {
       source: "extension",
       conversation: capturedConversation,
-      compact: true,
+      compact: message.compact,
+      roleFilter: message.roleFilter,
 
       outputHandler: async (markdown) => {
         const url = buildDataUrl(markdown, "text/markdown");
@@ -50,7 +52,7 @@ const exportHandlers = {
       },
     };
 
-    await globalThis.__AI_CHAT_EXPORTER__.runExporter(config);
+    return globalThis.__AI_CHAT_EXPORTER__.runExporter(config);
   },
 };
 
@@ -84,8 +86,8 @@ const messageHandlers = {
       return;
     }
 
-    // Ejecutar el handler (síncrono o asíncrono)
-    Promise.resolve(handler())
+    // Ejecutar el handler pasándole el mensaje completo
+    Promise.resolve(handler(message))
       .then(() => sendResponse({ success: true }))
       .catch((error) => {
         console.error("[AI Chat Exporter]", error);

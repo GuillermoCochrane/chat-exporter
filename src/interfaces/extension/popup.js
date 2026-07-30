@@ -1,21 +1,33 @@
 // Controla la interfaz del popup.
 // Envía las opciones elegidas por el usuario al background.
-const $ = (tagName) => document.querySelector(tagName);
-const $exportBtn = $("#exportBtn");
-const $formatSelect = $("#format");
-const $status = $("#status");
 
-const statusDiv = $status;
+const $ = (selector) => document.querySelector(selector);
+
+const $formatSelect = $("#format");
+const $exportBtn = $("#exportBtn");
+const $status = $("#status");
+const $mdOptions = $("#mdOptions");
+const $compactCheck = $("#compact");
+const $roleRadios = document.getElementsByName("role");
+
+// Mostrar / ocultar opciones de Markdown según el formato
+$formatSelect.addEventListener("change", () => {
+  $formatSelect.value === "md" ? $mdOptions.hidden = false : $mdOptions.hidden = true;
+});
 
 $exportBtn.addEventListener("click", () => {
   const format = $formatSelect.value;
+  const compact = $compactCheck.checked;
+  const roleFilter = [...$roleRadios].find(r => r.checked).value;
 
   $status.textContent = "Procesando...";
 
   chrome.runtime.sendMessage(
     {
       type: "EXPORT",
-      format: format,
+      format,
+      compact,
+      roleFilter,
     },
     (response) => {
       if (chrome.runtime.lastError) {
@@ -23,7 +35,7 @@ $exportBtn.addEventListener("click", () => {
         return;
       }
 
-      $status.textContent = `✔️ ${$formatSelect.value.toUpperCase()} exportado con éxito.`;
+      $status.textContent = `✔️ ${format.toUpperCase()} exportado con éxito.`;
     }
   );
 });

@@ -3,30 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>AI Chat Exporter</title>
-  <style>
-    body {
-      width: 220px;
-      padding: 12px;
-      font-family: system-ui, sans-serif;
-      font-size: 13px;
-    }
-    select, button {
-      width: 100%;
-      padding: 6px;
-      margin-top: 6px;
-      box-sizing: border-box;
-    }
-    button {
-      cursor: pointer;
-      font-weight: bold;
-    }
-    #status {
-      margin-top: 8px;
-      font-size: 11px;
-      color: #555;
-      min-height: 14px;
-    }
-  </style>
+  <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <label for="format">Formato:</label>
@@ -35,8 +12,22 @@
     <option value="json">JSON</option>
   </select>
 
+  <!-- Opciones exclusivas de Markdown -->
+  <div id="mdOptions">
+    <label>
+      <input type="checkbox" id="compact"> Modo compacto
+    </label>
+
+    <fieldset>
+      <legend>Filtrar mensajes</legend>
+      <label><input type="radio" name="role" value="all" checked> Todos</label>
+      <label><input type="radio" name="role" value="user"> Solo usuario</label>
+      <label><input type="radio" name="role" value="assistant"> Solo asistente</label>
+    </fieldset>
+  </div>
+
   <button id="exportBtn">Exportar</button>
-  <p id="status"></p>
+  <div id="status"></div>
 
   <script src="popup.js"></script>
 </body>
