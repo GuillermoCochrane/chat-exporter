@@ -30,6 +30,7 @@
     {
       "matches": ["https://chatgpt.com/*"],
       "js": ["content.js"],
+      "resources": ["inject.js", "popup.css"],
       "run_at": "document_start"
     }
   ],

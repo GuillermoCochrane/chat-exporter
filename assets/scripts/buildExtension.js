@@ -44,6 +44,7 @@ const staticFiles = [
   "inject.js",
   "popup.html",
   "popup.js",
+  "popup.css",
 ];
 
 for (const file of staticFiles) {
