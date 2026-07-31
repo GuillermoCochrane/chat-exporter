@@ -7,29 +7,36 @@
   <script type="module" src="popup.js"></script>
 </head>
 <body>
-  <h2>Exportando desde <span id="modelName">ChatGPT</span></h2>
-  <label for="format">Formato:</label>
-  <select id="format">
-    <option value="md">Markdown</option>
-    <option value="json">JSON</option>
-  </select>
+  <header>
+    <h2>Exportando desde <strong id="modelName">ChatGPT</strong></h2>
+  </header>
+  <main>
+    <label for="format">Formato:</label>
+    <select id="format">
+      <option value="md">Markdown</option>
+      <option value="json">JSON</option>
+    </select>
+  
+    <!-- Opciones exclusivas de Markdown -->
+    <div id="mdOptions">
+      <label>
+        <input type="checkbox" id="compact"> Modo compacto
+      </label>
+  
+      <fieldset>
+        <legend>Filtrar mensajes</legend>
+        <label><input type="radio" name="role" value="all" checked> Todos</label>
+        <label><input type="radio" name="role" value="user"> Solo usuario</label>
+        <label><input type="radio" name="role" value="assistant"> Solo asistente</label>
+      </fieldset>
+    </div>
+    <button id="exportBtn">Exportar</button>
+  </main>
 
-  <!-- Opciones exclusivas de Markdown -->
-  <div id="mdOptions">
-    <label>
-      <input type="checkbox" id="compact"> Modo compacto
-    </label>
 
-    <fieldset>
-      <legend>Filtrar mensajes</legend>
-      <label><input type="radio" name="role" value="all" checked> Todos</label>
-      <label><input type="radio" name="role" value="user"> Solo usuario</label>
-      <label><input type="radio" name="role" value="assistant"> Solo asistente</label>
-    </fieldset>
-  </div>
-
-  <button id="exportBtn">Exportar</button>
-  <div id="status"></div>
-
+  <footer id="status">
+    <output class="spinner"></output>
+    <strong id="statusText"></strong>
+  </footer>
 </body>
 </html>

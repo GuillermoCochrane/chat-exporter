@@ -2,14 +2,16 @@
 // Envía las opciones elegidas por el usuario al background.
 
 const $ = (selector) => document.querySelector(selector);
-const setModelName = (modelName) => ($modelName.textContent = modelName);
+const Text = (selector, text) => ($(selector).textContent = text);
 
 const $formatSelect = $("#format");
 const $exportBtn = $("#exportBtn");
-const $status = $("#status");
+const $spinner = $(".spinner");
+const $statusText = $("#statusText");
 const $mdOptions = $("#mdOptions");
 const $compactCheck = $("#compact");
 const $roleRadios = document.getElementsByName("role");
+const $modelName = $("#modelName");
 
 // Mostrar / ocultar opciones de Markdown según el formato
 $formatSelect.addEventListener("change", () => {
@@ -19,24 +21,31 @@ $formatSelect.addEventListener("change", () => {
 $exportBtn.addEventListener("click", () => {
   const format = $formatSelect.value;
   const compact = $compactCheck.checked;
-  const roleFilter = [...$roleRadios].find(r => r.checked).value;
+  const roleFilter = [...$roleRadios].find((r) => r.checked).value;
 
-  $status.textContent = "Procesando...";
+  // Estado de carga
+  $exportBtn.disabled = true;
+  $statusText.textContent = "";
+  $spinner.style.display = "inline-block";
 
   chrome.runtime.sendMessage(
-    {
-      type: "EXPORT",
-      format,
-      compact,
-      roleFilter,
-    },
+    { type: "EXPORT", format, compact, roleFilter },
     (response) => {
+      // Restaurar estado
+      $spinner.style.display = "none";
+      $exportBtn.disabled = false;
+
       if (chrome.runtime.lastError) {
-        $status.textContent = "⚠️ Error: " + chrome.runtime.lastError.message;
+        $statusText.textContent = "⚠️ " + chrome.runtime.lastError.message;
         return;
       }
 
-      $status.textContent = `✔️ ${format.toUpperCase()} exportado con éxito.`;
+      if (response && response.success === false) {
+        $statusText.textContent = "⚠️ " + response.error;
+        return;
+      }
+
+      $statusText.textContent = `✔️ ${format.toUpperCase()} exportado con éxito.`;
     }
   );
 });
