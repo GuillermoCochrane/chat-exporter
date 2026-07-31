@@ -68,11 +68,11 @@ const messageHandlers = {
   },
 
   // El popup solicita una exportación.
-  EXPORT: (message, sendResponse) => {
+  EXPORT: (message, sendResponse, model = "ChatGPT") => {
     if (!capturedConversation) {
       sendResponse({
         success: false,
-        error: "No hay conversación capturada.",
+        error:  `No hay conversación capturada. Abrí una conversación en ${model} primero.`,
       });
       return;
     }
