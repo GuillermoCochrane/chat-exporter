@@ -2,7 +2,7 @@
 // Envía las opciones elegidas por el usuario al background.
 
 const $ = (selector) => document.querySelector(selector);
-const Text = (selector, text) => ($(selector).textContent = text);
+const setText = (selector, text) => ($(selector).textContent = text);
 
 const $formatSelect = $("#format");
 const $exportBtn = $("#exportBtn");
@@ -12,6 +12,9 @@ const $mdOptions = $("#mdOptions");
 const $compactCheck = $("#compact");
 const $roleRadios = document.getElementsByName("role");
 const $modelName = $("#modelName");
+
+setText('aside.version', `v${chrome.runtime.getManifest().version}`);
+
 
 // Mostrar / ocultar opciones de Markdown según el formato
 $formatSelect.addEventListener("change", () => {
