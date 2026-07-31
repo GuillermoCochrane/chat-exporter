@@ -2,6 +2,7 @@
 // Envía las opciones elegidas por el usuario al background.
 
 const $ = (selector) => document.querySelector(selector);
+const setModelName = (modelName) => ($modelName.textContent = modelName);
 
 const $formatSelect = $("#format");
 const $exportBtn = $("#exportBtn");
