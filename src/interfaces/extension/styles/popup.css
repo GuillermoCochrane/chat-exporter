@@ -2,9 +2,9 @@
 /*? CSS Modular Handler                                                */
 /*? ------------------------------------------------------------------ */
 
-@import "styles/variables.css";
-@import "styles/base.css";
-@import "styles/selector.css";
-@import "styles/options.css";
-@import "styles/button.css";
-@import "styles/footer.css";
+@import "variables.css";
+@import "base.css";
+@import "selector.css";
+@import "options.css";
+@import "button.css";
+@import "footer.css";
