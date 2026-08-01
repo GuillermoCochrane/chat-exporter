@@ -1,0 +1,59 @@
+
+/*? ------------------------------------------------------------------ */
+/*? Variables de estilo                                                */
+/*? ------------------------------------------------------------------ */
+
+:root {
+  /** Tokens primitivos (no usar directamente) */
+  --rgb-black: 0, 0, 0;
+  --rgb-white: 255, 255, 255;
+  --rgb-blue: 13, 27, 42;
+  --rgb-accent: 37, 73, 107;
+
+  /** Derivado del #25496B del ícono */
+  --color-accent: #25496B;
+  --color-accent-hover: #1a3550;
+
+  /** Fondos oscuros */
+  --color-bg: #0d1b2a;
+  --color-surface: rgba(var(--rgb-blue), 0.85);
+
+  /** Texto */
+  --color-text: #EBEBEB;
+  --color-text-dim: #969696;
+
+  /** Acentos neón */
+  --color-neon: #00d4ff;
+  --color-neon-glow: rgba(0, 212, 255, 0.4);
+
+  /** Bordes */
+  --color-border: #969696;
+  --color-border-light: rgba(150, 150, 150, 0.3);
+
+  /** Feedback */
+  --color-success: #00ff88;
+  --color-error: #ff3366;
+  --color-warning: #ffaa00;
+
+  /** Animaciones */
+  --glass-blur: blur(12px);
+
+  /** sombras */
+  --shadow-color-dark: rgba(var(--rgb-black), 0.6);
+  --shadow-color-darker: rgba(var(--rgb-black), 0.8);
+  --shadow-focus: 0 0 0 2px var(--color-neon-glow);
+  --shadow-radio: inset 0 1px 2px rgba(var(--rgb-white), 0.1), 0 2px 4px var(--shadow-color-dark);
+  --shadow-switch: 0 2px 3px var(--shadow-color-dark);
+
+  /** gradientes */
+  --grad-position: 40% 40%;
+
+  /** transiciones */
+  --speed-slower: 0.2s;
+  --speed-slow: 0.3s;
+  --border-slower: border-color var(--speed-slower);
+  --shadow-slower: box-shadow var(--speed-slower);
+  --background-slower: background var(--speed-slower);
+  --background-slow: background var(--speed-slow);
+  --shadow-slow: box-shadow var(--speed-slow);
+}

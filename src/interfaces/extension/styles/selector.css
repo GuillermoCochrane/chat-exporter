@@ -1,0 +1,90 @@
+
+/*? ------------------------------------------------------------------ */
+/*? Select (model selector)                                            */
+/*? ------------------------------------------------------------------ */
+
+select,
+select::picker(select) {
+  appearance: base-select;
+}
+
+select {
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 2px;
+  box-sizing: border-box;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: var(--border-slower), var(--shadow-slower);
+  backdrop-filter: var(--glass-blur);
+
+  &:hover {
+    border-color: var(--color-neon);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--color-neon);
+    box-shadow: var(--shadow-focus);
+  }
+
+  &::picker-icon {
+    color: var(--color-border);
+    transition: rotate var(--speed-slow) ease;
+  }
+
+  &:open::picker-icon {
+    rotate: 180deg;
+  }
+
+  &::picker(select) {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-light);
+    border-radius: 8px;
+    padding: 0.5rem;
+    box-shadow: 0 10px 25px var(--shadow-color-dark);
+    margin-top: 4px;
+    backdrop-filter: var(--glass-blur);
+  }
+
+  option {
+    padding: 0.6rem;
+    border-radius: 4px;
+    color: var(--color-text-dim);
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--color-accent);
+      color: var(--color-text);
+    }
+
+    &:checked {
+      background-color: rgba(var(--rgb-accent), 0.4);
+      color: var(--color-neon);
+      font-weight: 600;
+    }
+
+    &::checkmark {
+      color: var(--color-neon);
+    }
+  }
+}
+
+/*? ------------------------------------------------------------------ */
+/*? Fallback para navegadores sin base-select                          */
+/*? ------------------------------------------------------------------ */
+
+@supports not (appearance: base-select) {
+  select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23969696" d="M6 8L1 3h10z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 28px;
+  }
+}
