@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>AI Chat Exporter</title>
-  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="styles/popup.css">
   <script type="module" src="popup.js"></script>
 </head>
 <body>
@@ -19,16 +19,15 @@
   
     <!-- Opciones exclusivas de Markdown -->
     <div id="mdOptions">
-      <label>
-        <input type="checkbox" id="compact"> Modo compacto
-      </label>
-  
       <fieldset>
         <legend>Filtrar mensajes</legend>
         <label><input type="radio" name="role" value="all" checked> Todos</label>
         <label><input type="radio" name="role" value="user"> Solo usuario</label>
         <label><input type="radio" name="role" value="assistant"> Solo asistente</label>
       </fieldset>
+      <label>
+        <input type="checkbox" id="compact"> Modo compacto
+      </label>
     </div>
     <button id="exportBtn">Exportar</button>
   </main>

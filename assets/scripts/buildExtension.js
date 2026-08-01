@@ -1,9 +1,9 @@
 // Script de build para la extensión de Chrome.
-// Empaqueta el core usando esbuild y copia los archivos estáticos a dist/.exportHandlers
+// Empaqueta el core usando esbuild y copia los archivos estáticos a dist/.
 
 import * as esbuild from "esbuild";
-import { copyFileSync, mkdirSync } from "node:fs";
-import { resolve } from "node:path";
+import { copyFileSync, mkdirSync, readdirSync, statSync } from "node:fs";
+import { resolve, join } from "node:path";
 
 const root = resolve(import.meta.dirname, "../..");
 const outDir = resolve(root, "dist");
@@ -16,7 +16,6 @@ const stubPlugin = {
   name: "stub-json-file",
   setup(build) {
     build.onResolve({ filter: /\/jsonFile\.js$/ }, (args) => {
-      // Solo aplicar si no estamos resolviendo el stub mismo
       if (args.path.includes("jsonFile.stub")) return null;
       return {
         path: resolve(args.resolveDir, "jsonFile.stub.js"),
@@ -35,7 +34,20 @@ await esbuild.build({
   absWorkingDir: root,
 });
 
-// Copiar archivos estáticos de la extensión
+// Copia recursiva de directorios
+function copyDir(src, dest) {
+  mkdirSync(dest, { recursive: true });
+  for (const entry of readdirSync(src)) {
+    const srcPath = join(src, entry);
+    const destPath = join(dest, entry);
+    if (statSync(srcPath).isDirectory()) {
+      copyDir(srcPath, destPath);
+    } else {
+      copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
 // Copiar archivos estáticos de la extensión
 const staticFiles = [
   "manifest.json",
@@ -44,7 +56,6 @@ const staticFiles = [
   "inject.js",
   "popup.html",
   "popup.js",
-  "popup.css",
 ];
 
 for (const file of staticFiles) {
@@ -53,6 +64,12 @@ for (const file of staticFiles) {
     resolve(outDir, file),
   );
 }
+
+// Copiar estilos modulares
+copyDir(
+  resolve(root, "src/interfaces/extension/styles"),
+  resolve(outDir, "styles"),
+);
 
 // Copiar íconos
 const iconsDir = resolve(root, "src/interfaces/extension/icons");
