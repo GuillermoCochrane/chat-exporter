@@ -1,46 +1,75 @@
 :root {
-  /* Derivado del #25496B del ícono */
+
+  /** Tokens primitivos (no usar directamente) */
+  --rgb-black: 0, 0, 0;
+  --rgb-white: 255, 255, 255;
+  --rgb-blue: 13, 27, 42;
+  --rgb-accent: 37, 73, 107;
+
+  /** Derivado del #25496B del ícono */
   --color-accent: #25496B;
   --color-accent-hover: #1a3550;
 
-  /* Fondos oscuros */
+  /** Fondos oscuros */
   --color-bg: #0d1b2a;
-  --color-surface: rgba(13, 27, 42, 0.85);
+  --color-surface: rgba(var(--rgb-blue), 0.85);
 
-  /* Texto */
+  /** Texto */
   --color-text: #EBEBEB;
   --color-text-dim: #969696;
 
-  /* Acentos neón */
+  /** Acentos neón */
   --color-neon: #00d4ff;
   --color-neon-glow: rgba(0, 212, 255, 0.4);
 
-  /* Bordes */
+  /** Bordes */
   --color-border: #969696;
   --color-border-light: rgba(150, 150, 150, 0.3);
 
-  /* Feedback */
+  /** Feedback */
   --color-success: #00ff88;
   --color-error: #ff3366;
   --color-warning: #ffaa00;
+
+  /** Animaciones */
+  --glass-blur: blur(12px);
+
+  /** sombras */
+  --shadow-color-dark: rgba(var(--rgb-black), 0.6);
+  --shadow-color-darker: rgba(var(--rgb-black), 0.8);
+  --shadow-focus: 0 0 0 2px var(--color-neon-glow);
+  --shadow-radio: inset 0 1px 2px rgba(var(--rgb-white), 0.1), 0 2px 4px var(--shadow-color-dark);
+  --shadow-switch: 0 2px 3px var(--shadow-color-dark);
+
+  /** gradientes */
+  --grad-position: 40% 40%;
+
+  /** transiciones */
+  --speed-slower: 0.2s;
+  --speed-slow: 0.3s;
+  --border-slower: border-color var(--speed-slower);
+  --shadow-slower: box-shadow var(--speed-slower);
+  --background-slower: background var(--speed-slower);
+  --background-slow: background var(--speed-slow);
+  --shadow-slow: box-shadow var(--speed-slow);
 }
 
-/* ------------------------------------------------------------------ */
-/* Base                                                               */
-/* ------------------------------------------------------------------ */
+/*? ------------------------------------------------------------------ */
+/*? Base                                                               */
+/*? ------------------------------------------------------------------ */
 
 body {
   width: 260px;
   padding: 16px;
   font-family: system-ui, -apple-system, sans-serif;
   font-size: 13px;
-  background: radial-gradient(circle at 20% 20%, #1a3550, var(--color-bg) 80%);
+  background: radial-gradient(circle at 20% 20%, var(--color-accent-hover), var(--color-bg) 80%);
   color: var(--color-text);
 }
 
-/* ------------------------------------------------------------------ */
-/* Encabezado                                                         */
-/* ------------------------------------------------------------------ */
+/*? ------------------------------------------------------------------ */
+/*? Encabezado                                                         */
+/*? ------------------------------------------------------------------ */
 
 h2 {
   margin: 0 0 16px 0;
@@ -56,9 +85,9 @@ h2 {
   }
 }
 
-/* ------------------------------------------------------------------ */
-/* Labels                                                             */
-/* ------------------------------------------------------------------ */
+/*? ------------------------------------------------------------------ */
+/*? Labels                                                             */
+/*? ------------------------------------------------------------------ */
 
 label {
   display: block;
@@ -67,9 +96,9 @@ label {
   color: var(--color-text-dim);
 }
 
-/* ------------------------------------------------------------------ */
-/* Select (API nativa)                                                */
-/* ------------------------------------------------------------------ */
+/*? ------------------------------------------------------------------ */
+/*? Select (API nativa)                                                */
+/*? ------------------------------------------------------------------ */
 
 select,
 select::picker(select) {
@@ -88,8 +117,8 @@ select {
   font-family: inherit;
   font-size: 13px;
   cursor: pointer;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  backdrop-filter: blur(8px);
+  transition: var(--border-slower), var(--shadow-slower);
+  backdrop-filter: var(--glass-blur);
 
   &:hover {
     border-color: var(--color-neon);
@@ -98,12 +127,12 @@ select {
   &:focus-visible {
     outline: none;
     border-color: var(--color-neon);
-    box-shadow: 0 0 0 2px var(--color-neon-glow);
+    box-shadow: var(--shadow-focus);
   }
 
   &::picker-icon {
     color: var(--color-border);
-    transition: rotate 0.3s ease;
+    transition: rotate var(--speed-slow) ease;
   }
 
   &:open::picker-icon {
@@ -115,9 +144,9 @@ select {
     border: 1px solid var(--color-border-light);
     border-radius: 8px;
     padding: 0.5rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 10px 25px var(--shadow-color-dark);
     margin-top: 4px;
-    backdrop-filter: blur(12px);
+    backdrop-filter: var(--glass-blur);
   }
 
   option {
@@ -132,7 +161,7 @@ select {
     }
 
     &:checked {
-      background-color: rgba(37, 73, 107, 0.4);
+      background-color: rgba(var(--rgb-accent), 0.4);
       color: var(--color-neon);
       font-weight: 600;
     }
@@ -143,9 +172,9 @@ select {
   }
 }
 
-/* ------------------------------------------------------------------ */
-/* Botón Exportar                                                     */
-/* ------------------------------------------------------------------ */
+/*? ------------------------------------------------------------------ */
+/*? Botón Exportar                                                     */
+/*? ------------------------------------------------------------------ */
 
 button {
   width: 100%;
@@ -156,20 +185,20 @@ button {
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  background-color: var(--color-accent);
+  background: var(--color-accent);
   color: var(--color-text);
   border: 1px solid var(--color-accent);
   border-radius: 6px;
-  transition: background-color 0.2s, box-shadow 0.2s, opacity 0.2s;
+  transition: var(--background-slower), var(--shadow-slower), opacity var(--speed-slower);
 
   &:hover:not(:disabled) {
-    background-color: var(--color-accent-hover);
+    background: var(--color-accent-hover);
     box-shadow: 0 0 8px var(--color-neon-glow);
   }
 
   &:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px var(--color-neon-glow);
+    box-shadow: var(--shadow-focus);
   }
 
   &:disabled {
@@ -178,17 +207,17 @@ button {
   }
 }
 
-/* ------------------------------------------------------------------ */
-/* Fieldset (opciones de Markdown)                                    */
-/* ------------------------------------------------------------------ */
+/*? ------------------------------------------------------------------ */
+/*? Fieldset (opciones de Markdown)                                    */
+/*? ------------------------------------------------------------------ */
 
 fieldset {
   margin-top: 10px;
   border: 1px solid var(--color-border-light);
   border-radius: 8px;
   padding: 8px 10px;
-  background-color: rgba(37, 73, 107, 0.15);
-  backdrop-filter: blur(8px);
+  background-color: rgba(var(--rgb-accent), 0.15);
+  backdrop-filter: var(--glass-blur);
 
   label {
     display: block;
@@ -206,9 +235,9 @@ legend {
   color: var(--color-text-dim);
 }
 
-/* ------------------------------------------------------------------ */
-/* Switch (modo compacto) - Estilo Hardware Físico                    */
-/* ------------------------------------------------------------------ */
+/*? ------------------------------------------------------------------ */
+/*? Switch (modo compacto) - Estilo Hardware Físico                    */
+/*? ------------------------------------------------------------------ */
 
 input[type="checkbox"] {
   appearance: none;
@@ -218,13 +247,13 @@ input[type="checkbox"] {
   height: 18px;
   margin: 0 6px 0 0;
   vertical-align: middle;
-  background-color: rgba(13, 27, 42, 0.6);
+  background: rgba(var(--rgb-blue), 0.6);
   border-radius: 18px;
   cursor: pointer;
   box-shadow:
-    inset 0 2px 5px rgba(0, 0, 0, 0.8),
-    0 1px 1px rgba(255, 255, 255, 0.05);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    inset 0 2px 5px var(--shadow-color-darker),
+    0 1px 1px rgba(var(--rgb-white), 0.05);
+  transition: var(--background-slow) ease, var(--shadow-slow) ease;
 
   /* El deslizador físico (Thumb) */
   &::after {
@@ -235,44 +264,39 @@ input[type="checkbox"] {
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: radial-gradient(circle at 40% 40%, var(--color-border), #555);
-    box-shadow:
-      inset 0 1px 2px rgba(255, 255, 255, 0.3),
-      0 2px 3px rgba(0, 0, 0, 0.6);
-    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1), background 0.3s, box-shadow 0.3s;
+    background: radial-gradient(circle at var(--grad-position), var(--color-border), #555);
+    box-shadow: inset 0 1px 2px rgba(var(--rgb-white), 0.3), var(--shadow-switch);
+    transition: transform var(--speed-slow) cubic-bezier(0.4, 0.0, 0.2, 1), var(--background-slow), var(--shadow-slow);
   }
 
   /* Estado Encendido */
   &:checked {
     /* El surco se enciende con el neón de fondo, no con color sólido */
-    background-color: rgba(0, 212, 255, 0.15);
+    background: rgba(0, 212, 255, 0.15);
     box-shadow:
-      inset 0 2px 5px rgba(0, 0, 0, 0.6),
+      inset 0 2px 5px var(--shadow-color-dark),
       inset 0 0 8px var(--color-neon-glow),
-      0 1px 1px rgba(255, 255, 255, 0.05);
+      0 1px 1px rgba(var(--rgb-white), 0.05);
 
     &::after {
       transform: translateX(18px);
       /* El deslizador cambia de material o atrapa la luz del neón */
-      background: radial-gradient(circle at 40% 40%, var(--color-text), var(--color-border));
-      box-shadow:
-        inset 0 1px 2px rgba(255, 255, 255, 0.6),
-        0 2px 3px rgba(0, 0, 0, 0.6),
-        -2px 0 4px var(--color-neon-glow);
+      background: radial-gradient(circle at var(--grad-position), var(--color-text), var(--color-border));
+      box-shadow: inset 0 1px 2px rgba(var(--rgb-white), 0.6), var(--shadow-switch), -2px 0 4px var(--color-neon-glow);
     }
   }
 
   &:focus-visible {
     outline: none;
     box-shadow:
-      0 0 0 2px var(--color-neon-glow),
-      inset 0 2px 5px rgba(0, 0, 0, 0.8);
+      var(--shadow-focus),
+      inset 0 2px 5px var(--shadow-color-darker);
   }
 }
 
-/* ------------------------------------------------------------------ */
-/* Radio buttons como botones físicos de consola                      */
-/* ------------------------------------------------------------------ */
+/*? ------------------------------------------------------------------ */
+/*? Radio buttons como botones físicos de consola                      */
+/*? ------------------------------------------------------------------ */
 
 input[type="radio"] {
   appearance: none;
@@ -285,7 +309,7 @@ input[type="radio"] {
   background: transparent;
   cursor: pointer;
   position: relative;
-  transition: background 0.2s;
+  transition: var(--background-slower);
 
   /* Círculo externo que simula el botón físico */
   &::before {
@@ -296,19 +320,15 @@ input[type="radio"] {
     right: 0;
     bottom: 0;
     border-radius: 50%;
-    background: radial-gradient(circle at 40% 40%, var(--color-accent), var(--color-bg));
-    box-shadow:
-      inset 0 1px 2px rgba(255, 255, 255, 0.1),
-      0 2px 4px rgba(0, 0, 0, 0.6);
-    transition: box-shadow 0.2s, background 0.2s;
+    background: radial-gradient(circle at var(--grad-position), var(--color-accent), var(--color-bg));
+    box-shadow: var(--shadow-radio);
+    transition: var(--shadow-slower), var(--background-slower);
   }
 
   /* Efecto hundido al seleccionar */
   &:checked::before {
-    background: radial-gradient(circle at 40% 40%, var(--color-bg), var(--color-accent));
-    box-shadow:
-      inset 0 1px 2px rgba(255, 255, 255, 0.1),
-      0 2px 4px rgba(0, 0, 0, 0.6);
+    background: radial-gradient(circle at var(--grad-position), var(--color-bg), var(--color-accent));
+    box-shadow: var(--shadow-radio);
   }
 
   &:focus-visible {
@@ -316,21 +336,21 @@ input[type="radio"] {
 
     &::before {
       box-shadow:
-        0 0 0 2px var(--color-neon-glow),
-        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+        var(--shadow-focus),
+        inset 0 1px 2px rgba(var(--rgb-white), 0.2);
     }
   }
 
   &:checked:focus-visible::before {
     box-shadow:
-      inset 0 2px 4px rgba(0, 0, 0, 0.6),
-      0 0 0 2px var(--color-neon-glow);
+      inset 0 2px 4px var(--shadow-color-dark),
+      var(--shadow-focus);
   }
 }
 
-/* ------------------------------------------------------------------ */
-/* Footer: estado del proceso                                         */
-/* ------------------------------------------------------------------ */
+/*? ------------------------------------------------------------------ */
+/*? Footer: estado del proceso                                         */
+/*? ------------------------------------------------------------------ */
 
 footer#status {
   margin-top: 12px;
@@ -356,9 +376,9 @@ footer#status {
   }
 }
 
-/* ------------------------------------------------------------------ */
-/* Footer: versión                                                    */
-/* ------------------------------------------------------------------ */
+/*? ------------------------------------------------------------------ */
+/*? Footer: versión                                                    */
+/*? ------------------------------------------------------------------ */
 
 aside.version {
   margin-top: 12px;
@@ -367,9 +387,9 @@ aside.version {
   text-align: center;
 }
 
-/* ------------------------------------------------------------------ */
-/* Animaciones                                                        */
-/* ------------------------------------------------------------------ */
+/*? ------------------------------------------------------------------ */
+/*? Animaciones                                                        */
+/*? ------------------------------------------------------------------ */
 
 @keyframes spin {
   to {
@@ -377,9 +397,9 @@ aside.version {
   }
 }
 
-/* ------------------------------------------------------------------ */
-/* Fallback para navegadores sin base-select                          */
-/* ------------------------------------------------------------------ */
+/*? ------------------------------------------------------------------ */
+/*? Fallback para navegadores sin base-select                          */
+/*? ------------------------------------------------------------------ */
 
 @supports not (appearance: base-select) {
   select {
