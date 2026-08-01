@@ -10,14 +10,11 @@ const output = buildMarkdown(cases, {
 });
 
 const expected = [
-`## Usuario · ${formatDate(cases[0].timestamp, "locale")}`,
-
-`> Hola
-> ¿Cómo va todo?`,
-
-`## Asistente · ${formatDate(cases[1].timestamp, "locale")}`,
-
-`> Muy bien.`
+  `## Usuario · ${formatDate(cases[0].timestamp, "locale")}`,
+  `Hola
+¿Cómo va todo?`,
+  `## Asistente · ${formatDate(cases[1].timestamp, "locale")}`,
+  `Muy bien.`
 ].join("\n\n");
 
 assert.equal(output.trim(), expected.trim());
