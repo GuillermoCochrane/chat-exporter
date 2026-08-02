@@ -2,6 +2,27 @@
 
 Este documento resume la evolución del proyecto versión por versión y registra las principales decisiones de implementación tomadas durante su desarrollo.
 
+---
+
+# v1.2.4 — Rediseño visual y mejoras de UX en el popup
+
+* Se agrega un encabezado contextual al popup que indica el proveedor de la conversación (`Exportando desde ChatGPT`), preparado para futuros modelos.
+* Se implementa un spinner CSS animado como indicador de progreso durante la exportación, en reemplazo del texto "Procesando...".
+* Se deshabilita el botón Exportar durante el procesamiento para evitar múltiples clics.
+* Se mejora el mensaje de error cuando no hay conversación capturada, incluyendo el nombre del proveedor.
+* Se agrega la versión dinámica de la extensión en el footer del popup, obtenida desde `chrome.runtime.getManifest()`.
+* Se aplica un rediseño completo del popup con estética cyberpunk:
+  - Fondo oscuro con gradiente radial.
+  - Efectos de glassmorphism en superficies.
+  - Switch y radio buttons con apariencia de hardware físico (relieve/hundido).
+  - Select nativo estilizado con la nueva API `appearance: base-select`.
+* Se implementa un sistema de tokens CSS (variables de diseño) con paleta de colores derivada del ícono de la extensión.
+* Se modulariza el CSS del popup por responsabilidad en archivos independientes (`variables.css`, `base.css`, `selector.css`, `options.css`, `button.css`, `footer.css`).
+* Se corrigen los tests del modo compacto que esperaban el formato de cita (`>`), el cual fue eliminado en la versión 1.2.2.
+* Se actualiza la documentación general y de la extensión para reflejar los cambios.
+
+---
+
 # v1.2.3 — Modo compacto y filtro de roles en la extensión
 
 * Se agregan opciones avanzadas al popup de la extensión:

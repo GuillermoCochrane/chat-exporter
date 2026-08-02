@@ -18,8 +18,8 @@ El objetivo final es convertir el capturador experimental en una herramienta com
 - ✅ Integración
 - ✅ Popup con selector de formato (MD/JSON)
 - ✅ Opciones avanzadas (compact, roles)
-- 🚧 UX completa
-- ⏳ Publicación
+- ✅ UX completa
+- 🚧 Publicación
 
 ---
 
@@ -150,16 +150,21 @@ Construir la interfaz definitiva de la extensión.
 ### Implementado
 
 - ✅ Popup con selector de formato
-- ✅ Modo compacto (checkbox)
-- ✅ Filtro de roles (radio buttons: all / user / assistant)
+- ✅ Modo compacto (switch con efecto físico)
+- ✅ Filtro de roles (radio buttons con efecto hundido)
 - ✅ Opciones de Markdown se ocultan al seleccionar JSON
-- ✅ Mensajes de estado (éxito / error)
+- ✅ Indicador de progreso (spinner animado)
+- ✅ Botón Exportar deshabilitado durante el procesamiento
+- ✅ Mensajes de estado (éxito / error detallado)
+- ✅ Encabezado contextual con nombre del proveedor
+- ✅ Footer con versión dinámica de la extensión
+- ✅ Estética cyberpunk con glassmorphism y sistema de tokens CSS
+- ✅ Estilos modularizados por responsabilidad
 
 ### Pendiente
 
-- ⏳ Indicador de progreso (spinner)
-- ⏳ Mejora visual de errores
-- ⏳ Configuración básica
+- ⏳ Publicación en Chrome Web Store
+- ⏳ Configuración avanzada (templates, atajos de teclado)
 
 ---
 

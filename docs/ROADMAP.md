@@ -10,7 +10,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 ## Versión
 
-**1.2.3 (Development)**
+**1.2.4 (Development)**
 
 ## Estado general
 
@@ -80,7 +80,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Popup con selector de formato (Markdown / JSON)
 - [x] Modo compacto en popup
 - [x] Filtro de roles en popup
-- [ ] Indicador de progreso y manejo de errores visual
+- [x] Indicador de progreso y manejo de errores visual
 
 
 ---
@@ -119,11 +119,12 @@ Output
 
 ## Próximo objetivo
 
-### Extensión: mejoras visuales y manejo de estado
+### Extensión: preparación para distribución
 
-- Mejorar la comunicación visual de estado en el popup (spinner, errores detallados).
-- Agregar indicador de progreso durante la exportación de Markdown.
-- Ajustes de estilo para una apariencia más profesional.
+- Ajustar íconos definitivos.
+- Agregar generación automática de ZIP en el build.
+- Revisar permisos del manifest.
+- Actualizar README con el estado final de la extensión.
 
 ---
 

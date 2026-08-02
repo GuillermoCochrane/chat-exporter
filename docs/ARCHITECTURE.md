@@ -30,7 +30,7 @@
   - [inject.js](#injectjs)
   - [content.js](#contentjs)
   - [background.js](#backgroundjs)
-  - [popup.html / popup.js / popup.css](#popuphtml--popupjs--popupcss)
+  - [popup.html / popup.js / styles/](#popuphtml--popupjs--styles)
   - [buildExtension.js](#buildextensionjs)
 - [Distribución](#distribución)
 
@@ -93,7 +93,14 @@ src/
 │       ├── manifest.json
 │       ├── popup.html
 │       ├── popup.js
-│       ├── popup.css
+│       ├── styles/
+│       │   ├── popup.css
+│       │   ├── variables.css
+│       │   ├── base.css
+│       │   ├── selector.css
+│       │   ├── options.css
+│       │   ├── button.css
+│       │   └── footer.css
 │       └── icons/
 │
 └── utilities/
@@ -471,18 +478,27 @@ Sus responsabilidades:
 
 ---
 
-## popup.html / popup.js / popup.css
+## popup.html / popup.js / styles/
 
-Interfaz de usuario de la extensión.
+Interfaz de usuario de la extensión con estética cyberpunk.
 
 `popup.html` define el layout con:
+- Encabezado contextual que indica el proveedor de la conversación (`Exportando desde ChatGPT`), preparado para futuros modelos.
 - Selector de formato (Markdown / JSON).
-- Opciones exclusivas de Markdown: checkbox de modo compacto y radio buttons para filtro de roles (`all`, `user`, `assistant`).
+- Opciones exclusivas de Markdown: switch de modo compacto y radio buttons con apariencia de hardware físico para filtro de roles (`all`, `user`, `assistant`).
 - Las opciones de Markdown se ocultan automáticamente al seleccionar JSON.
+- Footer con la versión dinámica de la extensión.
 
-`popup.js` captura las opciones elegidas por el usuario y envía un mensaje `EXPORT` al `background.js` con todos los parámetros.
+`popup.js` captura las opciones elegidas por el usuario, gestiona el estado visual (spinner durante la carga, deshabilitado del botón Exportar) y envía un mensaje `EXPORT` al `background.js` con todos los parámetros.
 
-`popup.css` contiene los estilos independientes del popup, incluyendo la regla para ocultar las opciones de Markdown cuando no aplican.
+Los estilos están modularizados en `styles/`:
+- `variables.css`: tokens de diseño (colores, sombras, transiciones) con paleta cyberpunk derivada del ícono original.
+- `base.css`: estilos del body, tipografía y encabezado.
+- `selector.css`: estilos del `<select>` nativo usando `appearance: base-select`.
+- `options.css`: estilos del fieldset, switch de modo compacto y radio buttons físicos.
+- `button.css`: estilos del botón Exportar y sus estados.
+- `footer.css`: estilos del estado de exportación (spinner, mensajes) y versión.
+- `popup.css`: punto de entrada que importa todos los módulos.
 
 ---
 
@@ -494,7 +510,7 @@ Utiliza esbuild para empaquetar `extensionCore.js` junto con todas las dependenc
 
 Incorpora un plugin que reemplaza `jsonFile.js` por `jsonFile.stub.js` para evitar dependencias de Node.js en el contexto del navegador.
 
-Copia los archivos estáticos de la extensión (manifest, background, content, inject, popup, CSS, íconos) al directorio `dist/`.
+Copia los archivos estáticos de la extensión (manifest, background, content, inject, popup, estilos modulares, íconos) al directorio `dist/`.
 
 ---
 

@@ -10,6 +10,7 @@
   - [v1.2.1 — Popup y selector de formato](#v121--popup-y-selector-de-formato)
   - [v1.2.2 — Filtro por rol y modo compacto (CLI)](#v122--filtro-por-rol-y-modo-compacto-cli)
   - [v1.2.3 — Opciones avanzadas en la extensión](#v123--opciones-avanzadas-en-la-extensión)
+  - [v1.2.4 — Rediseño visual y UX del popup](#v124--rediseño-visual-y-ux-del-popup)
 - [Descubrimientos](#descubrimientos)
   - [Desarrollo](#desarrollo)
   - [Pre Release](#pre-release)
@@ -1119,6 +1120,80 @@ La extensión ahora ofrece las mismas opciones de exportación que la CLI, mante
 
 ---
 
+### v1.2.4 — Rediseño visual y UX del popup
+
+### E-046
+
+#### Objetivo
+
+Implementar indicadores de progreso y retroalimentación visual durante la exportación.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se reemplazó el texto "Procesando..." por un spinner CSS animado.
+- Se deshabilita el botón Exportar mientras la operación está en curso, evitando múltiples clics.
+- Se mejoró el mensaje de error cuando no hay conversación capturada, incluyendo el nombre del proveedor y preparándolo para futuros modelos.
+- Se agregó la versión dinámica de la extensión en el footer, obtenida automáticamente desde `chrome.runtime.getManifest()`.
+
+#### Conclusión
+
+La experiencia de usuario mejoró significativamente con feedback visual claro durante la espera y mensajes de error orientativos.
+
+---
+
+### E-047
+
+#### Objetivo
+
+Rediseñar completamente el popup con una estética cyberpunk cohesiva.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se implementó un fondo oscuro con gradiente radial.
+- Las superficies (select, fieldset) utilizan glassmorphism (`backdrop-filter: blur()`) con transparencia controlada.
+- Los controles de formulario se rediseñaron con apariencia de hardware físico:
+  - Checkbox como switch deslizante.
+  - Radio buttons como botones circulares que se hunden al seleccionarlos.
+- El `<select>` se estilizó completamente con la nueva API nativa `appearance: base-select`, sin hacks ni JavaScript.
+- Se construyó un sistema de tokens CSS con tres capas (primitivos, derivados, compuestos) para garantizar consistencia y facilitar futuros cambios de paleta.
+
+#### Conclusión
+
+El diseño logra una identidad visual única y profesional, coherente con el ícono original, y preparado para adaptarse a una nueva paleta de colores con solo modificar variables.
+
+---
+
+### E-048
+
+#### Objetivo
+
+Modularizar la hoja de estilos del popup para mejorar el mantenimiento.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- El archivo único de más de 300 líneas se dividió en siete módulos: `variables.css`, `base.css`, `selector.css`, `options.css`, `button.css`, `footer.css` y `popup.css` como punto de entrada.
+- La separación sigue el principio de responsabilidad única: cada archivo controla un aspecto visual específico.
+- El build de la extensión se actualizó para copiar recursivamente la carpeta `styles/` a `dist/`.
+- Se corrigió la declaración de recursos en el manifest para permitir que el popup cargue los nuevos módulos.
+
+#### Conclusión
+
+La modularización facilita la edición y extensión de los estilos sin navegar por un archivo monolítico, manteniendo la misma apariencia visual.
+
+---
+
 ## Descubrimientos
 
 ### Desarrollo
@@ -1162,6 +1237,10 @@ La extensión ahora ofrece las mismas opciones de exportación que la CLI, mante
 - Una regex con mirada negativa puede proteger múltiples patrones, pero no cubre todos los casos de borde (como la transición lista→párrafo).
 - La técnica de placeholders (proteger→procesar→restaurar) es una alternativa KISS efectiva cuando las reglas de reemplazo son contextuales.
 - Extender un módulo existente con un parámetro opcional es preferible a crear un nuevo archivo cuando la responsabilidad es la misma (filtrar mensajes).
+- La API `appearance: base-select` permite personalizar completamente un `<select>` nativo sin perder accesibilidad ni navegación por teclado.
+- Un sistema de tokens CSS con capas (primitivos, derivados, compuestos) simplifica el mantenimiento y la evolución visual del proyecto.
+- Los Service Workers de Manifest V3 son efímeros: el estado en memoria puede perderse entre aperturas del popup, lo que requiere estrategias de persistencia (storage) para datos críticos.
+- La modularización de CSS con `@import` es viable en extensiones de Chrome siempre que los archivos se declaren en `web_accessible_resources`.
 
 ### Pre Release
 
