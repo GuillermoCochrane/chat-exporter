@@ -143,12 +143,15 @@ vite.config.ts.timestamp-*
 .vite/
 
 # sensitive files
-assets/input/*
-!assets/input/.gitkeep
-# Default sample conversation
-!assets/input/conversation.json
+dist.zip
+
+assets/docs/research/development/*
 
 assets/output/*
 !assets/output/.gitkeep
 
-assets/docs/research/development/*
+assets/input/*
+!assets/input/.gitkeep
+
+# Default sample conversation
+!assets/input/conversation.json
