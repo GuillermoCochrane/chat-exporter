@@ -29,6 +29,7 @@ Aunque hoy el proyecto soporta ChatGPT y Markdown, su arquitectura fue diseñada
   - [Archivo de entrada personalizado](#archivo-de-entrada-personalizado)
   - [Archivo de salida personalizado](#archivo-de-salida-personalizado)
   - [Modo compacto](#modo-compacto)
+  - [Filtro por rol](#filtro-por-rol)
   - [Inspeccionar una conversación](#inspeccionar-una-conversación)
   - [Ejecutar el pipeline sin escribir archivos](#ejecutar-el-pipeline-sin-escribir-archivos)
 - [Testing](#testing)
@@ -44,7 +45,7 @@ Aunque hoy el proyecto soporta ChatGPT y Markdown, su arquitectura fue diseñada
 
 # Estado
 
-- ✅ Versión estable 1.2.1
+- ✅ Versión estable 1.3.0
 - ✅ CLI funcional
 - ✅ Extensión de Chrome integrada
 - ✅ Soporte para ChatGPT
@@ -57,12 +58,14 @@ Aunque hoy el proyecto soporta ChatGPT y Markdown, su arquitectura fue diseñada
 
 - Conversión de conversaciones exportadas desde ChatGPT a Markdown.
 - Pipeline modular y desacoplado.
-- Interfaz de línea de comandos (CLI).
-- Extensión de Chrome con popup para exportar conversaciones en formato Markdown o JSON.
-- Modo `--inspect`.
-- Modo `--no-write`.
-- Modo `--compact`.
+- Interfaz de línea de comandos (CLI) con opciones avanzadas:
+  - Modo compacto, filtro por rol (`--role`), inspección y modo sin escritura.
+- Extensión de Chrome con popup interactivo:
+  - Selector de formato (Markdown / JSON).
+  - Modo compacto y filtro de roles (todos / usuario / asistente).
+  - Diseño cyberpunk con indicador de progreso y mensajes de estado.
 - Build automatizado de la extensión con esbuild.
+- Empaquetado en ZIP listo para distribución.
 - Suite de pruebas automatizadas por módulo.
 - Documentación técnica completa.
 
@@ -90,7 +93,7 @@ El proyecto solo requiere `esbuild` como dependencia de desarrollo para construi
 
 # Extensión de Chrome
 
-La extensión captura automáticamente el JSON de cualquier conversación de ChatGPT y la exporta a Markdown utilizando el mismo pipeline que la CLI.
+La extensión captura automáticamente el JSON de cualquier conversación de ChatGPT y la exporta a Markdown o JSON utilizando el mismo pipeline que la CLI.
 
 ## Build
 
@@ -99,6 +102,12 @@ npm run build:extension
 ```
 
 Esto genera la carpeta `dist/` con todos los archivos necesarios.
+
+Para crear un ZIP listo para distribuir:
+
+```bash
+npm run build:extension:zip
+```
 
 ## Instalación en Chrome
 
@@ -112,8 +121,9 @@ Esto genera la carpeta `dist/` con todos los archivos necesarios.
 1. Andá a `https://chatgpt.com/` y abrí una conversación.
 2. Hacé clic en el ícono de la extensión para abrir el popup.
 3. Seleccioná el formato de exportación (Markdown o JSON).
-4. Hacé clic en **Exportar**.
-5. El archivo se descargará automáticamente.
+4. Ajustá las opciones: modo compacto, filtro de roles.
+5. Hacé clic en **Exportar**.
+6. El archivo se descargará automáticamente.
 
 ---
 
@@ -146,6 +156,13 @@ npm start -- -i assets/input/conversation.json -o assets/output/prueba.md
 
 ```bash
 npm start -- -i assets/input/conversation.json -o assets/output/prueba.md -c
+```
+
+## Filtro por rol
+
+```bash
+npm start -- -i assets/input/conversation.json -o assets/output/user.md --role user
+npm start -- -i assets/input/conversation.json -o assets/output/assistant.md --role assistant
 ```
 
 ## Inspeccionar una conversación
@@ -274,6 +291,14 @@ src/
 │       ├── manifest.json
 │       ├── popup.html
 │       ├── popup.js
+│       └── styles/
+│           ├── popup.css
+│           ├── variables.css
+│           ├── base.css
+│           ├── selector.css
+│           ├── options.css
+│           ├── button.css
+│           └── footer.css
 └── utilities/
     ├── formatter.js
     └── validator.js
