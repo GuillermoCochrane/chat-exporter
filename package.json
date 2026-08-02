@@ -1,6 +1,6 @@
 {
   "name": "chat-exporter",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Convert conversations exported from ChatGPT into clean, reusable Markdown documents.",
   "keywords": [
     "chatgpt",
