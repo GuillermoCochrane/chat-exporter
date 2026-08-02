@@ -75,7 +75,7 @@ copyDir(
 const iconsDir = resolve(root, "src/interfaces/extension/icons");
 const outIconsDir = resolve(outDir, "icons");
 mkdirSync(outIconsDir, { recursive: true });
-for (const icon of ["icon16.png", "icon48.png", "icon128.png"]) {
+for (const icon of ["icon16.png", "icon32.png", "icon48.png", "icon128.png"]) {
   copyFileSync(resolve(iconsDir, icon), resolve(outIconsDir, icon));
 }
 
