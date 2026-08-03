@@ -38,7 +38,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["inject.js", "styles/*"],
+      "resources": ["inject.js", "styles/*", "js/*"],
       "matches": ["https://chatgpt.com/*"]
     }
   ]

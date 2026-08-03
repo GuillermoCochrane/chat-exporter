@@ -55,7 +55,6 @@ const staticFiles = [
   "content.js",
   "inject.js",
   "popup.html",
-  "popup.js",
 ];
 
 for (const file of staticFiles) {
@@ -69,6 +68,12 @@ for (const file of staticFiles) {
 copyDir(
   resolve(root, "src/interfaces/extension/styles"),
   resolve(outDir, "styles"),
+);
+
+// Copiar scripts del popup
+copyDir(
+  resolve(root, "src/interfaces/extension/js"),
+  resolve(outDir, "js"),
 );
 
 // Copiar íconos
