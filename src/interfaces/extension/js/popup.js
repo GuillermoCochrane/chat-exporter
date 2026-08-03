@@ -1,9 +1,11 @@
-// Controla la interfaz del popup.
-// Envía las opciones elegidas por el usuario al background.
+import { TRANSLATIONS } from './languages.js';
 
+// Helpers
 const $ = (selector) => document.querySelector(selector);
-const setText = (selector, text) => ($(selector).textContent = text);
+const setText = (selector, text) => { ($(selector)) && ($(selector).textContent = text); };
+const currentLang = "es";
 
+// Elementos estáticos
 const $formatSelect = $("#format");
 const $exportBtn = $("#exportBtn");
 const $spinner = $(".spinner");
@@ -12,6 +14,16 @@ const $mdOptions = $("#mdOptions");
 const $compactCheck = $("#compact");
 const $roleRadios = document.getElementsByName("role");
 const $modelName = $("#modelName");
+
+// Elementos dinámicos (para traducción)
+function setlanguage(lang, translations) {
+  for (const entry in translations) {
+    const value = translations[entry];
+    const selector = `#${entry}`;
+    const element = $(selector);
+    element && setText(selector, value[lang] || value.en);
+  }
+}
 
 setText('aside.version', `v${chrome.runtime.getManifest().version}`);
 
@@ -43,12 +55,16 @@ $exportBtn.addEventListener("click", () => {
         return;
       }
 
-      if (response && response.success === false) {
-        $statusText.textContent = "⚠️ " + response.error;
-        return;
-      }
+    if (response && response.success === false) {
+      const errorPrefix = TRANSLATIONS[response.errorCode]?.[currentLang] 
+                          ?? TRANSLATIONS[response.errorCode]?.en 
+                          ?? "";
+      const errorParam = Object.values(response.params ?? {})[0] ?? "";
+      $statusText.textContent = "⚠️ " + errorPrefix + errorParam;
+      return;
+    }
 
-      $statusText.textContent = `✔️ ${format.toUpperCase()} exportado con éxito.`;
+      $statusText.textContent = `✔️ ${format.toUpperCase()}${TRANSLATIONS.success[currentLang]}`;
     }
   );
 });

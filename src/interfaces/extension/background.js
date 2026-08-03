@@ -60,19 +60,19 @@ const exportHandlers = {
 // Handlers de mensajes entrantes
 // ---------------------------------------------------------------------------
 
+// Handlers de mensajes entrantes
 const messageHandlers = {
-  // El content script envía la conversación recién capturada.
   DOWNLOAD_JSON: (message) => {
     capturedConversation = message.conversation;
     console.log("[AI Chat Exporter] Conversación almacenada.");
   },
 
-  // El popup solicita una exportación.
   EXPORT: (message, sendResponse, model = "ChatGPT") => {
     if (!capturedConversation) {
       sendResponse({
         success: false,
-        error:  `No hay conversación capturada. Abrí una conversación en ${model} primero.`,
+        errorCode: "NO_CONVERSATION",
+        params: { model },
       });
       return;
     }
@@ -81,20 +81,24 @@ const messageHandlers = {
     if (!handler) {
       sendResponse({
         success: false,
-        error: `Formato desconocido: ${message.format}`,
+        errorCode: "UNKNOWN_FORMAT",
+        params: { format: message.format },
       });
       return;
     }
 
-    // Ejecutar el handler pasándole el mensaje completo
     Promise.resolve(handler(message))
       .then(() => sendResponse({ success: true }))
       .catch((error) => {
         console.error("[AI Chat Exporter]", error);
-        sendResponse({ success: false, error: error.message });
+        // Error inesperado del pipeline: enviamos el mensaje original como fallback
+        sendResponse({
+          success: false,
+          errorCode: "PIPELINE_ERROR",
+          params: { message: error.message },
+        });
       });
 
-    // Mantiene el canal abierto para respuesta asíncrona
     return true;
   },
 };

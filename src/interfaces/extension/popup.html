@@ -4,14 +4,16 @@
   <meta charset="UTF-8">
   <title>AI Chat Exporter</title>
   <link rel="stylesheet" href="styles/popup.css">
-  <script type="module" src="popup.js"></script>
+  <script type="module" src="js/popup.js"></script>
 </head>
 <body>
   <header>
-    <h2>Exportando desde <strong id="modelName">ChatGPT</strong></h2>
+    <h2>
+      <span id="title">Exportando desde </span>
+      <strong id="modelName">ChatGPT</strong></h2>
   </header>
   <main>
-    <label for="format">Formato:</label>
+    <label for="format" id="formatLabel">Formato:</label>
     <select id="format">
       <option value="md">Markdown</option>
       <option value="json">JSON</option>
@@ -20,13 +22,36 @@
     <!-- Opciones exclusivas de Markdown -->
     <div id="mdOptions">
       <fieldset>
-        <legend>Filtrar mensajes</legend>
-        <label><input type="radio" name="role" value="all" checked> Todos</label>
-        <label><input type="radio" name="role" value="user"> Solo usuario</label>
-        <label><input type="radio" name="role" value="assistant"> Solo asistente</label>
+        <legend id="optionsLabel">Filtrar mensajes</legend>
+          <label>
+            <input 
+              type="radio" 
+              name="role" 
+              value="all" 
+              checked 
+              > 
+              <span id="all">Todos</span>
+          </label>
+        <label>
+          <input 
+            type="radio" 
+            name="role" 
+            value="user" 
+            >
+            <span id="user">Solo usuario</span>
+        </label>
+        <label>
+          <input 
+            type="radio" 
+            name="role" 
+            value="assistant" 
+            >
+            <span id="assistant">Solo asistente</span>
+        </label>
       </fieldset>
       <label>
-        <input type="checkbox" id="compact"> Modo compacto
+        <input type="checkbox" id="compact"> 
+        <span id="compactLabel">Modo compacto</span>
       </label>
     </div>
     <button id="exportBtn">Exportar</button>
