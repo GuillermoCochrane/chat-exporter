@@ -1,10 +1,9 @@
 import { TRANSLATIONS } from './languages.js';
-import { getInitialLanguage } from './languageSettings.js';
+import { loadLanguage, saveLanguagePreference } from './languageSettings.js';
 
 // Helpers
 const $ = (selector) => document.querySelector(selector);
 const setText = (selector, text) => { ($(selector)) && ($(selector).textContent = text); };
-
 
 // Elementos estáticos
 const $formatSelect = $("#format");
@@ -16,12 +15,8 @@ const $compactCheck = $("#compact");
 const $roleRadios = document.getElementsByName("role");
 const $modelName = $("#modelName");
 const $langToggle = $("#langToggle");
-const $flags = $langToggle.querySelectorAll(".flag");
 
-// Idioma inicial (se recupera del navegador)
-let currentLang = getInitialLanguage();
-
-// Elementos dinámicos (para traducción)
+// Traducción dinámica de textos en el DOM
 function setlanguage(lang, translations) {
   for (const entry in translations) {
     const value = translations[entry];
@@ -31,8 +26,31 @@ function setlanguage(lang, translations) {
   }
 }
 
-// Versión dinámica de la extensión
+// Versión dinámica
 setText('aside.version', `v${chrome.runtime.getManifest().version}`);
+
+// Idioma actual (se cargará de forma asíncrona)
+let currentLang;
+
+async function initLanguage() {
+  currentLang = await loadLanguage();
+  setlanguage(currentLang, TRANSLATIONS);
+  // Mostrar la bandera correcta según el idioma inicial
+  const flags = $langToggle.querySelectorAll(".flag");
+  flags.forEach(flag => {
+    const isActive = flag.dataset.lang === currentLang;
+    flag.classList.toggle("active", isActive);
+    flag.hidden = !isActive;
+  });
+}
+
+// Inicializar idioma al cargar el popup
+initLanguage();
+
+// Mostrar / ocultar opciones de Markdown según el formato
+$formatSelect.addEventListener("change", () => {
+  $formatSelect.value === "md" ? $mdOptions.hidden = false : $mdOptions.hidden = true;
+});
 
 // Toggle de idioma
 $langToggle.addEventListener("click", () => {
@@ -46,21 +64,19 @@ $langToggle.addEventListener("click", () => {
   nextFlag.classList.add("active");
   nextFlag.hidden = false;
 
-  // Aplicar efecto de rotación
+  // Efecto de rotación
   $langToggle.classList.add("rotated");
   setTimeout(() => $langToggle.classList.remove("rotated"), 400);
 
   // Actualizar idioma
   currentLang = nextLang;
   setlanguage(currentLang, TRANSLATIONS);
+
+  // Persistir preferencia
+  saveLanguagePreference(currentLang);
 });
 
-
-// Mostrar / ocultar opciones de Markdown según el formato
-$formatSelect.addEventListener("change", () => {
-  $formatSelect.value === "md" ? $mdOptions.hidden = false : $mdOptions.hidden = true;
-});
-
+// Exportar conversación
 $exportBtn.addEventListener("click", () => {
   const format = $formatSelect.value;
   const compact = $compactCheck.checked;
@@ -83,14 +99,14 @@ $exportBtn.addEventListener("click", () => {
         return;
       }
 
-    if (response && response.success === false) {
-      const errorPrefix = TRANSLATIONS[response.errorCode]?.[currentLang] 
-                          ?? TRANSLATIONS[response.errorCode]?.en 
-                          ?? "";
-      const errorParam = Object.values(response.params ?? {})[0] ?? "";
-      $statusText.textContent = "⚠️ " + errorPrefix + errorParam;
-      return;
-    }
+      if (response && response.success === false) {
+        const errorPrefix = TRANSLATIONS[response.errorCode]?.[currentLang] 
+                            ?? TRANSLATIONS[response.errorCode]?.en 
+                            ?? "";
+        const errorParam = Object.values(response.params ?? {})[0] ?? "";
+        $statusText.textContent = "⚠️ " + errorPrefix + errorParam;
+        return;
+      }
 
       $statusText.textContent = `✔️ ${format.toUpperCase()}${TRANSLATIONS.success[currentLang]}`;
     }
