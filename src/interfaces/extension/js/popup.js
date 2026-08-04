@@ -1,9 +1,10 @@
 import { TRANSLATIONS } from './languages.js';
+import { getInitialLanguage } from './languageSettings.js';
 
 // Helpers
 const $ = (selector) => document.querySelector(selector);
 const setText = (selector, text) => { ($(selector)) && ($(selector).textContent = text); };
-let currentLang = "es";
+
 
 // Elementos estáticos
 const $formatSelect = $("#format");
@@ -16,6 +17,9 @@ const $roleRadios = document.getElementsByName("role");
 const $modelName = $("#modelName");
 const $langToggle = $("#langToggle");
 const $flags = $langToggle.querySelectorAll(".flag");
+
+// Idioma inicial (se recupera del navegador)
+let currentLang = getInitialLanguage();
 
 // Elementos dinámicos (para traducción)
 function setlanguage(lang, translations) {
