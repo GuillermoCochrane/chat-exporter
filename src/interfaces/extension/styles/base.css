@@ -15,6 +15,10 @@ body {
 /*? Encabezado                                                         */
 /*? ------------------------------------------------------------------ */
 
+header {
+  position: relative;
+}
+
 h2 {
   margin: 0 0 16px 0;
   font-size: 15px;
@@ -26,6 +30,52 @@ h2 {
   strong {
     color: var(--color-neon);
     font-weight: 700;
+  }
+}
+
+/* Contenedor del toggle de idioma */
+#langToggle {
+  position: absolute;
+  top: -4px; 
+  right: -5px; 
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(var(--rgb-blue), 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: var(--glass-blur);
+  transition: transform 0.4s ease, background var(--speed-slow);
+
+  &:hover {
+    background: rgba(var(--rgb-accent), 0.6);
+    border-color: var(--color-neon);
+    box-shadow: 0 0 6px var(--color-neon-glow);
+  }
+
+  /* Efecto de rotación al hacer clic */
+  &.rotated {
+    transform: rotate(180deg);
+  }
+
+  svg.flag {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    transition: opacity 0.3s ease;
+
+    &[hidden] {
+      display: block;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    &.active {
+      opacity: 1;
+    }
   }
 }
 
