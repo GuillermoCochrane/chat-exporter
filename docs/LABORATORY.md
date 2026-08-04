@@ -11,6 +11,7 @@
   - [v1.2.2 — Filtro por rol y modo compacto (CLI)](#v122--filtro-por-rol-y-modo-compacto-cli)
   - [v1.2.3 — Opciones avanzadas en la extensión](#v123--opciones-avanzadas-en-la-extensión)
   - [v1.2.4 — Rediseño visual y UX del popup](#v124--rediseño-visual-y-ux-del-popup)
+  - [v1.3.1 — Sistema multi‑idioma y preparación para publicación](#v131--sistema-multiidioma-y-preparación-para-publicación)
 - [Descubrimientos](#descubrimientos)
   - [Desarrollo](#desarrollo)
   - [Pre Release](#pre-release)
@@ -1194,6 +1195,56 @@ La modularización facilita la edición y extensión de los estilos sin navegar 
 
 ---
 
+### v1.3.1 — Sistema multi‑idioma y preparación para publicación
+
+### E-049
+
+#### Objetivo
+
+Implementar un sistema de traducción multi‑idioma en el popup de la extensión.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se creó un helper de traducción (`languages.js`) con soporte inicial para español e inglés.
+- Los mensajes de error del background se desacoplaron: en lugar de enviar texto hardcodeado, se envían códigos de error (`errorCode`) y parámetros (`params`) que el popup traduce.
+- La detección automática del idioma del navegador se encapsuló en `languageSettings.js`, con fallback a inglés.
+- Se agregó un toggle visual con banderas SVG inline (España / Reino Unido) en el `<header>` del popup, con animación de rotación.
+- La preferencia de idioma se persiste en `chrome.storage.local`, requiriendo la adición del permiso `storage` al `manifest.json`.
+- Se reorganizaron los scripts del popup en la carpeta `js/` (`popup.js`, `languages.js`, `languageSettings.js`).
+
+#### Conclusión
+
+El sistema multi‑idioma se integra sin modificar la lógica del Core ni del background más allá de los códigos de error. La arquitectura de traducción (helper + error codes + settings) mantiene las responsabilidades separadas y es extensible a nuevos idiomas con solo agregar entradas al helper.
+
+---
+
+### E-050
+
+#### Objetivo
+
+Preparar los materiales y la configuración necesaria para publicar la extensión en la Chrome Web Store.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se redactaron la descripción corta, larga, la política de privacidad y la justificación de permisos en inglés, alineadas con la filosofía de privacidad y procesamiento local del proyecto.
+- Se verificaron los permisos del `manifest.json` (`downloads`, `storage`), el ícono (16/32/48/128) y la categoría (`Developer Tools`).
+- Se creó el script `build:extension:zip` para generar un paquete ZIP listo para distribución.
+- Se preparó un documento con las respuestas al formulario de privacidad de la Chrome Web Store.
+
+#### Conclusión
+
+La extensión cumple con todos los requisitos técnicos y de contenido para ser enviada a revisión. Los materiales reflejan fielmente el propósito, funcionamiento y política de privacidad del proyecto.
+
+---
+
 ## Descubrimientos
 
 ### Desarrollo
@@ -1241,6 +1292,10 @@ La modularización facilita la edición y extensión de los estilos sin navegar 
 - Un sistema de tokens CSS con capas (primitivos, derivados, compuestos) simplifica el mantenimiento y la evolución visual del proyecto.
 - Los Service Workers de Manifest V3 son efímeros: el estado en memoria puede perderse entre aperturas del popup, lo que requiere estrategias de persistencia (storage) para datos críticos.
 - La modularización de CSS con `@import` es viable en extensiones de Chrome siempre que los archivos se declaren en `web_accessible_resources`.
+- Desacoplar los mensajes de error mediante códigos (`errorCode`) y parámetros (`params`) permite que el background no dependa de un idioma específico y facilita la traducción en el popup.
+- La API `chrome.storage.local` es adecuada para persistir preferencias de usuario en extensiones Manifest V3 sin requerir permisos adicionales sensibles.
+- Usar `navigator.language` como idioma por defecto y luego sobrescribirlo con una preferencia guardada en storage es un patrón eficaz para respetar la configuración del usuario.
+- Los SVG inline permiten incluir gráficos vectoriales (como banderas) en el popup sin dependencias externas, manteniendo el principio de build autocontenido.
 
 ### Pre Release
 

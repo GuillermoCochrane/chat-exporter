@@ -160,6 +160,7 @@ Construir la interfaz definitiva de la extensión.
 - ✅ Footer con versión dinámica de la extensión
 - ✅ Estética cyberpunk con glassmorphism y sistema de tokens CSS
 - ✅ Estilos modularizados por responsabilidad
+- ✅ Sistema multi‑idioma (español / inglés) con toggle visual
 
 ### Pendiente
 

@@ -4,6 +4,38 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
+# v1.3.1 — Sistema multi‑idioma y preparación para publicación
+
+* Se implementa un sistema de traducción multi‑idioma en el popup:
+  - Helper de traducción (`languages.js`) con soporte para español e inglés.
+  - Mensajes de error desacoplados: el background envía códigos de error (`errorCode`) y el popup los traduce.
+  - Detección automática del idioma del navegador al cargar el popup (`languageSettings.js`).
+  - Toggle visual con banderas SVG (España / Reino Unido) para cambiar de idioma.
+  - Persistencia de la preferencia de idioma en `chrome.storage.local`.
+* Se agrega el permiso `storage` al `manifest.json` para guardar la preferencia de idioma.
+* Se preparan los materiales para la publicación en la Chrome Web Store:
+  - Descripción corta y larga.
+  - Política de privacidad.
+  - Justificación de permisos.
+* Se reorganizan los scripts del popup en la carpeta `js/` (`popup.js`, `languages.js`, `languageSettings.js`).
+* Se actualiza el build de la extensión para copiar la carpeta `js/` a `dist/`.
+* Se actualiza la documentación general y de la extensión para reflejar los cambios.
+
+---
+
+# v1.3.0 — Release estable con rediseño visual y preparación para distribución
+
+* Se publica la versión estable 1.3.0 en GitHub.
+* Incluye todas las funcionalidades de la serie 1.2.x:
+  - Popup con opciones avanzadas (formato, compacto, roles).
+  - Rediseño cyberpunk con sistema de tokens CSS.
+  - Build ZIP automático.
+  - Íconos definitivos en todos los tamaños.
+  - Indicador de progreso y mejoras de UX.
+* Documentación actualizada y preparación para publicación en Chrome Web Store.
+
+---
+
 # v1.2.4 — Rediseño visual y mejoras de UX en el popup
 
 * Se agrega un encabezado contextual al popup que indica el proveedor de la conversación (`Exportando desde ChatGPT`), preparado para futuros modelos.

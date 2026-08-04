@@ -30,7 +30,7 @@
   - [inject.js](#injectjs)
   - [content.js](#contentjs)
   - [background.js](#backgroundjs)
-  - [popup.html / popup.js / styles/](#popuphtml--popupjs--styles)
+  - [popup.html / js/ / styles/](#popuphtml--js--styles)
   - [buildExtension.js](#buildextensionjs)
 - [Distribución](#distribución)
 
@@ -92,7 +92,10 @@ src/
 │       ├── inject.js
 │       ├── manifest.json
 │       ├── popup.html
-│       ├── popup.js
+│       ├── js/
+│       │   ├── popup.js
+│       │   ├── languages.js
+│       │   └── languageSettings.js
 │       ├── styles/
 │       │   ├── popup.css
 │       │   ├── variables.css
@@ -475,27 +478,32 @@ Sus responsabilidades:
   - JSON: descarga directa del objeto almacenado.
   - Markdown: construye un `config` con `source: "extension"`, `compact`, `roleFilter` y un `outputHandler` basado en `chrome.downloads`, y llama a `runExporter`.
 - No interpreta la conversación ni genera Markdown directamente; toda la lógica de procesamiento se delega al Core.
+- Los errores se comunican mediante códigos (`errorCode`) y parámetros para que el popup pueda traducirlos al idioma del usuario.
 
 ---
 
-## popup.html / popup.js / styles/
+## popup.html / js/ / styles/
 
-Interfaz de usuario de la extensión con estética cyberpunk.
+Interfaz de usuario de la extensión con estética cyberpunk y sistema multi‑idioma.
 
 `popup.html` define el layout con:
+- Toggle de idioma en el encabezado (banderas SVG inline).
 - Encabezado contextual que indica el proveedor de la conversación (`Exportando desde ChatGPT`), preparado para futuros modelos.
 - Selector de formato (Markdown / JSON).
 - Opciones exclusivas de Markdown: switch de modo compacto y radio buttons con apariencia de hardware físico para filtro de roles (`all`, `user`, `assistant`).
 - Las opciones de Markdown se ocultan automáticamente al seleccionar JSON.
 - Footer con la versión dinámica de la extensión.
 
-`popup.js` captura las opciones elegidas por el usuario, gestiona el estado visual (spinner durante la carga, deshabilitado del botón Exportar) y envía un mensaje `EXPORT` al `background.js` con todos los parámetros.
+Los scripts están organizados en `js/`:
+- `popup.js`: punto de entrada principal. Gestiona el estado visual (spinner, deshabilitado del botón Exportar), el envío de mensajes `EXPORT` y la traducción de la interfaz.
+- `languages.js`: helper de traducción con las claves textuales para español e inglés.
+- `languageSettings.js`: detecta el idioma inicial (navegador o preferencia guardada) y persiste la elección del usuario en `chrome.storage.local`.
 
 Los estilos están modularizados en `styles/`:
 - `variables.css`: tokens de diseño (colores, sombras, transiciones) con paleta cyberpunk derivada del ícono original.
 - `base.css`: estilos del body, tipografía y encabezado.
 - `selector.css`: estilos del `<select>` nativo usando `appearance: base-select`.
-- `options.css`: estilos del fieldset, switch de modo compacto y radio buttons físicos.
+- `options.css`: estilos del fieldset, switch de modo compacto, radio buttons físicos y el toggle de idioma.
 - `button.css`: estilos del botón Exportar y sus estados.
 - `footer.css`: estilos del estado de exportación (spinner, mensajes) y versión.
 - `popup.css`: punto de entrada que importa todos los módulos.
@@ -510,7 +518,9 @@ Utiliza esbuild para empaquetar `extensionCore.js` junto con todas las dependenc
 
 Incorpora un plugin que reemplaza `jsonFile.js` por `jsonFile.stub.js` para evitar dependencias de Node.js en el contexto del navegador.
 
-Copia los archivos estáticos de la extensión (manifest, background, content, inject, popup, estilos modulares, íconos) al directorio `dist/`.
+Copia recursivamente los archivos estáticos de la extensión (manifest, background, content, inject, popup, scripts del popup en `js/`, estilos modulares en `styles/`, íconos) al directorio `dist/`.
+
+El manifiesto incluye el permiso `storage` necesario para la persistencia del idioma.
 
 ---
 
@@ -527,6 +537,6 @@ Actualmente cualquier interfaz puede reutilizar el mismo motor proporcionando ú
 
 Esta organización permite incorporar nuevas interfaces (como la extensión de Chrome), nuevos formatos y nuevas salidas sin modificar el Core.
 
-La extensión de Chrome ya utiliza este mecanismo: captura el JSON, lo entrega al core mediante `ExtensionSource`, y recibe el Markdown generado para descargarlo mediante un `outputHandler` basado en `chrome.downloads`. Incluye un popup con opciones avanzadas de exportación (formato, modo compacto, filtro de roles).
+La extensión de Chrome ya utiliza este mecanismo: captura el JSON, lo entrega al core mediante `ExtensionSource`, y recibe el Markdown generado para descargarlo mediante un `outputHandler` basado en `chrome.downloads`. Incluye un popup con opciones avanzadas de exportación (formato, modo compacto, filtro de roles) y soporte multi‑idioma.
 
 ---

@@ -108,9 +108,9 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
                   │
                   │
 ┌───────────────────────────────────────┐
-│   popup.html / popup.js / styles/     │
+│   popup.html / js/ / styles/          │
 │                                       │
-│                                       │
+│ • Toggle de idioma (SVG inline)       │
 │ • Selector de formato (MD / JSON)     │
 │ • Modo compacto (switch)              │
 │ • Filtro de roles (radio buttons)     │
@@ -119,6 +119,7 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 │ • Spinner de progreso                 │
 │ • Footer con versión dinámica         │
 │ • Muestra estado de la operación      │
+│ • Traducción multi‑idioma             │
 └───────────────────────────────────────┘
 ```
 
@@ -175,6 +176,9 @@ No debe:
 - interpretar la conversación;
 - modificar el JSON.
 
+
+- Los errores se comunican mediante códigos (`errorCode`) y parámetros para que el popup pueda traducirlos al idioma del usuario.
+
 ---
 
 ### Popup
@@ -182,22 +186,28 @@ No debe:
 Responsabilidades:
 
 - presentar al usuario las opciones de exportación:
+  - toggle de idioma con banderas SVG (español / inglés) en el encabezado;
   - encabezado contextual que indica el proveedor de la conversación (ej: "Exportando desde ChatGPT");
   - selector de formato (Markdown / JSON);
   - switch de modo compacto (solo visible en Markdown);
   - radio buttons con apariencia de hardware físico para filtro de roles: `all`, `user`, `assistant` (solo visible en Markdown).
 - ocultar automáticamente las opciones de Markdown cuando se selecciona JSON;
 - mostrar un spinner animado y deshabilitar el botón Exportar durante el procesamiento;
-- mostrar el estado de la operación (éxito o error detallado);
+- mostrar el estado de la operación (éxito o error detallado traducido);
 - mostrar la versión dinámica de la extensión en el footer, obtenida desde `chrome.runtime.getManifest()`.
 
 La interfaz sigue una estética cyberpunk con glassmorphism, tokens CSS y componentes con efecto de hardware físico (relieve/hundido).
+
+Los scripts están organizados en `js/`:
+- `popup.js`: punto de entrada principal que gestiona la interfaz, el envío del mensaje `EXPORT` y la traducción de la interfaz.
+- `languages.js`: helper con las claves textuales para español e inglés.
+- `languageSettings.js`: detecta el idioma inicial (navegador o preferencia guardada) y persiste la elección del usuario en `chrome.storage.local`.
 
 Los estilos están modularizados en `styles/`:
 - `variables.css`: tokens de diseño (colores, sombras, transiciones).
 - `base.css`: estilos del body, tipografía y encabezado.
 - `selector.css`: estilos del `<select>` nativo.
-- `options.css`: estilos del fieldset, switch y radio buttons.
+- `options.css`: estilos del fieldset, switch, radio buttons y toggle de idioma.
 - `button.css`: estilos del botón Exportar.
 - `footer.css`: estilos del estado de exportación (spinner, mensajes) y versión.
 - `popup.css`: punto de entrada que importa todos los módulos.

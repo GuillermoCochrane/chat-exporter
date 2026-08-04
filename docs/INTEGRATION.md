@@ -300,6 +300,8 @@ exportHandlers[format]()
 
 - `popup.js` presenta opciones de exportación: formato (MD/JSON), modo compacto y filtro de roles (`all`, `user`, `assistant`). Las opciones específicas de Markdown se ocultan al elegir JSON.
 - El popup incluye un encabezado contextual que indica el proveedor de la conversación y un footer con la versión dinámica de la extensión.
+- El popup incluye un sistema multi‑idioma (español / inglés) con detección automática del idioma del navegador, toggle visual con banderas SVG y persistencia de la preferencia en `chrome.storage.local`.
+- Los errores del background se comunican mediante códigos (`errorCode`) y parámetros, permitiendo que el popup los traduzca al idioma activo.
 - Envía un mensaje `EXPORT` con todos los parámetros (`format`, `compact`, `roleFilter`).
 - `background.js` recibe el mensaje, verifica que exista una conversación capturada y ejecuta el handler correspondiente:
   - **JSON**: serializa la conversación y la descarga directamente.
@@ -335,8 +337,9 @@ La extensión reutiliza el mismo `runExporter` y `runPipeline` que la CLI. La co
 4. [x] Incorporar selector de formato (MD/JSON) en el popup.
 5. [x] Agregar opciones avanzadas al popup (modo compacto, filtro de roles).
 6. [x] Mejorar feedback visual en el popup (spinner, errores detallados).
-7. [ ] Incorporar nuevos Conversation Sources sin modificar el Core.
-8. [ ] Incorporar nuevos Renderers y Outputs manteniendo el desacoplamiento actual.
+7. [x] Preparar materiales para publicación en Chrome Web Store (descripción, política de privacidad, ZIP).
+8. [ ] Incorporar nuevos Conversation Sources sin modificar el Core.
+9. [ ] Incorporar nuevos Renderers y Outputs manteniendo el desacoplamiento actual.
 
 ---
 
