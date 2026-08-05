@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AI Chat Exporter - Promo Tile</title>
+
+    <style>
+      :root {
+        --color-bg: #0d1b2a;
+        --color-accent: #25496b;
+        --color-accent-hover: #1a3550;
+
+        --color-text: #ebebeb;
+        --color-text-dim: #b8c2cc;
+
+        --color-neon: #00d4ff;
+
+        --shadow-dark: rgba(0, 0, 0, 0.65);
+        --shadow-darker: rgba(0, 0, 0, 0.85);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+
+      .hero {
+        width: 440px;
+        height: 280px;
+
+        overflow: hidden;
+        position: relative;
+
+        background:
+          radial-gradient(
+            circle at 20% 20%,
+            var(--color-accent-hover),
+            var(--color-bg) 78%
+          ),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 40%);
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+
+        opacity: 0.03;
+
+        background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+
+        background-size: 18px 18px;
+      }
+
+      /* -------------------- */
+
+      .wrapper {
+        position: relative;
+        z-index: 2;
+
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        padding: 20px;
+      }
+
+      /* -------------------- */
+
+      .title {
+        margin: 0;
+
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+
+        color: var(--color-text);
+
+        text-align: center;
+      }
+
+      .title span {
+        color: var(--color-neon);
+      }
+
+      .subtitle {
+        margin: 10px 0 28px;
+
+        color: var(--color-text-dim);
+
+        font-size: 15px;
+
+        text-align: center;
+      }
+
+      /* -------------------- */
+
+      .flow {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      /* -------------------- */
+
+      .file {
+        width: 108px;
+
+        border-radius: 12px;
+
+        padding-block: 12px;
+
+        background: rgba(255, 255, 255, 0.05);
+
+        border: 1px solid rgba(255, 255, 255, 0.08);
+
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+
+        text-align: center;
+      }
+
+      .file .ext {
+        font-size: 26px;
+        font-weight: 800;
+      }
+
+      .file.json .ext {
+        color: #ff6b6b;
+      }
+
+      .file.md .ext {
+        color: var(--color-neon);
+      }
+
+      .file .name {
+        margin-top: 8px;
+
+        font-size: 12px;
+
+        color: var(--color-text-dim);
+      }
+
+      /* -------------------- */
+
+      .icon {
+        width: 82px;
+        height: 82px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border-radius: 18px;
+
+        background: rgba(255, 255, 255, 0.04);
+
+        border: 1px solid rgba(255, 255, 255, 0.08);
+
+        /* Sombra ajustada para mayor nitidez */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      }
+
+      .icon img {
+        width: 64px;
+        height: 64px;
+      }
+
+      /* -------------------- */
+
+      .arrow {
+        color: var(--color-neon);
+
+        font-size: 26px;
+        font-weight: 700;
+        
+        /* Ajuste óptico de alineación */
+        display: flex;
+        align-items: center;
+        transform: translateY(-2px); 
+      }
+
+      /* -------------------- */
+
+      .footer {
+        margin-top: 24px;
+
+        display: flex;
+        gap: 12px;
+
+        font-size: 11px;
+
+        color: var(--color-text-dim);
+
+        opacity: 0.9;
+      }
+
+      .footer span {
+        padding: 4px 8px;
+
+        border-radius: 999px;
+
+        background: rgba(255, 255, 255, 0.05);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="hero">
+      <div class="wrapper">
+        <h1 class="title">Your <span>conversations</span>.</h1>
+
+        <p class="subtitle">Your files.</p>
+
+        <div class="flow">
+          <div class="file json">
+            <div class="ext">{ }</div>
+            <div class="name">conversation.json</div>
+          </div>
+
+          <div class="arrow">→</div>
+
+          <div class="icon">
+            <img src="icon.png" alt="" />
+          </div>
+
+          <div class="arrow">→</div>
+
+          <div class="file md">
+            <div class="ext">#</div>
+            <div class="name">conversation.md</div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <span>Private</span>
+          <span>Local</span>
+          <span>Open Source</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
