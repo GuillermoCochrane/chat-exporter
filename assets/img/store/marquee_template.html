@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AI Chat Exporter - Marquee</title>
+
+    <style>
+      :root {
+        --color-bg: #0d1b2a;
+        --color-accent-hover: #1a3550;
+
+        --color-text: #ebebeb;
+        --color-text-dim: #b8c2cc;
+
+        --color-neon: #00d4ff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+
+      .hero {
+        width: 1400px;
+        height: 560px;
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(
+            circle at 20% 20%,
+            var(--color-accent-hover),
+            var(--color-bg) 78%
+          ),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 40%);
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0.03;
+        background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+        background-size: 18px 18px;
+      }
+
+      .wrapper {
+        position: relative;
+        z-index: 2;
+        height: 100%;
+        padding: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .subtitle {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--color-text-dim);
+      }
+
+      .title {
+        margin: 14px 0 0;
+        font-size: 72px;
+        font-weight: 800;
+        letter-spacing: -2px;
+        color: var(--color-text);
+        text-align: center;
+      }
+
+      .title span {
+        color: var(--color-neon);
+      }
+
+      .description {
+        margin: 18px 0 60px;
+        font-size: 28px;
+        color: var(--color-text-dim);
+        text-align: center;
+      }
+
+      .flow {
+        display: flex;
+        align-items: center;
+        gap: 48px;
+      }
+
+      .file {
+        width: 210px;
+        padding: 22px;
+        border-radius: 16px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+      }
+
+      .ext {
+        font-size: 56px;
+        font-weight: 800;
+      }
+
+      .json .ext {
+        color: #ff6b6b;
+      }
+
+      .md .ext {
+        color: var(--color-neon);
+      }
+
+      .label {
+        margin-top: 12px;
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--color-text);
+      }
+
+      .icon {
+        width: 150px;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.55);
+      }
+
+      .icon img {
+        width: 118px;
+        height: 118px;
+      }
+
+      .arrow {
+        font-size: 42px;
+        font-weight: 700;
+        color: var(--color-neon);
+        display: flex;
+        align-items: center;
+        transform: translateY(-4px); 
+      }
+
+      .footer {
+        margin-top: 60px;
+        display: flex;
+        gap: 24px;
+        font-size: 18px;
+        color: var(--color-text-dim);
+      }
+
+      .footer span {
+        padding: 8px 16px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="hero">
+      <div class="wrapper">
+        <h5 class="subtitle">AI Chat Exporter</h5>
+
+        <h1 class="title">Own your <span>conversations</span>.</h1>
+
+        <p class="description">Markdown • JSON • 100% Local</p>
+
+        <div class="flow">
+          <div class="file json">
+            <div class="ext">{ }</div>
+            <div class="label">JSON</div>
+          </div>
+
+          <div class="arrow">→</div>
+
+          <div class="icon">
+            <img src="icon.png" alt="AI Chat Exporter" />
+          </div>
+
+          <div class="arrow">→</div>
+
+          <div class="file md">
+            <div class="ext">#</div>
+            <div class="label">Markdown</div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <span>Private</span>
+          <span>Local</span>
+          <span>Open Source</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
