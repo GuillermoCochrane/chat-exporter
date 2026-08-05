@@ -64,6 +64,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Fixtures versionados
 - [x] Repositorio ejecutable inmediatamente después de clonar
 - [x] Materiales para publicación en Chrome Web Store
+- [x] Extensión enviada a revisión en la Chrome Web Store
 
 ### Arquitectura
 
@@ -84,6 +85,13 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Indicador de progreso y manejo de errores visua
 - [x] Sistema multi‑idioma (español / inglés) con toggle visual
 
+
+### Deuda técnica
+
+- [ ] La captura del `mapping` ocurre solo al cargar la página; los mensajes nuevos posteriores no se incluyen en la exportación.
+- [ ] Las conversaciones nuevas desde cero no generan una captura inicial, por lo que la extensión no puede exportarlas.
+- [ ] La segunda exportación sin recargar la página falla porque el Service Worker pierde el estado en memoria.
+- [ ] Agregar un modal de advertencia cuando la conversación pueda estar incompleta, con recomendación de recargar la página y enlace a un futuro FAQ.
 
 ---
 
@@ -121,10 +129,13 @@ Output
 
 ## Próximo objetivo
 
-### Publicación y nuevos proveedores
+### Estabilización, sitio de documentación y DeepSeek
 
-- Publicar la extensión en la Chrome Web Store.
-- Iniciar la investigación para integrar DeepSeek como Conversation Source.
+- Lanzar la extensión en la Chrome Web Store una vez aprobada.
+- Agregar la marquesina promocional (opcional) en la ficha de la store.
+- Construir un sitio web de documentación estático con la identidad visual del proyecto (cyberpunk, GitHub Pages).
+- Investigar la estructura del JSON de DeepSeek para integrarlo como nuevo Conversation Source.
+- Corregir la deuda técnica de la captura parcial y el bug de la doble descarga.
 
 ---
 
