@@ -1,0 +1,48 @@
+/*? ======================== Design Tokens ======================== */
+:root {
+  --rgb-black: 0, 0, 0;
+  --rgb-white: 255, 255, 255;
+  --rgb-blue: 13, 27, 42;
+  --rgb-accent: 37, 73, 107;
+
+  --color-accent: #25496B;
+  --color-accent-hover: #1a3550;
+
+  --color-bg: #0d1b2a;
+  --color-surface: rgba(var(--rgb-blue), 0.85);
+
+  --color-text: #EBEBEB;
+  --color-text-dim: #969696;
+
+  --color-neon: #00d4ff;
+  --color-neon-glow: rgba(0, 212, 255, 0.4);
+  --color-success: #00ff88;
+  --color-warning: #ffaa00;
+
+  --color-border: #969696;
+  --color-border-light: rgba(150, 150, 150, 0.3);
+
+  --shadow-color-dark: rgba(var(--rgb-black), 0.6);
+  --shadow-color-darker: rgba(var(--rgb-black), 0.8);
+  --shadow-focus: 0 0 0 2px var(--color-neon-glow);
+
+  --header-height: 64px;
+  --footer-height: 40px;
+  --sidebar-width: 280px;
+}
+
+/* Light theme */
+body.light {
+  --color-bg: #f0f4f8;
+  --color-surface: rgba(255, 255, 255, 0.92);
+  --color-text: #1a202c;
+  --color-text-dim: #4a5568;
+  --color-accent: #2b6cb0;
+  --color-accent-hover: #2c5282;
+  --color-neon: #2b6cb0;
+  --color-border: #a0aec0;
+  --color-border-light: rgba(160, 174, 192, 0.4);
+  --shadow-color-dark: rgba(0, 0, 0, 0.12);
+  --shadow-color-darker: rgba(0, 0, 0, 0.2);
+  background: linear-gradient(160deg, #e2e8f0 0%, #f8fafc 100%);
+}

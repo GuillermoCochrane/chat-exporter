@@ -1,0 +1,20 @@
+/*? ============================ FAQ ============================== */
+
+.faq details {
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px solid var(--color-border-light);
+  background: rgba(var(--rgb-blue), 0.55);
+  backdrop-filter: blur(8px);
+  margin-bottom: 12px;
+}
+
+.faq summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.faq p {
+  color: var(--color-text-dim);
+  margin-top: 0.5rem;
+}

@@ -1,0 +1,103 @@
+/*? =========================== Hero ============================== */
+
+.hero {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 2rem;
+}
+
+.eyebrow {
+  color: var(--color-neon);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.hero h1 {
+  font-size: clamp(2.6rem, 6vw, 4.8rem);
+  line-height: 1.05;
+  margin: 0;
+  letter-spacing: -2px;
+}
+
+.hero h1 span {
+  color: var(--color-neon);
+}
+
+.hero-text {
+  max-width: 720px;
+  color: var(--color-text-dim);
+  font-size: 1.15rem;
+  line-height: 1.7;
+  margin: 24px 0 32px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 22px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn.primary {
+  background: var(--color-accent);
+  color: var(--color-text);
+}
+
+.btn.primary:hover {
+  background: var(--color-accent-hover);
+  box-shadow: 0 0 8px var(--color-neon-glow);
+}
+
+.btn.ghost {
+  border: 1px solid var(--color-border-light);
+  background: rgba(var(--rgb-white), 0.03);
+  color: var(--color-text);
+}
+
+.btn.ghost:hover {
+  border-color: var(--color-neon);
+  color: var(--color-neon);
+}
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero-badges span {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(var(--rgb-white), 0.05);
+  border: 1px solid var(--color-border-light);
+  color: var(--color-text-dim);
+  font-size: 0.9rem;
+}
+
+/*? ======================== Responsive =========================== */
+
+@media (max-width: 560px) {
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

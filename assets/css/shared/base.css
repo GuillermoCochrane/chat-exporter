@@ -1,0 +1,26 @@
+/*? ======================= Reset & Base ========================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  height: 100%;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  background: radial-gradient(circle at 20% 20%, var(--color-accent-hover), var(--color-bg) 80%);
+  color: var(--color-text);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.3s, color 0.3s;
+}

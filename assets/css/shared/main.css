@@ -1,0 +1,42 @@
+/*? ======================== Main Layout ========================== */
+
+body>main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  overflow: hidden;
+}
+
+/* Article (scrollable) */
+body>main>article {
+  overflow-y: auto;
+  padding: 3rem 2rem 6rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+body>main>article section {
+  max-width: 960px;
+  margin: 0 auto 5rem;
+  scroll-margin-top: 96px;
+}
+
+/*? ===================== Section Headings ======================== */
+
+.section-heading h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.section-heading p {
+  color: var(--color-text-dim);
+  margin-bottom: 1.5rem;
+}
+
+/*? ======================== Responsive =========================== */
+
+@media (max-width: 980px) {
+  body>main {
+    grid-template-columns: 1fr;
+  }
+}
