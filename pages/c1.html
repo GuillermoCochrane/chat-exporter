@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Chat Exporter</title>
+
+    <!-- <link rel="stylesheet" href="styles.css" /> -->
+    <style>
+      :root {
+        --rgb-black: 0, 0, 0;
+        --rgb-white: 255, 255, 255;
+        --rgb-blue: 13, 27, 42;
+        --rgb-accent: 37, 73, 107;
+
+        --color-accent: #25496b;
+        --color-accent-hover: #1a3550;
+
+        --color-bg: #0d1b2a;
+        --color-surface: rgba(var(--rgb-blue), 0.85);
+
+        --color-text: #ebebeb;
+        --color-text-dim: #969696;
+
+        --color-neon: #00d4ff;
+        --color-neon-glow: rgba(0, 212, 255, 0.4);
+
+        --color-border: #969696;
+        --color-border-light: rgba(150, 150, 150, 0.3);
+
+        --shadow-color-dark: rgba(var(--rgb-black), 0.6);
+        --shadow-color-darker: rgba(var(--rgb-black), 0.8);
+
+        --header-height: 72px;
+        --footer-height: 40px;
+        --sidebar-width: 280px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          sans-serif;
+        color: var(--color-text);
+        background:
+          radial-gradient(
+            circle at 20% 20%,
+            var(--color-accent-hover),
+            var(--color-bg) 78%
+          ),
+          linear-gradient(180deg, rgba(var(--rgb-white), 0.03), transparent 40%);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        opacity: 0.03;
+        pointer-events: none;
+        background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+        background-size: 18px 18px;
+      }
+
+      .site-header {
+        height: var(--header-height);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+        border-bottom: 1px solid var(--color-border-light);
+        background: rgba(var(--rgb-blue), 0.55);
+        backdrop-filter: blur(12px);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-logo {
+        width: 36px;
+        height: 36px;
+      }
+
+      .brand-name {
+        font-weight: 700;
+        letter-spacing: -0.3px;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .header-actions a {
+        color: var(--color-text-dim);
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .header-actions a:hover {
+        color: var(--color-text);
+      }
+
+      .menu-toggle {
+        display: none;
+        border: 1px solid var(--color-border-light);
+        background: rgba(var(--rgb-white), 0.04);
+        color: var(--color-text);
+        border-radius: 10px;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+      }
+
+      .layout {
+        height: calc(100vh - var(--header-height) - var(--footer-height));
+        display: grid;
+        grid-template-columns: var(--sidebar-width) 1fr;
+      }
+
+      .sidebar {
+        overflow-y: auto;
+        padding: 20px;
+        border-right: 1px solid var(--color-border-light);
+        background: rgba(var(--rgb-blue), 0.35);
+        backdrop-filter: blur(10px);
+      }
+
+      .sidebar details {
+        margin-bottom: 16px;
+      }
+
+      .sidebar summary {
+        cursor: pointer;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .sidebar ul {
+        list-style: none;
+        padding-left: 12px;
+        margin: 0;
+      }
+
+      .sidebar li {
+        margin: 8px 0;
+      }
+
+      .sidebar a {
+        color: var(--color-text-dim);
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .sidebar a:hover,
+      .sidebar a.active {
+        color: var(--color-neon);
+      }
+
+      .content {
+        overflow-y: auto;
+        padding: 48px clamp(20px, 4vw, 64px) 96px;
+      }
+
+      .content section {
+        scroll-margin-top: 96px;
+      }
+
+      .hero {
+        min-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .eyebrow {
+        color: var(--color-neon);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.6rem, 6vw, 4.8rem);
+        line-height: 1.05;
+        margin: 0;
+        letter-spacing: -2px;
+      }
+
+      .hero h1 span {
+        color: var(--color-neon);
+      }
+
+      .hero-text {
+        max-width: 720px;
+        color: var(--color-text-dim);
+        font-size: 1.15rem;
+        line-height: 1.7;
+        margin: 24px 0 32px;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 22px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+        transition:
+          transform 0.2s ease,
+          background 0.2s ease,
+          border-color 0.2s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn.primary {
+        background: var(--color-accent);
+        color: var(--color-text);
+      }
+
+      .btn.primary:hover {
+        background: var(--color-accent-hover);
+      }
+
+      .btn.ghost {
+        border: 1px solid var(--color-border-light);
+        background: rgba(var(--rgb-white), 0.03);
+        color: var(--color-text);
+      }
+
+      .hero-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .hero-badges span {
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(var(--rgb-white), 0.05);
+        border: 1px solid var(--color-border-light);
+        color: var(--color-text-dim);
+        font-size: 0.9rem;
+      }
+
+      .section {
+        margin-top: 72px;
+      }
+
+      .section-heading h2 {
+        font-size: 2rem;
+        margin: 0 0 8px;
+      }
+
+      .section-heading p {
+        color: var(--color-text-dim);
+        margin: 0 0 24px;
+      }
+
+      .carousel {
+        display: grid;
+        grid-template-columns: 56px 1fr 56px;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .carousel-track {
+        position: relative;
+        min-height: 420px;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid var(--color-border-light);
+        background: rgba(var(--rgb-white), 0.03);
+        box-shadow: 0 24px 60px var(--shadow-color-darker);
+      }
+
+      .carousel-slide {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 0.35s ease;
+      }
+
+      .carousel-slide.active {
+        opacity: 1;
+      }
+
+      .carousel-btn {
+        width: 56px;
+        height: 56px;
+        border-radius: 999px;
+        border: 1px solid var(--color-border-light);
+        background: rgba(var(--rgb-white), 0.04);
+        color: var(--color-text);
+        font-size: 2rem;
+        cursor: pointer;
+      }
+
+      .carousel-dots {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        border: none;
+        background: rgba(var(--rgb-white), 0.25);
+        cursor: pointer;
+      }
+
+      .dot.active {
+        background: var(--color-neon);
+      }
+
+      .feature-grid,
+      .privacy-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(240px, 1fr));
+        gap: 18px;
+      }
+
+      .feature-card,
+      .privacy-card {
+        padding: 24px;
+        border-radius: 16px;
+        background: rgba(var(--rgb-white), 0.04);
+        border: 1px solid var(--color-border-light);
+        box-shadow: 0 12px 28px var(--shadow-color-dark);
+      }
+
+      .feature-card h3,
+      .privacy-card h3 {
+        margin-top: 0;
+      }
+
+      .check {
+        color: var(--color-success);
+        font-size: 1.25rem;
+      }
+
+      .privacy-note {
+        margin-top: 20px;
+        color: var(--color-text-dim);
+      }
+
+      .install-steps {
+        padding-left: 20px;
+        line-height: 1.9;
+        margin-bottom: 24px;
+      }
+
+      .roadmap-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+
+      .roadmap-column {
+        padding: 22px;
+        border-radius: 16px;
+        border: 1px solid var(--color-border-light);
+        background: rgba(var(--rgb-white), 0.04);
+      }
+
+      .roadmap-column h3 {
+        margin-top: 0;
+      }
+
+      .roadmap-column ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      .roadmap-column.done h3 {
+        color: var(--color-success);
+      }
+
+      .roadmap-column.next h3 {
+        color: var(--color-neon);
+      }
+
+      .roadmap-column.future h3 {
+        color: var(--color-warning);
+      }
+
+      .faq details {
+        padding: 18px 20px;
+        border-radius: 14px;
+        border: 1px solid var(--color-border-light);
+        background: rgba(var(--rgb-white), 0.03);
+        margin-bottom: 12px;
+      }
+
+      .faq summary {
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .faq p {
+        color: var(--color-text-dim);
+      }
+
+      .site-footer {
+        height: var(--footer-height);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        border-top: 1px solid var(--color-border-light);
+        background: rgba(var(--rgb-blue), 0.55);
+        color: var(--color-text-dim);
+        font-size: 0.9rem;
+      }
+
+      .site-footer a {
+        color: var(--color-text-dim);
+        text-decoration: none;
+      }
+
+      .site-footer a:hover {
+        color: var(--color-text);
+      }
+
+      @media (max-width: 980px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          position: fixed;
+          top: var(--header-height);
+          left: 0;
+          width: min(82vw, 320px);
+          height: calc(100vh - var(--header-height));
+          transform: translateX(-100%);
+          transition: transform 0.25s ease;
+          z-index: 90;
+          box-shadow: 12px 0 30px var(--shadow-color-darker);
+        }
+
+        .sidebar.open {
+          transform: translateX(0);
+        }
+
+        .menu-toggle {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .content {
+          padding: 32px 20px 96px;
+        }
+
+        .feature-grid,
+        .privacy-grid,
+        .roadmap-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .carousel {
+          grid-template-columns: 1fr;
+        }
+
+        .carousel-btn {
+          display: none;
+        }
+
+        .carousel-track {
+          min-height: 240px;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .site-header {
+          padding: 0 16px;
+        }
+
+        .brand-name {
+          display: none;
+        }
+
+        .hero-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .hero-badges {
+          gap: 8px;
+        }
+
+        .site-footer {
+          flex-wrap: wrap;
+          height: auto;
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <img src="icon.png" alt="AI Chat Exporter" class="brand-logo" />
+        <span class="brand-name">AI Chat Exporter</span>
+      </div>
+
+      <div class="header-actions">
+        <a
+          href="https://github.com/GuillermoCochrane/chat-exporter"
+          target="_blank"
+          rel="noreferrer"
+          >GitHub</a
+        >
+        <a href="#install">Install</a>
+        <button
+          id="menu-toggle"
+          class="menu-toggle"
+          aria-label="Toggle navigation"
+        >
+          ☰
+        </button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <nav id="sidebar" class="sidebar">
+        <details open>
+          <summary>Documentation</summary>
+          <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#install">Installation</a></li>
+            <li><a href="#privacy">Privacy</a></li>
+            <li><a href="#roadmap">Roadmap</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </details>
+
+        <details open>
+          <summary>On this page</summary>
+          <ul>
+            <li><a href="#hero">Hero</a></li>
+            <li><a href="#screenshots">Screenshots</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#why">Why</a></li>
+            <li><a href="#privacy">Privacy</a></li>
+            <li><a href="#roadmap">Roadmap</a></li>
+          </ul>
+        </details>
+      </nav>
+
+      <article class="content">
+        <section id="hero" class="hero">
+          <p class="eyebrow">Open Source Chrome Extension</p>
+          <h1>Own your <span>conversations</span>.</h1>
+          <p class="hero-text">
+            Export ChatGPT conversations as clean Markdown or JSON files
+            directly from your browser.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn primary" href="#install">Install Extension</a>
+            <a
+              class="btn ghost"
+              href="https://github.com/GuillermoCochrane/chat-exporter"
+              target="_blank"
+              rel="noreferrer"
+              >View on GitHub</a
+            >
+          </div>
+
+          <div class="hero-badges">
+            <span>MIT</span>
+            <span>Local Processing</span>
+            <span>Markdown</span>
+            <span>JSON</span>
+          </div>
+        </section>
+
+        <section id="screenshots" class="section">
+          <div class="section-heading">
+            <h2>See it in action</h2>
+            <p>The extension keeps exports clean, readable, and portable.</p>
+          </div>
+
+          <div class="carousel">
+            <button class="carousel-btn prev" aria-label="Previous screenshot">
+              ‹
+            </button>
+
+            <div class="carousel-track">
+              <img
+                src="screenshots/scr1.png"
+                alt="Conversation view"
+                class="carousel-slide active"
+              />
+              <img
+                src="screenshots/scr2.png"
+                alt="Export options popup"
+                class="carousel-slide"
+              />
+              <img
+                src="screenshots/scr3.png"
+                alt="Markdown export preview"
+                class="carousel-slide"
+              />
+              <img
+                src="screenshots/scr4.png"
+                alt="Conversation preserved in Markdown"
+                class="carousel-slide"
+              />
+              <img
+                src="screenshots/scr5.png"
+                alt="Privacy-first export flow"
+                class="carousel-slide"
+              />
+            </div>
+
+            <button class="carousel-btn next" aria-label="Next screenshot">
+              ›
+            </button>
+          </div>
+
+          <div class="carousel-dots">
+            <button class="dot active" aria-label="Screenshot 1"></button>
+            <button class="dot" aria-label="Screenshot 2"></button>
+            <button class="dot" aria-label="Screenshot 3"></button>
+            <button class="dot" aria-label="Screenshot 4"></button>
+            <button class="dot" aria-label="Screenshot 5"></button>
+          </div>
+        </section>
+
+        <section id="features" class="section">
+          <div class="section-heading">
+            <h2>Features</h2>
+            <p>
+              Everything you need to keep your AI conversations under your
+              control.
+            </p>
+          </div>
+
+          <div class="feature-grid">
+            <div class="feature-card">
+              <h3>Markdown Export</h3>
+              <p>
+                Clean documents ready for Obsidian, Notion, GitHub, or long-term
+                notes.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <h3>JSON Export</h3>
+              <p>
+                Preserve the original conversation structure for automation and
+                tooling.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <h3>Role Filters</h3>
+              <p>Export only User, Assistant, or the complete conversation.</p>
+            </div>
+
+            <div class="feature-card">
+              <h3>Compact Mode</h3>
+              <p>
+                Reduce unnecessary spacing for smaller, cleaner Markdown files.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <h3>Local Processing</h3>
+              <p>
+                All processing happens in your browser; no cloud service is
+                involved.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <h3>Open Source</h3>
+              <p>MIT licensed and fully auditable on GitHub.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="why" class="section">
+          <div class="section-heading">
+            <h2>Why AI Chat Exporter?</h2>
+          </div>
+
+          <p>
+            AI conversations often contain research, code, documentation, ideas,
+            and decisions that become valuable over time.
+          </p>
+
+          <p>
+            AI Chat Exporter was created to make those conversations portable,
+            searchable, versionable, and independent from a single platform.
+          </p>
+
+          <p>
+            Open a ChatGPT conversation, click the extension icon, choose your
+            export options, and save the result in seconds.
+          </p>
+        </section>
+
+        <section id="privacy" class="section privacy">
+          <div class="section-heading">
+            <h2>Privacy First</h2>
+            <p>Your conversations belong to you.</p>
+          </div>
+
+          <div class="privacy-grid">
+            <div class="privacy-card">
+              <span class="check">✔</span>
+              <h3>100% Local</h3>
+              <p>Processed entirely inside your browser.</p>
+            </div>
+
+            <div class="privacy-card">
+              <span class="check">✔</span>
+              <h3>No Tracking</h3>
+              <p>No analytics, telemetry, or advertising.</p>
+            </div>
+
+            <div class="privacy-card">
+              <span class="check">✔</span>
+              <h3>No Cloud</h3>
+              <p>Conversations are never uploaded to external servers.</p>
+            </div>
+
+            <div class="privacy-card">
+              <span class="check">✔</span>
+              <h3>Open Source</h3>
+              <p>Anyone can inspect and audit the code.</p>
+            </div>
+          </div>
+
+          <p class="privacy-note">
+            No accounts. No hidden data collection. No third-party services.
+          </p>
+        </section>
+
+        <section id="install" class="section install">
+          <div class="section-heading">
+            <h2>Install in under a minute</h2>
+          </div>
+
+          <ol class="install-steps">
+            <li>Install AI Chat Exporter from the Chrome Web Store.</li>
+            <li>Open any ChatGPT conversation.</li>
+            <li>Click the extension icon in your toolbar.</li>
+            <li>Choose Markdown or JSON and export your conversation.</li>
+          </ol>
+
+          <a class="btn primary" href="#">Open Chrome Web Store</a>
+        </section>
+
+        <section id="roadmap" class="section roadmap">
+          <div class="section-heading">
+            <h2>Roadmap</h2>
+          </div>
+
+          <div class="roadmap-grid">
+            <div class="roadmap-column done">
+              <h3>Done</h3>
+              <ul>
+                <li>Markdown export</li>
+                <li>JSON export</li>
+                <li>Compact mode</li>
+                <li>Role filters</li>
+                <li>Chrome extension</li>
+                <li>CLI support</li>
+              </ul>
+            </div>
+
+            <div class="roadmap-column next">
+              <h3>Next</h3>
+              <ul>
+                <li>DeepSeek support</li>
+                <li>Gemini support</li>
+                <li>Claude support</li>
+              </ul>
+            </div>
+
+            <div class="roadmap-column future">
+              <h3>Future</h3>
+              <ul>
+                <li>Firefox extension</li>
+                <li>HTML export</li>
+                <li>PDF export</li>
+                <li>Additional AI providers</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="faq" class="section faq">
+          <div class="section-heading">
+            <h2>Frequently Asked Questions</h2>
+          </div>
+
+          <details>
+            <summary>Does AI Chat Exporter upload my conversations?</summary>
+            <p>No. Everything is processed locally in your browser.</p>
+          </details>
+
+          <details>
+            <summary>Do I need an account?</summary>
+            <p>
+              No. The extension works with the ChatGPT session you already have
+              open.
+            </p>
+          </details>
+
+          <details>
+            <summary>Where are the exported files saved?</summary>
+            <p>
+              They are downloaded directly to your device using the browser
+              download dialog.
+            </p>
+          </details>
+
+          <details>
+            <summary>Can I export JSON?</summary>
+            <p>
+              Yes. JSON export preserves the original conversation structure.
+            </p>
+          </details>
+
+          <details>
+            <summary>Is the project open source?</summary>
+            <p>
+              Yes. The full source code is available on GitHub under the MIT
+              License.
+            </p>
+          </details>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <span>MIT License</span>
+      <span>•</span>
+      <span>Version 1.3.1</span>
+      <span>•</span>
+      <a
+        href="https://guillermocochrane.github.io/chat-exporter/"
+        target="_blank"
+        rel="noreferrer"
+        >Privacy Policy</a
+      >
+      <span>•</span>
+      <a
+        href="https://github.com/GuillermoCochrane/chat-exporter"
+        target="_blank"
+        rel="noreferrer"
+        >GitHub</a
+      >
+    </footer>
+
+    <script>
+      const sidebar = document.getElementById("sidebar");
+      const menuToggle = document.getElementById("menu-toggle");
+
+      menuToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+      });
+
+      sidebar.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          if (window.innerWidth <= 980) {
+            sidebar.classList.remove("open");
+          }
+        });
+      });
+
+      const slides = [...document.querySelectorAll(".carousel-slide")];
+      const dots = [...document.querySelectorAll(".dot")];
+      const prevBtn = document.querySelector(".carousel-btn.prev");
+      const nextBtn = document.querySelector(".carousel-btn.next");
+
+      let current = 0;
+
+      function showSlide(index) {
+        slides[current].classList.remove("active");
+        dots[current].classList.remove("active");
+
+        current = (index + slides.length) % slides.length;
+
+        slides[current].classList.add("active");
+        dots[current].classList.add("active");
+      }
+
+      prevBtn.addEventListener("click", () => showSlide(current - 1));
+      nextBtn.addEventListener("click", () => showSlide(current + 1));
+
+      dots.forEach((dot, index) => {
+        dot.addEventListener("click", () => showSlide(index));
+      });
+
+      let autoPlay = setInterval(() => showSlide(current + 1), 5000);
+
+      const carousel = document.querySelector(".carousel");
+      carousel.addEventListener("mouseenter", () => clearInterval(autoPlay));
+      carousel.addEventListener("mouseleave", () => {
+        autoPlay = setInterval(() => showSlide(current + 1), 5000);
+      });
+
+      const sections = [...document.querySelectorAll(".content section[id]")];
+      const navLinks = [...document.querySelectorAll('.sidebar a[href^="#"]')];
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            navLinks.forEach((link) => link.classList.remove("active"));
+
+            const active = document.querySelector(
+              `.sidebar a[href="#${entry.target.id}"]`,
+            );
+            if (active) active.classList.add("active");
+          });
+        },
+        {
+          root: document.querySelector(".content"),
+          threshold: 0.3,
+        },
+      );
+
+      sections.forEach((section) => observer.observe(section));
+
+      document.querySelectorAll(".sidebar details").forEach((details) => {
+        details.addEventListener("toggle", () => {
+          if (!details.open) return;
+
+          document.querySelectorAll(".sidebar details").forEach((other) => {
+            if (other !== details) other.open = false;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
