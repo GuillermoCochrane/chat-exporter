@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Chat Exporter | Documentation</title>
+  <style>
+    /*? ------------------------------------------------------------------ */
+    /*? Variables de estilo (Tokens de la extensión)                       */
+    /*? ------------------------------------------------------------------ */
+    :root {
+      --rgb-black: 0, 0, 0;
+      --rgb-white: 255, 255, 255;
+      --rgb-blue: 13, 27, 42;
+      --rgb-accent: 37, 73, 107;
+      --color-accent: #25496B;
+      --color-accent-hover: #1a3550;
+      --color-bg: #0d1b2a;
+      --color-surface: rgba(var(--rgb-blue), 0.85);
+      --color-text: #EBEBEB;
+      --color-text-dim: #969696;
+      --color-neon: #00d4ff;
+      --color-neon-glow: rgba(0, 212, 255, 0.4);
+      --color-border: #969696;
+      --color-border-light: rgba(150, 150, 150, 0.3);
+      --color-success: #00ff88;
+      
+      --header-height: 72px;
+      --footer-height: 32px;
+    }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Reset y Layout General                                             */
+    /*? ------------------------------------------------------------------ */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: system-ui, -apple-system, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Header                                                             */
+    /*? ------------------------------------------------------------------ */
+    header {
+      block-size: var(--header-height);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border-light);
+      z-index: 100;
+    }
+
+    .brand {
+      font-weight: 700;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .header-actions a, .theme-toggle {
+      color: var(--color-text-dim);
+      text-decoration: none;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      transition: color 0.2s;
+    }
+
+    .header-actions a:hover, .theme-toggle:hover {
+      color: var(--color-neon);
+    }
+
+    .burger-menu {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--color-text);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Main Grid (Desktop First)                                          */
+    /*? ------------------------------------------------------------------ */
+    main {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      height: calc(100vh - var(--header-height) - var(--footer-height));
+    }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Sidebar (Nav)                                                      */
+    /*? ------------------------------------------------------------------ */
+    nav {
+      border-right: 1px solid var(--color-border-light);
+      padding: 2rem 1.5rem;
+      overflow-y: auto;
+      background: var(--color-bg);
+    }
+
+    details {
+      margin-bottom: 1.5rem;
+    }
+
+    summary {
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::before {
+      content: '▶';
+      font-size: 0.7rem;
+      color: var(--color-text-dim);
+      transition: transform 0.2s;
+    }
+
+    details[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    .nav-list {
+      list-style: none;
+      padding-left: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .nav-list a {
+      color: var(--color-text-dim);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .nav-list a:hover {
+      color: var(--color-text);
+    }
+
+    .nav-list a.active {
+      color: var(--color-neon);
+      font-weight: 600;
+    }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Article (Contenido)                                                */
+    /*? ------------------------------------------------------------------ */
+    article {
+      padding: 2rem 4rem;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+
+    section {
+      max-width: 800px;
+      margin: 0 auto 6rem auto;
+    }
+
+    h1, h2, h3 {
+      color: var(--color-text);
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-size: 3rem;
+      letter-spacing: -0.05em;
+      line-height: 1.1;
+    }
+
+    p {
+      color: var(--color-text-dim);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .neon-text {
+      color: var(--color-neon);
+    }
+
+    /* Botones */
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: transparent;
+      color: var(--color-neon);
+      border: 1px solid var(--color-neon);
+      box-shadow: var(--shadow-focus);
+    }
+
+    .btn-primary:hover {
+      background: rgba(0, 212, 255, 0.1);
+    }
+
+    .btn-secondary {
+      background: var(--color-accent);
+      color: var(--color-text);
+      border: 1px solid transparent;
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-accent-hover);
+    }
+
+    /* Cards & Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-light);
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--color-text);
+    }
+
+    /* Roadmap List */
+    .roadmap-list {
+      list-style: none;
+    }
+    
+    .roadmap-list li {
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-text-dim);
+    }
+
+    .roadmap-list li.done::before {
+      content: '✓';
+      color: var(--color-success);
+      font-weight: bold;
+    }
+
+    .roadmap-list li.pending::before {
+      content: '○';
+      color: var(--color-border);
+    }
+
+    /* Carousel Minimalista */
+    .carousel {
+      position: relative;
+      width: 100%;
+      border: 1px solid var(--color-border-light);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--color-black);
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .carousel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .carousel img.active {
+      display: block;
+    }
+
+    .carousel-controls {
+      position: absolute;
+      bottom: 1rem;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-border-light);
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background: var(--color-neon);
+    }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Footer                                                             */
+    /*? ------------------------------------------------------------------ */
+    footer {
+      block-size: var(--footer-height);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      border-top: 1px solid var(--color-border-light);
+      font-size: 0.8rem;
+      color: var(--color-text-dim);
+      background: var(--color-bg);
+    }
+
+    footer a {
+      color: var(--color-text-dim);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--color-text);
+    }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Responsive (Mobile)                                                */
+    /*? ------------------------------------------------------------------ */
+    @media (max-width: 768px) {
+      .burger-menu {
+        display: block;
+      }
+      
+      .header-actions {
+        display: none; /* Ocultamos links en mobile para simplificar */
+      }
+
+      main {
+        grid-template-columns: 1fr;
+        position: relative;
+      }
+
+      nav {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--color-bg);
+        transition: left 0.3s ease;
+        z-index: 10;
+      }
+
+      nav.open {
+        left: 0;
+      }
+
+      article {
+        padding: 2rem 1.5rem;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <a href="#" class="brand">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-neon)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      AI Chat Exporter
+    </a>
+    <div class="header-actions">
+      <a href="#">GitHub</a>
+      <a href="#">Chrome Store</a>
+      <button class="theme-toggle" title="Toggle Theme">☀</button>
+    </div>
+    <button class="burger-menu">☰</button>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    
+    <!-- SIDEBAR / NAV -->
+    <nav id="sidebar">
+      <details>
+        <summary>Documentation</summary>
+        <ul class="nav-list">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Installation</a></li>
+          <li><a href="#">CLI</a></li>
+        </ul>
+      </details>
+
+      <details open>
+        <summary>On this page</summary>
+        <ul class="nav-list" id="scrollspy-nav">
+          <li><a href="#hero">Overview</a></li>
+          <li><a href="#demo">Screenshots</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#privacy">Privacy</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </details>
+    </nav>
+
+    <!-- ARTICLE (SCROLLABLE AREA) -->
+    <article id="content-area">
+      
+      <!-- HERO -->
+      <section id="hero">
+        <h1>Own your <span class="neon-text">conversations.</span><br>Not just your prompts.</h1>
+        <p>Export ChatGPT conversations as clean Markdown or raw JSON.<br>Built by developers, for developers.</p>
+        <div class="btn-group">
+          <a href="#" class="btn btn-primary">Install Extension</a>
+          <a href="#" class="btn btn-secondary">GitHub</a>
+        </div>
+      </section>
+
+      <!-- DEMO / CAROUSEL -->
+      <section id="demo">
+        <h2>Interface</h2>
+        <div class="carousel">
+          <!-- Referenciando a tus capturas scr1.png a scr5.png[cite: 1] -->
+          <img src="screenshots/scr1.png" alt="Screenshot 1" class="active">
+          <img src="screenshots/scr2.png" alt="Screenshot 2">
+          <img src="screenshots/scr3.png" alt="Screenshot 3">
+          <img src="screenshots/scr4.png" alt="Screenshot 4">
+          <img src="screenshots/scr5.png" alt="Screenshot 5">
+          <div class="carousel-controls" id="dots-container">
+            <div class="dot active" data-index="0"></div>
+            <div class="dot" data-index="1"></div>
+            <div class="dot" data-index="2"></div>
+            <div class="dot" data-index="3"></div>
+            <div class="dot" data-index="4"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FEATURES -->
+      <section id="features">
+        <h2>Features</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Markdown Ready</h3>
+            <p>Clean documents perfectly formatted for Obsidian, Notion, or GitHub.</p>
+          </div>
+          <div class="card">
+            <h3>Raw JSON</h3>
+            <p>Keep the original structure intact for parsing or archiving.</p>
+          </div>
+          <div class="card">
+            <h3>Role Filters</h3>
+            <p>Export only the User prompts, the Assistant replies, or the whole thread.</p>
+          </div>
+          <div class="card">
+            <h3>Compact Mode</h3>
+            <p>Cleaner Markdown output with reduced vertical spacing.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRIVACY -->
+      <section id="privacy">
+        <h2>Privacy First</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>100% Local</h3>
+            <p>Everything runs entirely in your browser. Nothing leaves your machine.</p>
+          </div>
+          <div class="card">
+            <h3>No Tracking</h3>
+            <p>Zero analytics. Zero accounts. Zero cloud dependencies.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROADMAP -->
+      <section id="roadmap">
+        <h2>Roadmap</h2>
+        <ul class="roadmap-list">
+          <li class="done">Markdown Export</li>
+          <li class="done">JSON Export</li>
+          <li class="done">CLI Integration</li>
+          <li class="done">Chrome Extension</li>
+          <li class="pending">DeepSeek Integration</li>
+          <li class="pending">Claude Integration</li>
+          <li class="pending">Gemini Integration</li>
+        </ul>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq">
+        <h2>FAQ</h2>
+        <p><strong>Does it upload my chats?</strong><br>No. The extension parses the DOM locally.</p>
+        <p><strong>Is it Open Source?</strong><br>Yes, under the MIT License.</p>
+      </section>
+
+    </article>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>MIT License</span>
+    <span>•</span>
+    <span id="version-placeholder">v1.4.0</span>
+    <span>•</span>
+    <a href="#">Privacy Policy</a>
+    <span>•</span>
+    <a href="#">GitHub</a>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    // 1. Mobile Menu Toggle
+    const burgerMenu = document.querySelector('.burger-menu');
+    const sidebar = document.getElementById('sidebar');
+    
+    burgerMenu.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      burgerMenu.textContent = sidebar.classList.contains('open') ? '✕' : '☰';
+    });
+
+    // 2. Scrollspy (Intersection Observer)
+    const article = document.getElementById('content-area');
+    const sections = document.querySelectorAll('article section');
+    const navLinks = document.querySelectorAll('#scrollspy-nav a');
+
+    const observerOptions = {
+      root: article,
+      rootMargin: '0px 0px -60% 0px', // Activa la sección cuando pasa por la mitad superior
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const currentId = entry.target.id;
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === `#${currentId}`);
+          });
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(section => observer.observe(section));
+
+    // 3. Carousel Logic
+    const images = document.querySelectorAll('.carousel img');
+    const dots = document.querySelectorAll('.dot');
+    
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        // Remover activas
+        document.querySelector('.carousel img.active').classList.remove('active');
+        document.querySelector('.dot.active').classList.remove('active');
+        // Setear nuevas
+        images[index].classList.add('active');
+        dot.classList.add('active');
+      });
+    });
+
+    // 4. Smooth Scroll for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        if(this.getAttribute('href') === '#') return;
+        e.preventDefault();
+        
+        // Cerrar menú mobile si está abierto
+        if(window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+          sidebar.classList.remove('open');
+          burgerMenu.textContent = '☰';
+        }
+
+        const target = document.querySelector(this.getAttribute('href'));
+        if(target) {
+          target.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

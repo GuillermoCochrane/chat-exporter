@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Chat Exporter — Own your conversations</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <style>
+    /* ===================================================================
+       Design Tokens (reutilizados del popup de la extensión)
+       =================================================================== */
+    :root {
+      --rgb-black: 0, 0, 0;
+      --rgb-white: 255, 255, 255;
+      --rgb-blue: 13, 27, 42;
+      --rgb-accent: 37, 73, 107;
+
+      --color-accent: #25496B;
+      --color-accent-hover: #1a3550;
+
+      --color-bg: #0d1b2a;
+      --color-surface: rgba(var(--rgb-blue), 0.85);
+
+      --color-text: #EBEBEB;
+      --color-text-dim: #969696;
+
+      --color-neon: #00d4ff;
+      --color-neon-glow: rgba(0, 212, 255, 0.4);
+
+      --color-border: #969696;
+      --color-border-light: rgba(150, 150, 150, 0.3);
+
+      --glass-blur: blur(12px);
+
+      --shadow-color-dark: rgba(var(--rgb-black), 0.6);
+      --shadow-focus: 0 0 0 2px var(--color-neon-glow);
+
+      --header-height: 64px;
+      --footer-height: 40px;
+    }
+
+    /* Light theme (opcional) */
+    body.light {
+      --color-bg: #f0f4f8;
+      --color-surface: rgba(255, 255, 255, 0.9);
+      --color-text: #1a202c;
+      --color-text-dim: #4a5568;
+      --color-accent: #2b6cb0;
+      --color-accent-hover: #2c5282;
+      --color-neon: #2b6cb0;
+      --color-border: #a0aec0;
+      --color-border-light: rgba(160, 174, 192, 0.4);
+      --shadow-color-dark: rgba(0,0,0,0.1);
+    }
+
+    /* ===================================================================
+       Reset & Base
+       =================================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+    body {
+      height: 100%;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      background: radial-gradient(circle at 20% 20%, var(--color-accent-hover), var(--color-bg) 80%);
+      color: var(--color-text);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ===================================================================
+       Header
+       =================================================================== */
+    body > header {
+      height: var(--header-height);
+      background: var(--color-surface);
+      backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--color-border-light);
+      display: flex;
+      align-items: center;
+      padding: 0 1.5rem;
+      gap: 1rem;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--color-text);
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    .logo img { height: 32px; }
+
+    .header-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .header-btn {
+      background: none;
+      border: none;
+      color: var(--color-text-dim);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.3rem 0.5rem;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .header-btn:hover { color: var(--color-neon); background: rgba(255,255,255,0.1); }
+
+    #hamburger { display: none; }
+
+    /* ===================================================================
+       Main Layout (Grid)
+       =================================================================== */
+    body > main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    body > main > nav {
+      background: var(--color-surface);
+      backdrop-filter: var(--glass-blur);
+      border-right: 1px solid var(--color-border-light);
+      overflow-y: auto;
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .sidebar-section details { margin-bottom: 1rem; }
+    .sidebar-section summary {
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--color-text-dim);
+      margin-bottom: 0.5rem;
+      list-style: none;
+    }
+    .sidebar-section summary::-webkit-details-marker { display: none; }
+    .sidebar-section ul { list-style: none; padding-left: 1rem; display: flex; flex-direction: column; gap: 0.3rem; }
+    .sidebar-section a {
+      color: var(--color-text-dim);
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      display: block;
+      transition: color 0.2s, background 0.2s;
+    }
+    .sidebar-section a:hover,
+    .sidebar-section a.active {
+      color: var(--color-neon);
+      background: rgba(0,212,255,0.1);
+    }
+
+    /* Article (scrollable) */
+    body > main > article {
+      overflow-y: auto;
+      padding: 2rem 2rem 4rem;
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* ===================================================================
+       Sections
+       =================================================================== */
+    section { margin-bottom: 4rem; }
+    h1 { font-size: 3rem; color: var(--color-neon); text-shadow: 0 0 10px var(--color-neon-glow); margin-bottom: 1rem; }
+    h2 { font-size: 2rem; color: var(--color-text); margin-bottom: 1.5rem; border-bottom: 1px solid var(--color-border-light); padding-bottom: 0.5rem; }
+    h3 { font-size: 1.3rem; color: var(--color-text); margin-bottom: 0.8rem; }
+
+    .hero-subtitle { font-size: 1.5rem; color: var(--color-text-dim); margin-bottom: 2rem; }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: var(--color-accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover { background: var(--color-accent-hover); box-shadow: 0 0 10px var(--color-neon-glow); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+    }
+    .btn-outline:hover { border-color: var(--color-neon); color: var(--color-neon); }
+
+    /* Carousel */
+    .carousel {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid var(--color-border-light);
+      background: var(--color-surface);
+      margin-bottom: 2rem;
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform 0.4s ease;
+    }
+    .carousel-slide {
+      min-width: 100%;
+      text-align: center;
+      padding: 1rem;
+    }
+    .carousel-slide img {
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .carousel-caption { margin-top: 0.8rem; color: var(--color-text-dim); font-size: 0.9rem; }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      padding: 0.3rem 0.8rem;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .carousel-btn.left { left: 10px; }
+    .carousel-btn.right { right: 10px; }
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+    }
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--color-border);
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+    }
+    .carousel-dot.active { background: var(--color-neon); }
+
+    /* Features grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: var(--color-surface);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--color-border-light);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: transform 0.2s;
+    }
+    .feature-card:hover { transform: translateY(-4px); }
+    .feature-card h3 { margin-bottom: 0.5rem; }
+    .feature-card p { color: var(--color-text-dim); font-size: 0.95rem; }
+
+    /* Privacy highlights */
+    .privacy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    .privacy-item {
+      background: var(--color-surface);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid var(--color-border-light);
+    }
+
+    /* Roadmap list */
+    .roadmap-list { list-style: none; }
+    .roadmap-list li { margin-bottom: 0.5rem; }
+
+    /* FAQ */
+    .faq-item { margin-bottom: 0.8rem; }
+    .faq-question {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-light);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--color-text);
+      width: 100%;
+      text-align: left;
+    }
+    .faq-answer {
+      display: none;
+      padding: 0.8rem 1rem;
+      color: var(--color-text-dim);
+    }
+    .faq-answer.open { display: block; }
+
+    /* Footer */
+    body > footer {
+      height: var(--footer-height);
+      background: var(--color-surface);
+      backdrop-filter: var(--glass-blur);
+      border-top: 1px solid var(--color-border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--color-text-dim);
+      flex-shrink: 0;
+    }
+    body > footer a { color: var(--color-neon); text-decoration: none; }
+
+    /* ===================================================================
+       Responsive (Desktop First)
+       =================================================================== */
+    @media (max-width: 768px) {
+      body > main { grid-template-columns: 1fr; }
+      body > main > nav {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        bottom: var(--footer-height);
+        width: 260px;
+        z-index: 20;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+      body > main > nav.open { transform: translateX(0); }
+      #hamburger { display: block; }
+      h1 { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== Header ===== -->
+  <header>
+    <a href="#" class="logo">
+      <img src="icon.png" alt="AI Chat Exporter icon">
+      AI Chat Exporter
+    </a>
+    <div class="header-right">
+      <a href="https://github.com/GuillermoCochrane/chat-exporter" target="_blank" class="header-btn" title="GitHub">🐙</a>
+      <button id="themeToggle" class="header-btn" title="Toggle theme">🌓</button>
+      <button id="hamburger" class="header-btn" title="Menu">☰</button>
+    </div>
+  </header>
+
+  <!-- ===== Main (Grid) ===== -->
+  <main>
+    <!-- Sidebar -->
+    <nav id="sidebar">
+      <div class="sidebar-section">
+        <details open>
+          <summary>📘 Documentation</summary>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#carousel">Screenshots</a></li>
+            <li><a href="#why">Why</a></li>
+            <li><a href="#privacy">Privacy</a></li>
+            <li><a href="#opensource">Open Source</a></li>
+            <li><a href="#roadmap">Roadmap</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </details>
+      </div>
+      <div class="sidebar-section">
+        <details open>
+          <summary>📍 On this page</summary>
+          <ul id="onThisPage"></ul>
+        </details>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <article>
+      <!-- Hero -->
+      <section id="home">
+        <h1>AI Chat Exporter</h1>
+        <p class="hero-subtitle">Own your conversations.<br>Not just your prompts.</p>
+        <p style="color:var(--color-text-dim); margin-bottom:2rem;">Export ChatGPT conversations as clean Markdown or JSON files — entirely on your device.</p>
+        <div class="hero-actions">
+          <a href="#" class="btn">⚡ Install Extension</a>
+          <a href="https://github.com/GuillermoCochrane/chat-exporter" target="_blank" class="btn btn-outline">💻 View on GitHub</a>
+        </div>
+      </section>
+
+      <!-- Carousel -->
+      <section id="carousel">
+        <h2>See it in action</h2>
+        <div class="carousel">
+          <div class="carousel-track" id="carouselTrack">
+            <div class="carousel-slide">
+              <img src="screenshots/scr1.png" alt="Screenshot 1">
+              <p class="carousel-caption">1. Open a ChatGPT conversation</p>
+            </div>
+            <div class="carousel-slide">
+              <img src="screenshots/scr2.png" alt="Screenshot 2">
+              <p class="carousel-caption">2. Click the extension icon</p>
+            </div>
+            <div class="carousel-slide">
+              <img src="screenshots/scr3.png" alt="Screenshot 3">
+              <p class="carousel-caption">3. Choose your format and options</p>
+            </div>
+            <div class="carousel-slide">
+              <img src="screenshots/scr4.png" alt="Screenshot 4">
+              <p class="carousel-caption">4. Export with one click</p>
+            </div>
+            <div class="carousel-slide">
+              <img src="screenshots/scr5.png" alt="Screenshot 5">
+              <p class="carousel-caption">5. Clean Markdown output</p>
+            </div>
+          </div>
+          <button class="carousel-btn left" id="carouselPrev">◀</button>
+          <button class="carousel-btn right" id="carouselNext">▶</button>
+          <div class="carousel-dots" id="carouselDots"></div>
+        </div>
+      </section>
+
+      <!-- Features -->
+      <section id="features">
+        <h2>Features</h2>
+        <div class="features-grid">
+          <div class="feature-card"><h3>📝 Markdown</h3><p>Clean, readable documents ready for Obsidian, Notion or GitHub.</p></div>
+          <div class="feature-card"><h3>📦 JSON</h3><p>Keep the original structure for archival or custom processing.</p></div>
+          <div class="feature-card"><h3>👥 Role filters</h3><p>Export only User, Assistant or the complete conversation.</p></div>
+          <div class="feature-card"><h3>🧹 Compact mode</h3><p>Smaller exports with reduced spacing, perfect for long chats.</p></div>
+          <div class="feature-card"><h3>🔒 100% Local</h3><p>Everything happens inside your browser — nothing ever leaves your computer.</p></div>
+          <div class="feature-card"><h3>🌐 Open Source</h3><p>MIT Licensed. Transparent and community-driven.</p></div>
+        </div>
+      </section>
+
+      <!-- Why AI Chat Exporter -->
+      <section id="why">
+        <h2>Why AI Chat Exporter?</h2>
+        <p>AI conversations often contain valuable knowledge, but they usually remain locked inside a single platform. AI Chat Exporter was created to solve that problem.</p>
+        <p>Simply open a ChatGPT conversation, click the extension icon, choose your export options, and save your conversation in seconds. No accounts, no cloud, no tracking.</p>
+      </section>
+
+      <!-- Privacy -->
+      <section id="privacy">
+        <h2>Privacy First</h2>
+        <div class="privacy-grid">
+          <div class="privacy-item">✔ No tracking</div>
+          <div class="privacy-item">✔ No analytics</div>
+          <div class="privacy-item">✔ No accounts</div>
+          <div class="privacy-item">✔ No cloud</div>
+          <div class="privacy-item">✔ Local processing</div>
+          <div class="privacy-item">✔ Open Source</div>
+        </div>
+        <p style="margin-top:1.5rem;"><a href="privacy-policy.html" class="btn btn-outline">📜 Read full Privacy Policy</a></p>
+      </section>
+
+      <!-- Open Source -->
+      <section id="opensource">
+        <h2>Open Source</h2>
+        <p>Built in public. MIT Licensed. Contributions welcome.</p>
+        <div class="hero-actions" style="margin-top:1rem;">
+          <a href="https://github.com/GuillermoCochrane/chat-exporter" target="_blank" class="btn btn-outline">💻 Source Code</a>
+          <a href="https://github.com/GuillermoCochrane/chat-exporter/issues" target="_blank" class="btn btn-outline">🐛 Report an Issue</a>
+          <a href="https://github.com/GuillermoCochrane/chat-exporter/releases" target="_blank" class="btn btn-outline">📦 Releases</a>
+        </div>
+      </section>
+
+      <!-- Roadmap -->
+      <section id="roadmap">
+        <h2>Roadmap</h2>
+        <ul class="roadmap-list">
+          <li>✅ Markdown export</li>
+          <li>✅ JSON export</li>
+          <li>✅ CLI tool</li>
+          <li>✅ Chrome Extension</li>
+          <li>🚧 DeepSeek support</li>
+          <li>🔮 Gemini, Claude, Firefox, and more</li>
+        </ul>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq">
+        <h2>FAQ</h2>
+        <div class="faq-item">
+          <button class="faq-question">🔹 Does it upload my conversations?</button>
+          <div class="faq-answer">No. Everything is processed locally on your device. No data ever leaves your browser.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">🔹 Do I need an account?</button>
+          <div class="faq-answer">No. The extension works entirely offline and requires no sign-up.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">🔹 Where are the exported files saved?</button>
+          <div class="faq-answer">They are downloaded directly to your default downloads folder, just like any other file.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">🔹 Can I export as JSON?</button>
+          <div class="faq-answer">Yes. The popup lets you choose between Markdown and JSON at any time.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">🔹 Is it really Open Source?</button>
+          <div class="faq-answer">Absolutely. The complete code is on GitHub under the MIT license.</div>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <span>© 2026 AI Chat Exporter</span>
+    <a href="https://github.com/GuillermoCochrane/chat-exporter">GitHub</a>
+    <a href="privacy-policy.html">Privacy</a>
+    <span id="footerVersion">v1.3.1</span>
+  </footer>
+
+  <script>
+    (function() {
+      // ---- Theme toggle ----
+      const themeBtn = document.getElementById('themeToggle');
+      themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('light');
+      });
+
+      // ---- Hamburger menu (mobile) ----
+      const hamburger = document.getElementById('hamburger');
+      const sidebar = document.getElementById('sidebar');
+      hamburger.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+      });
+
+      // ---- Carousel ----
+      const track = document.getElementById('carouselTrack');
+      const slides = Array.from(track.children);
+      const nextBtn = document.getElementById('carouselNext');
+      const prevBtn = document.getElementById('carouselPrev');
+      const dotsContainer = document.getElementById('carouselDots');
+      let currentIndex = 0;
+
+      // create dots
+      slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.classList.add('carousel-dot');
+        if (i === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
+      });
+      const dots = Array.from(dotsContainer.children);
+
+      function goToSlide(index) {
+        currentIndex = index;
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+      }
+      nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        goToSlide(currentIndex);
+      });
+      prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        goToSlide(currentIndex);
+      });
+
+      // ---- FAQ accordion ----
+      document.querySelectorAll('.faq-question').forEach(q => {
+        q.addEventListener('click', () => {
+          const answer = q.nextElementSibling;
+          answer.classList.toggle('open');
+        });
+      });
+
+      // ---- Active section tracking (IntersectionObserver) ----
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.sidebar-section a');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            navLinks.forEach(link => {
+              link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`);
+            });
+          }
+        });
+      }, { rootMargin: '-20% 0px -80% 0px' });
+
+      sections.forEach(section => observer.observe(section));
+
+      // ---- Populate "On this page" from h2 in article ----
+      const onThisPageList = document.getElementById('onThisPage');
+      const articleHeadings = document.querySelectorAll('article h2');
+      articleHeadings.forEach(h2 => {
+        const id = h2.parentElement.id || h2.textContent.toLowerCase().replace(/\s+/g, '-');
+        h2.parentElement.id = id; // ensure id for anchors
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `#${id}`;
+        a.textContent = h2.textContent;
+        li.appendChild(a);
+        onThisPageList.appendChild(li);
+      });
+
+      // ---- Footer version (could be fetched from package.json later) ----
+      // For now it's static, but you can update it.
+    })();
+  </script>
+</body>
+</html>
