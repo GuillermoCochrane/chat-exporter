@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Chat Exporter | Official Documentation</title>
+  <style>
+    /*? ------------------------------------------------------------------ */
+    /*? Variables de estilo (Originales de la extensión)                   */
+    /*? ------------------------------------------------------------------ */
+    :root {
+      --rgb-black: 0, 0, 0;
+      --rgb-white: 255, 255, 255;
+      --rgb-blue: 13, 27, 42;
+      --rgb-accent: 37, 73, 107;
+
+      --color-accent: #25496B;
+      --color-accent-hover: #1a3550;
+
+      --color-bg: #0d1b2a;
+      --color-surface: rgba(var(--rgb-blue), 0.85);
+
+      --color-text: #EBEBEB;
+      --color-text-dim: #969696;
+
+      --color-neon: #00d4ff;
+      --color-neon-glow: rgba(0, 212, 255, 0.4);
+
+      --color-border: #969696;
+      --color-border-light: rgba(150, 150, 150, 0.3);
+
+      --color-success: #00ff88;
+      --color-error: #ff3366;
+      --color-warning: #ffaa00;
+
+      --shadow-color-dark: rgba(var(--rgb-black), 0.6);
+      --shadow-color-darker: rgba(var(--rgb-black), 0.8);
+      
+      --header-height: 72px;
+      --footer-height: 32px;
+      --sidebar-width: 280px;
+    }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Reset & Base                                                       */
+    /*? ------------------------------------------------------------------ */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: var(--color-text);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    a:hover {
+      color: var(--color-neon);
+    }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Layout (Desktop First)                                             */
+    /*? ------------------------------------------------------------------ */
+    header {
+      height: var(--header-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--color-border-light);
+      background: var(--color-surface);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+
+    .header-left, .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--color-neon);
+    }
+
+    .burger-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--color-text);
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    main {
+      height: calc(100vh - var(--header-height) - var(--footer-height));
+      display: grid;
+      grid-template-columns: var(--sidebar-width) 1fr;
+      transition: grid-template-columns 0.3s ease;
+    }
+
+    main.sidebar-closed {
+      grid-template-columns: 0 1fr;
+    }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Sidebar                                                            */
+    /*? ------------------------------------------------------------------ */
+    nav {
+      border-right: 1px solid var(--color-border-light);
+      background: rgba(var(--rgb-black), 0.2);
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    nav details {
+      margin-bottom: 16px;
+    }
+
+    nav summary {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--color-text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      margin-bottom: 12px;
+      list-style: none;
+    }
+
+    nav summary::-webkit-details-marker {
+      display: none;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-left: 8px;
+    }
+
+    nav a {
+      font-size: 15px;
+      color: var(--color-text-dim);
+      display: block;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border-left: 2px solid transparent;
+    }
+
+    nav a.active {
+      color: var(--color-neon);
+      border-left: 2px solid var(--color-neon);
+      background: rgba(0, 212, 255, 0.05);
+    }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Article & Sections                                                 */
+    /*? ------------------------------------------------------------------ */
+    article {
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      padding: 0 40px 80px 40px;
+    }
+
+    .content-wrapper {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    section {
+      padding-top: 80px;
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      font-size: 32px;
+      margin-bottom: 24px;
+      color: var(--color-text);
+      border-bottom: 1px solid var(--color-border-light);
+      padding-bottom: 8px;
+    }
+
+    p {
+      color: var(--color-text-dim);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Hero (Integrado desde tus templates)                               */
+    /*? ------------------------------------------------------------------ */
+    #hero {
+      padding-top: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: -40px;
+      z-index: -1;
+      border-radius: 24px;
+      background: radial-gradient(circle at 50% 50%, var(--color-accent-hover), var(--color-bg) 60%),
+                  linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 40%);
+      border: 1px solid var(--color-border-light);
+    }
+
+    .hero-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.03;
+      background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+      background-size: 18px 18px;
+      pointer-events: none;
+    }
+
+    .promo-title {
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    
+    .promo-title span { color: var(--color-neon); }
+
+    .promo-subtitle {
+      font-size: 22px;
+      max-width: 600px;
+      margin-bottom: 48px;
+    }
+
+    /* Flujo visual del template */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .file {
+      width: 120px;
+      border-radius: 12px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--color-border-light);
+      box-shadow: 0 8px 20px var(--shadow-color-dark);
+      text-align: center;
+    }
+
+    .file .ext { font-size: 28px; font-weight: 800; }
+    .file.json .ext { color: var(--color-error); }
+    .file.md .ext { color: var(--color-neon); }
+    .file .name { margin-top: 8px; font-size: 12px; color: var(--color-text-dim); }
+
+    .flow-icon {
+      width: 82px;
+      height: 82px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 18px;
+      background: var(--color-accent);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 15px var(--shadow-color-dark);
+      font-size: 32px;
+    }
+
+    .arrow { color: var(--color-neon); font-size: 26px; font-weight: 700; }
+
+    .badges {
+      display: flex;
+      gap: 12px;
+      font-size: 12px;
+    }
+    
+    .badges span {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--color-border-light);
+    }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Carousel (Integrado desde tus templates)                           */
+    /*? ------------------------------------------------------------------ */
+    .carousel-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 40px;
+    }
+
+    .image-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      aspect-ratio: 16/9;
+      border-radius: 18px;
+      border: 1px solid var(--color-border-light);
+      background: rgba(255, 255, 255, 0.03);
+      box-shadow: 0 32px 70px var(--shadow-color-darker);
+      overflow: hidden;
+    }
+
+    .image-wrapper::before {
+      content: "";
+      position: absolute;
+      inset: -50px;
+      background: radial-gradient(circle, var(--color-neon-glow), transparent 72%);
+      z-index: -1;
+    }
+
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      color: var(--color-text-dim);
+      background: var(--color-surface);
+    }
+
+    .carousel-slide.active { opacity: 1; z-index: 10; }
+
+    .carousel-controls {
+      display: flex;
+      gap: 16px;
+      margin-top: 24px;
+      align-items: center;
+    }
+
+    .carousel-btn {
+      background: none;
+      border: none;
+      color: var(--color-text);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .carousel-dots { display: flex; gap: 8px; }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--color-border-light);
+      cursor: pointer;
+    }
+    .dot.active { background: var(--color-neon); }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Cards Grid (Features/Privacy)                                      */
+    /*? ------------------------------------------------------------------ */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .card {
+      padding: 24px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--color-border-light);
+      border-radius: 12px;
+    }
+
+    .card h3 { color: var(--color-neon); margin-bottom: 12px; font-size: 18px; }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Footer                                                             */
+    /*? ------------------------------------------------------------------ */
+    footer {
+      height: var(--footer-height);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      font-size: 12px;
+      color: var(--color-text-dim);
+      border-top: 1px solid var(--color-border-light);
+      background: var(--color-bg);
+    }
+
+    /*? ------------------------------------------------------------------ */
+    /*? Responsive (Mobile adjustments)                                    */
+    /*? ------------------------------------------------------------------ */
+    @media (max-width: 768px) {
+      .burger-btn { display: block; }
+      
+      main { grid-template-columns: 1fr; }
+      
+      nav {
+        position: absolute;
+        top: var(--header-height);
+        left: -100%;
+        height: calc(100vh - var(--header-height) - var(--footer-height));
+        width: 100%;
+        background: var(--color-bg);
+        z-index: 90;
+        transition: left 0.3s ease;
+      }
+
+      nav.mobile-open { left: 0; }
+      .flow { flex-direction: column; }
+      .arrow { transform: rotate(90deg); }
+      article { padding: 0 20px 80px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <button class="burger-btn" id="burgerBtn">☰</button>
+      <div class="logo">AI Chat Exporter</div>
+    </div>
+    <div class="header-right">
+      <a href="#">Theme ☀</a>
+      <a href="#">GitHub</a>
+    </div>
+  </header>
+
+  <main id="mainLayout">
+    <nav id="sidebar">
+      <details open>
+        <summary>Documentation</summary>
+        <ul>
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#privacy">Privacy</a></li>
+          <li><a href="#cli">CLI</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
+        </ul>
+      </details>
+
+      <details open>
+        <summary>On this page</summary>
+        <ul id="scrollspy-list">
+          <!-- Generado por JS -->
+        </ul>
+      </details>
+    </nav>
+
+    <article id="content">
+      <div class="content-wrapper">
+        
+        <!-- HERO SECTION -->
+        <section id="hero">
+          <div class="hero-bg"></div>
+          <h1 class="promo-title">Own your <span>conversations</span>.</h1>
+          <p class="promo-subtitle">Not just your prompts. Export ChatGPT to Markdown and JSON natively, with no intermediate servers.</p>
+          
+          <div class="flow">
+            <div class="file json">
+              <div class="ext">{ }</div>
+              <div class="name">raw_data.json</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="flow-icon">⚡</div>
+            <div class="arrow">→</div>
+            <div class="file md">
+              <div class="ext">#</div>
+              <div class="name">notes.md</div>
+            </div>
+          </div>
+
+          <div class="badges">
+            <span>Install Extension</span>
+            <span>Local Processing</span>
+            <span>Open Source</span>
+          </div>
+
+          <!-- CAROUSEL -->
+          <div class="carousel-container">
+            <div class="image-wrapper">
+              <div class="carousel-slide active">Screenshot 1 (Placeholder)</div>
+              <div class="carousel-slide">Screenshot 2 (Placeholder)</div>
+              <div class="carousel-slide">Screenshot 3 (Placeholder)</div>
+            </div>
+            <div class="carousel-controls">
+              <button class="carousel-btn" id="prevBtn">◀</button>
+              <div class="carousel-dots">
+                <div class="dot active" data-index="0"></div>
+                <div class="dot" data-index="1"></div>
+                <div class="dot" data-index="2"></div>
+              </div>
+              <button class="carousel-btn" id="nextBtn">▶</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- FEATURES SECTION -->
+        <section id="features">
+          <h2>Features</h2>
+          <p>Designed for developers and power users who need their data clean and accessible.</p>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Markdown</h3>
+              <p>Clean documents ready for Obsidian, Notion or GitHub. Headers, code blocks, and formatting preserved.</p>
+            </div>
+            <div class="card">
+              <h3>JSON</h3>
+              <p>Keep the original structure intact for parsing, scripting, or archiving.</p>
+            </div>
+            <div class="card">
+              <h3>Role Filters</h3>
+              <p>Export only User prompts, Assistant replies, or the complete conversation.</p>
+            </div>
+            <div class="card">
+              <h3>Compact Mode</h3>
+              <p>Cleaner Markdown with reduced spacing for dense technical conversations.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- PRIVACY SECTION -->
+        <section id="privacy">
+          <h2>Privacy First</h2>
+          <p>Your data is yours. The architecture guarantees zero data leakage.</p>
+          <div class="grid-2">
+            <div class="card">
+              <h3>100% Local</h3>
+              <p>Everything runs in your browser. No external APIs. No cloud processing.</p>
+            </div>
+            <div class="card">
+              <h3>No Tracking</h3>
+              <p>No analytics, no telemetry, no accounts required to use the exporter.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ROADMAP SECTION -->
+        <section id="roadmap">
+          <h2>Roadmap</h2>
+          <p>What's currently supported and what's coming next.</p>
+          <ul>
+            <li>✓ ChatGPT Support</li>
+            <li>✓ Markdown & JSON</li>
+            <li>✓ Standalone CLI</li>
+            <li>○ DeepSeek Integration</li>
+            <li>○ Gemini Integration</li>
+            <li>○ Claude Integration</li>
+          </ul>
+        </section>
+
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <span>MIT License</span>
+    <span>•</span>
+    <span>v1.4.0</span>
+    <span>•</span>
+    <span>GitHub</span>
+  </footer>
+
+  <script>
+    // 1. Manejo del menú hamburguesa (Mobile / Toggle Sidebar)
+    const burgerBtn = document.getElementById('burgerBtn');
+    const sidebar = document.getElementById('sidebar');
+    const mainLayout = document.getElementById('mainLayout');
+
+    burgerBtn.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        sidebar.classList.toggle('mobile-open');
+      } else {
+        mainLayout.classList.toggle('sidebar-closed');
+      }
+    });
+
+    // 2. Scrollspy automatizado (Lee las secciones y arma el menú "On this page")
+    const sections = document.querySelectorAll('section');
+    const scrollspyList = document.getElementById('scrollspy-list');
+
+    // Generar anclas dinámicamente
+    sections.forEach(section => {
+      const id = section.id;
+      // Usar el h2 interno o el id formateado como nombre
+      const titleEl = section.querySelector('h2');
+      const name = titleEl ? titleEl.textContent : id.charAt(0).toUpperCase() + id.slice(1);
+      
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="#${id}" data-target="${id}">${name}</a>`;
+      scrollspyList.appendChild(li);
+    });
+
+    const navLinks = document.querySelectorAll('#scrollspy-list a');
+    const article = document.getElementById('content');
+
+    const observerOptions = {
+      root: article,
+      rootMargin: '0px 0px -60% 0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('data-target') === entry.target.id) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(sec => observer.observe(sec));
+
+    // 3. Lógica del Carrusel
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+    let currentSlide = 0;
+
+    function goToSlide(index) {
+      slides[currentSlide].classList.remove('active');
+      dots[currentSlide].classList.remove('active');
+      currentSlide = (index + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
+      dots[currentSlide].classList.add('active');
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', () => goToSlide(currentSlide + 1));
+    document.getElementById('prevBtn').addEventListener('click', () => goToSlide(currentSlide - 1));
+    
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => goToSlide(index));
+    });
+
+  </script>
+</body>
+</html>
