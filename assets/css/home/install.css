@@ -4,4 +4,15 @@
   padding-left: 20px;
   line-height: 1.9;
   margin-bottom: 24px;
+
+  li {
+    padding-inline-start: .5em;
+    font-size: 1.15rem;
+    color: var(--color-text-dim);
+
+    &::marker {
+      color: var(--color-neon);
+      font-size: 1.2rem;
+    }
+  }
 }
