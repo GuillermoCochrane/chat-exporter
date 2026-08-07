@@ -5,6 +5,10 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(240px, 1fr));
   gap: 18px;
+
+  @media (max-width: 980px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .feature-card,
@@ -15,29 +19,27 @@
   backdrop-filter: blur(8px);
   border: 1px solid var(--color-border-light);
   box-shadow: 0 12px 28px var(--shadow-color-dark);
-}
 
-.feature-card h3,
-.privacy-card h3 {
-  margin-top: 0;
-}
+  h3 {
+    margin-top: 0;
+    margin-bottom: 0.7rem;
 
-.check {
-  color: var(--color-success);
-  font-size: 1.25rem;
+    .check {
+      color: var(--color-success);
+      font-size: 1.25rem;
+      margin-right: 0.5rem;
+    }
+  }
+
+  p {
+    color: var(--color-text-dim);
+    padding-inline: 0.2rem;
+  }
+
 }
 
 .privacy-note {
-  margin-top: 20px;
+  margin-top: 1.7rem;
   color: var(--color-text-dim);
   font-style: italic;
-}
-
-/*? ======================== Responsive =========================== */
-
-@media (max-width: 980px) {
-  .feature-grid,
-  .privacy-grid {
-    grid-template-columns: 1fr;
-  }
 }
