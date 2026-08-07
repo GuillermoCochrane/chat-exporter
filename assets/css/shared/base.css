@@ -24,3 +24,7 @@ body {
   flex-direction: column;
   transition: background 0.3s, color 0.3s;
 }
+
+[hidden] {
+  display: none !important;
+}
