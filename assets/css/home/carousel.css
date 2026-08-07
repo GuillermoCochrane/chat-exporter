@@ -2,7 +2,7 @@
 
 .carousel {
   display: grid;
-  grid-template-columns: 56px 1fr 56px;
+  grid-template-columns: 115px 1fr 115px;
   align-items: center;
   gap: 12px;
   max-width: 960px;
@@ -11,7 +11,7 @@
 
 .carousel-track {
   position: relative;
-  min-height: 420px;
+  aspect-ratio: 8/5;
   border-radius: 18px;
   overflow: hidden;
   border: 1px solid var(--color-border-light);
@@ -36,6 +36,7 @@
 .carousel-btn {
   width: 56px;
   height: 56px;
+  margin: auto;
   border-radius: 999px;
   border: 1px solid var(--color-border-light);
   background: rgba(var(--rgb-white), 0.04);
