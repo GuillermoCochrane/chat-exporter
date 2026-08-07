@@ -21,10 +21,10 @@ body>header {
   color: var(--color-text);
   font-weight: 700;
   font-size: 1.2rem;
-}
 
-.logo img {
-  height: 32px;
+  img {
+    height: 32px;
+  }
 }
 
 .header-right {
@@ -32,33 +32,37 @@ body>header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-}
 
-.header-btn {
-  background: none;
-  border: none;
-  color: var(--color-text-dim);
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0.3rem 0.5rem;
-  border-radius: 6px;
-  transition: color 0.2s, background 0.2s;
-}
+  #hamburger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border-light);
+    background: rgba(var(--rgb-white), 0.04);
+    color: var(--color-text);
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
 
-.header-btn:hover {
-  color: var(--color-neon);
-  background: rgba(255, 255, 255, 0.1);
-}
+  .header-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-dim);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.3rem 0.5rem;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
 
-#hamburger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--color-border-light);
-  background: rgba(var(--rgb-white), 0.04);
-  color: var(--color-text);
-  border-radius: 10px;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
+    &:hover {
+      color: var(--color-neon);
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  a.header-btn {
+    text-decoration: none;
+  }
 }
