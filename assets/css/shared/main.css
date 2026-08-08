@@ -12,11 +12,17 @@ body>main {
     padding: 3rem 2rem 6rem;
     width: 100%;
     margin: 0 auto;
+    scroll-behavior: smooth;
+    scrollbar-color: var(--color-neon-glow) var(--color-accent-hover);
 
     section {
       max-width: 960px;
       margin: 0 auto 5rem;
       scroll-margin-top: 96px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: var(--color-neon);
     }
   }
 
