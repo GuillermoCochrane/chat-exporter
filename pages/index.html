@@ -1,43 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Chat Exporter — Own your conversations</title>
-  <link rel="icon" type="image/png" href="../assets/img/icons/icon.png">
-  <link rel="stylesheet" href="../assets/css/main.css">
-  <script type="module" src="../assets/js/main.js"></script>
-</head>
-<body>
-  <!-- ===== Header ===== -->
-  <header>
-    <a href="#" class="logo">
-      <img src="../assets/img/icons/icon.png" alt="AI Chat Exporter icon">
-      AI Chat Exporter
-    </a>
-    <div class="header-right">
-      <a href="#install" class="header-btn" title="Install Extension">⚙️</a>
-      <button id="themeToggle" class="header-btn" title="Toggle theme">🌓</button>
-      <button id="hamburger" title="Menu">☰</button>
-    </div>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Chat Exporter — Own your conversations</title>
+    <link rel="icon" type="image/png" href="../assets/img/icons/icon.png" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <script type="module" src="../assets/js/main.js"></script>
+  </head>
+  <body>
+    <!-- ===== Header ===== -->
+    <header>
+      <a href="#" class="logo">
+        <img src="../assets/img/icons/icon.png" alt="AI Chat Exporter icon" />
+        AI Chat Exporter
+      </a>
+      <div class="header-right">
+        <a href="#install" class="header-btn" title="Install Extension">⚙️</a>
+        <button id="themeToggle" class="header-btn" title="Toggle theme">
+          🌓
+        </button>
+        <button id="hamburger" title="Menu">☰</button>
+      </div>
+    </header>
 
-  <!-- ===== Main (Grid) ===== -->
-  <main>
-    <nav id="sidebar">
-      <div class="sidebar-section">
-        <details open>
+    <!-- ===== Main (Grid) ===== -->
+    <main>
+      <nav id="sidebar" class="sidebar-section">
+        <details name="navbar">
           <summary>Documentation</summary>
           <ul>
-            <li><a href="#hero">Home</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#install">Install</a></li>
-            <li><a href="#privacy">Privacy</a></li>
-            <li><a href="#roadmap">Roadmap</a></li>
-            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Changelog</a></li>
+            <li><a href="#">FAQ</a></li>
           </ul>
         </details>
-        <details open>
+        <details  name="navbar" open>
           <summary>On this page</summary>
           <ul>
             <li><a href="#hero">Hero</a></li>
@@ -45,163 +44,271 @@
             <li><a href="#features">Features</a></li>
             <li><a href="#why">Why</a></li>
             <li><a href="#privacy">Privacy</a></li>
+            <li><a href="#install">Install</a></li>
             <li><a href="#roadmap">Roadmap</a></li>
+            <li><a href="#faq">FAQ</a></li>
           </ul>
         </details>
-      </div>
-    </nav>
+      </nav>
 
-    <!-- Main Content -->
-    <article>
-      <!-- Hero -->
-      <section id="hero" class="hero">
-        <p class="eyebrow">Open Source Chrome Extension</p>
-        <h1>Own your <span>conversations</span>.</h1>
-        <p class="hero-text">Export ChatGPT conversations as clean Markdown or JSON files directly from your browser.</p>
-        <div class="hero-actions">
-          <a href="#install" class="btn primary">Install Extension</a>
-          <a href="https://github.com/GuillermoCochrane/chat-exporter" target="_blank" rel="noreferrer" class="btn ghost">View on GitHub</a>
-        </div>
-        <div class="hero-badges">
-          <span>MIT</span><span>Local Processing</span><span>Markdown</span><span>JSON</span>
-        </div>
-      </section>
+      <!-- Main Content -->
+      <article>
+        <!-- Hero -->
+        <section id="hero" class="hero">
+          <p class="eyebrow">Open Source Chrome Extension</p>
+          <h1>Own your <strong>conversations</strong>.</h1>
+          <p class="hero-text">
+            Export ChatGPT conversations as clean Markdown or JSON files
+            directly from your browser.
+          </p>
+          <menu class="hero-actions">
+            <a href="#install" class="btn primary">Install Extension</a>
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter"
+              target="_blank"
+              rel="noreferrer"
+              class="btn ghost"
+              >
+                View on GitHub
+            </a>
+          </menu>
+          <ul class="hero-badges">
+            <li>MIT</li>
+            <li>Local Processing</li>
+            <li>Markdown</li>
+            <li>JSON</li>
+          </ul>
+        </section>
 
-      <!-- Screenshots Carousel -->
-      <section id="screenshots">
-        <header class="section-heading">
-          <h2>See it in action</h2>
-          <p>The extension keeps exports clean, readable, and portable.</p>
-        </header>
-        <div class="carousel">
-          <button class="carousel-btn prev" aria-label="Previous">‹</button>
-          <div class="carousel-track">
-            <img src="../assets/img/store/scr1.png" alt="Conversation view" class="carousel-slide active">
-            <img src="../assets/img/store/scr2.png" alt="Export options popup" class="carousel-slide">
-            <img src="../assets/img/store/scr3.png" alt="Markdown export preview" class="carousel-slide">
-            <img src="../assets/img/store/scr4.png" alt="Conversation preserved in Markdown" class="carousel-slide">
-            <img src="../assets/img/store/scr5.png" alt="Privacy-first export flow" class="carousel-slide">
-          </div>
-          <button class="carousel-btn next" aria-label="Next">›</button>
-          <div class="carousel-dots">
-            <button class="dot active" aria-label="Screenshot 1"></button>
-            <button class="dot" aria-label="Screenshot 2"></button>
-            <button class="dot" aria-label="Screenshot 3"></button>
-            <button class="dot" aria-label="Screenshot 4"></button>
-            <button class="dot" aria-label="Screenshot 5"></button>
-          </div>
-        </div>
-      </section>
+        <!-- Screenshots Carousel -->
+        <section id="screenshots">
+          <header class="section-heading">
+            <h2>See it in action</h2>
+            <p>The extension keeps exports clean, readable, and portable.</p>
+          </header>
+          <figure class="carousel">
+            <button class="carousel-btn prev" aria-label="Previous">‹</button>
+            <ul class="carousel-track">
+              <li>
+                <img
+                  src="../assets/img/store/scr1.png"
+                  alt="Conversation view"
+                  class="carousel-slide active"
+                />
+              </li>
+              <li>
+                <img
+                  src="../assets/img/store/scr2.png"
+                  alt="Export options popup"
+                  class="carousel-slide"
+                />
+              </li>
+              <li>
+                <img
+                  src="../assets/img/store/scr3.png"
+                  alt="Markdown export preview"
+                  class="carousel-slide"
+                />
+              </li>
+              <li>
+                <img
+                  src="../assets/img/store/scr4.png"
+                  alt="Conversation preserved in Markdown"
+                  class="carousel-slide"
+                />
+              </li>
+              <li>
+                <img
+                  src="../assets/img/store/scr5.png"
+                  alt="Privacy-first export flow"
+                  class="carousel-slide"
+                />
+              </li>
+            </ul>
+            <button class="carousel-btn next" aria-label="Next">›</button>
+            <ul class="carousel-dots">
+              <li><button class="dot active" aria-label="Screenshot 1"></button></li>
+              <li><button class="dot" aria-label="Screenshot 2"></button></li>
+              <li><button class="dot" aria-label="Screenshot 3"></button></li>
+              <li><button class="dot" aria-label="Screenshot 4"></button></li>
+              <li><button class="dot" aria-label="Screenshot 5"></button></li>
+            </ul>
+          </figure>
+        </section>
 
-      <!-- Features -->
-      <section id="features">
-        <header class="section-heading">
-          <h2>Features</h2>
-          <p>Everything you need to keep your AI conversations under your control.</p>
-        </header>
-        <div class="feature-grid">
-          <div class="feature-card"><h3>📝 Markdown Export</h3><p>Clean documents ready for Obsidian, Notion, GitHub, or long-term notes.</p></div>
-          <div class="feature-card"><h3>📦 JSON Export</h3><p>Preserve the original conversation structure for automation and tooling.</p></div>
-          <div class="feature-card"><h3>👥 Role Filters</h3><p>Export only User, Assistant, or the complete conversation.</p></div>
-          <div class="feature-card"><h3>🧹 Compact Mode</h3><p>Reduce unnecessary spacing for smaller, cleaner Markdown files.</p></div>
-          <div class="feature-card"><h3>🔒 100% Local</h3><p>All processing happens in your browser; no cloud service is involved.</p></div>
-          <div class="feature-card"><h3>🌐 Open Source</h3><p>MIT licensed and fully auditable on GitHub.</p></div>
-        </div>
-      </section>
+        <!-- Features -->
+        <section id="features">
+          <header class="section-heading">
+            <h2>Features</h2>
+            <p>Everything you need to keep your AI conversations under your control.</p>
+          </header>
+          <ul class="feature-grid">
+            <li class="feature-card">
+              <h3>📝 Markdown Export</h3>
+              <p>Clean documents ready for Obsidian, Notion, GitHub, or long-term notes.</p>  
+            </li>
+            <li class="feature-card">
+              <h3>📦 JSON Export</h3>
+              <p>Preserve the original conversation structure for automation and tooling.</p>
+            </li>
+            <li class="feature-card">
+              <h3>👥 Role Filters</h3>
+              <p>Export only User, Assistant, or the complete conversation.</p>
+            </li>
+            <li class="feature-card">
+              <h3>🧹 Compact Mode</h3>
+              <p>Reduce unnecessary spacing for smaller, cleaner Markdown files.</p>
+            </li>
+            <li class="feature-card">
+              <h3>🔒 100% Local</h3>
+              <p>All processing happens in your browser; no cloud service is involved.</p>
+            </li>
+            <li class="feature-card">
+              <h3>🌐 Open Source</h3>
+              <p>MIT licensed and fully auditable on GitHub.</p>
+            </li>
+          </ul>
+        </section>
 
-      <!-- Why -->
-      <section id="why">
-        <header class="section-heading"><h2>Why AI Chat Exporter?</h2></header>
-        <p>AI conversations often contain research, code, documentation, ideas, and decisions that become valuable over time.</p>
-        <p>AI Chat Exporter was created to make those conversations portable, searchable, versionable, and independent from a single platform.</p>
-        <p>Open a ChatGPT conversation, click the extension icon, choose your export options, and save the result in seconds.</p>
-      </section>
+        <!-- Why -->
+        <section id="why">
+          <header class="section-heading">
+            <h2>Why AI Chat Exporter?</h2>
+          </header>
+          <p>AI conversations often contain research, code, documentation, ideas, and decisions that become valuable over time.</p>
+          <p>AI Chat Exporter was created to make those conversations portable, searchable, versionable, and independent from a single platform.</p>
+          <p>Open a ChatGPT conversation, click the extension icon, choose your export options, and save the result in seconds.</p>
+        </section>
 
-      <!-- Privacy -->
-      <section id="privacy">
-        <header class="section-heading">
-          <h2>Privacy First</h2>
-          <p>Your conversations belong to you.</p>
-        </header>
-        <div class="privacy-grid">
-          <div class="privacy-card">
-            <h3><span class="check">✔</span> 100% Local
-            </h3>
-            <p>Processed entirely inside your browser.</p>
-          </div>
-          <div class="privacy-card">
-            <h3><span class="check">✔</span> No Tracking</h3>
-            <p>No analytics, telemetry, or advertising.</p>
-          </div>
-          <div class="privacy-card">
-            <h3><span class="check">✔</span> No Cloud</h3>
-            <p>Conversations are never uploaded to external servers.</p>
+        <!-- Privacy -->
+        <section id="privacy">
+          <header class="section-heading">
+            <h2>Privacy First</h2>
+            <p>Your conversations belong to you.</p>
+          </header>
+          <ul class="privacy-grid">
+            <li class="privacy-card">
+              <h3><span class="check">✔</span> 100% Local</h3>
+              <p>Processed entirely inside your browser.</p>
+            </li>
+            <li class="privacy-card">
+              <h3><span class="check">✔</span> No Tracking</h3>
+              <p>No analytics, telemetry, or advertising.</p>
+            </li>
+            <li class="privacy-card">
+              <h3><span class="check">✔</span> No Cloud</h3>
+              <p>Conversations are never uploaded to external servers.</p>
+            </li>
+            <li class="privacy-card">
+              <h3><span class="check">✔</span> Open Source</h3>
+              <p>Anyone can inspect and audit the code.</p>
+            </li>
+          </ul>
+          <p class="privacy-note">No accounts. No hidden data collection. No third-party services.</p>
+        </section>
+
+        <!-- Install -->
+        <section id="install">
+          <header class="section-heading">
+            <h2>Install in under a minute</h2>
+          </header>
+          <ol class="install-steps">
+            <li>Install AI Chat Exporter from the Chrome Web Store.</li>
+            <li>Open any ChatGPT conversation.</li>
+            <li>Click the extension icon in your toolbar.</li>
+            <li>Choose Markdown or JSON and export your conversation.</li>
+          </ol>
+          <a 
+            href="https://chromewebstore.google.com/detail/ai-chat-exporter/hckedjhjkkdaogjkjbnnnjaecbhoipaa?authuser=6&hl=es-419" 
+            class="btn primary"
+            >
+              Open Chrome Web Store
+          </a>
+        </section>
+
+        <!-- Roadmap -->
+        <section id="roadmap">
+          <header class="section-heading"><h2>Roadmap</h2></header>
+          <div class="roadmap-grid">
+            <div class="roadmap-column done">
+              <h3>✅ Done</h3>
+              <ul>
+                <li>Markdown export</li>
+                <li>JSON export</li>
+                <li>Compact mode</li>
+                <li>Role filters</li>
+                <li>Chrome extension</li>
+                <li>CLI support</li>
+              </ul>
             </div>
-          <div class="privacy-card">
-            <h3><span class="check">✔</span> Open Source</h3>
-            <p>Anyone can inspect and audit the code.</p>
+            <div class="roadmap-column next">
+              <h3>🚧 Next</h3>
+              <ul>
+                <li>Claude support</li>
+                <li>Gemini support</li>
+                <li>DeepSeek support</li>
+                <li>Qwen support</li>
+              </ul>
+            </div>
+            <div class="roadmap-column future">
+              <h3>🔮 Future</h3>
+              <ul>
+                <li>Firefox extension</li>
+                <li>HTML export</li>
+                <li>PDF export</li>
+                <li>Additional AI providers</li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <p class="privacy-note">No accounts. No hidden data collection. No third-party services.</p>
-      </section>
+        </section>
 
-      <!-- Install -->
-      <section id="install">
-        <header class="section-heading"><h2>Install in under a minute</h2></header>
-        <ol class="install-steps">
-          <li>Install AI Chat Exporter from the Chrome Web Store.</li>
-          <li>Open any ChatGPT conversation.</li>
-          <li>Click the extension icon in your toolbar.</li>
-          <li>Choose Markdown or JSON and export your conversation.</li>
-        </ol>
-        <a href="#" class="btn primary">Open Chrome Web Store</a>
-      </section>
+        <!-- FAQ -->
+        <section id="faq">
+          <header class="section-heading">
+            <h2>Frequently Asked Questions</h2>
+          </header>
+          <div class="faq">
+            <details>
+              <summary>
+                <span>Does AI Chat Exporter upload my conversations?</span>
+              </summary>
+              <p>No. Everything is processed locally in your browser.</p>
+            </details>
+            <details>
+              <summary>
+                <span>Do I need an account?</span>
+              </summary>
+              <p>No. The extension works with the ChatGPT session you already have open.</p>
+            </details>
+            <details>
+              <summary>
+                <span>Where are the exported files saved?</span>
+              </summary>
+              <p>They are downloaded directly to your device using the browser download dialog.</p>
+            </details>
+            <details>
+              <summary>
+                <span>Can I export JSON?</span>
+              </summary>
+              <p>Yes. JSON export preserves the original conversation structure.</p>
+            </details>
+            <details>
+              <summary>
+                <span>Is the project open source?</span>
+              </summary>
+              <p>Yes. The full source code is available on GitHub under the MIT License.</p>
+            </details>
+          </div>
+        </section>
+      </article>
+    </main>
 
-      <!-- Roadmap -->
-      <section id="roadmap">
-        <header class="section-heading"><h2>Roadmap</h2></header>
-        <div class="roadmap-grid">
-          <div class="roadmap-column done"><h3>✅ Done</h3><ul><li>Markdown export</li><li>JSON export</li><li>Compact mode</li><li>Role filters</li><li>Chrome extension</li><li>CLI support</li></ul></div>
-          <div class="roadmap-column next"><h3>🚧 Next</h3><ul><li>DeepSeek support</li><li>Gemini support</li><li>Claude support</li></ul></div>
-          <div class="roadmap-column future"><h3>🔮 Future</h3><ul><li>Firefox extension</li><li>HTML export</li><li>PDF export</li><li>Additional AI providers</li></ul></div>
-        </div>
-      </section>
-
-      <!-- FAQ -->
-      <section id="faq">
-        <header class="section-heading"><h2>Frequently Asked Questions</h2></header>
-        <div class="faq">
-          <details>
-            <summary><span>Does AI Chat Exporter upload my conversations?</span></summary>
-            <p>No. Everything is processed locally in your browser.</p>
-          </details>
-          <details>
-            <summary><span>Do I need an account?</span></summary>
-            <p>No. The extension works with the ChatGPT session you already have open.</p>
-          </details>
-          <details>
-            <summary><span>Where are the exported files saved?</span></summary>
-            <p>They are downloaded directly to your device using the browser download dialog.</p>
-          </details>
-          <details>
-            <summary><span>Can I export JSON?</span></summary>
-            <p>Yes. JSON export preserves the original conversation structure.</p>
-          </details>
-          <details>
-            <summary><span>Is the project open source?</span></summary>
-            <p>Yes. The full source code is available on GitHub under the MIT License.</p>
-          </details>
-        </div>
-      </section>
-    </article>
-  </main>
-
-  <!-- ===== Footer ===== -->
-  <footer>
-    <span>MIT License</span><span>•</span><span id="footerVersion">v1.3.1</span><span>•</span>
-    <a href="privacy-policy.html">Privacy Policy</a><span>•</span>
-    <a href="https://github.com/GuillermoCochrane/chat-exporter">GitHub</a>
-  </footer>
-
-</body>
+    <!-- ===== Footer ===== -->
+    <footer>
+      <span>MIT License</span><span>•</span
+      ><span id="footerVersion">v1.3.1</span><span>•</span>
+      <a href="privacy-policy.html">Privacy Policy</a><span>•</span>
+      <a href="https://github.com/GuillermoCochrane/chat-exporter">GitHub</a>
+    </footer>
+  </body>
 </html>
