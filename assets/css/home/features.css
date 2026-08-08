@@ -38,6 +38,21 @@
 
 }
 
+#why {
+
+  margin-inline: auto;
+
+  .section-heading {
+    margin-bottom: 1.5em;
+  }
+
+  p {
+    margin-block: 0.3rem;
+    color: var(--color-text-dim);
+    padding-inline: 0.3rem;
+  }
+} 
+
 .privacy-note {
   margin-top: 1.7rem;
   color: var(--color-text-dim);
