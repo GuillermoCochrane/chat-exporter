@@ -23,8 +23,9 @@
   letter-spacing: -2px;
 }
 
-.hero h1 span {
+.hero h1 strong {
   color: var(--color-neon);
+  font-weight: inherit;
 }
 
 .hero-text {
@@ -82,9 +83,10 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+  list-style: none;
 }
 
-.hero-badges span {
+.hero-badges li {
   padding: 8px 14px;
   border-radius: 999px;
   background: rgba(var(--rgb-white), 0.05);

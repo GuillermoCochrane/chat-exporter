@@ -5,6 +5,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(240px, 1fr));
   gap: 18px;
+  list-style: none;
 
   @media (max-width: 980px) {
     grid-template-columns: 1fr;
