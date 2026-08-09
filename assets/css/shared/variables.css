@@ -52,7 +52,8 @@
   --background-slower: background var(--speed-slower);
   --background-slow: background var(--speed-slow);
   --shadow-slow: box-shadow var(--speed-slow);
-
+  --color-slower: color var(--speed-slower);
+  --color-slow: color var(--speed-slow);
 
 }
 

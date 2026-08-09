@@ -21,7 +21,7 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: background 0.3s, color 0.3s;
+  transition: var(--background-slower), var(--color-slower);
 }
 
 [hidden] {
