@@ -54,7 +54,7 @@ body>header {
     cursor: pointer;
     padding: 0.3rem 0.5rem;
     border-radius: 6px;
-    transition: color 0.2s, background 0.2s;
+    transition: var(--color-slower), var(--background-slower);
 
     &:hover {
       color: var(--color-neon);
