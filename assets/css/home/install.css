@@ -1,6 +1,6 @@
 /*? ========================== Install ============================ */
 
-.install-steps {
+ol.install-steps {
   padding-left: 20px;
   line-height: 1.9;
   margin-bottom: 24px;
@@ -16,3 +16,28 @@
     }
   }
 }
+
+#install a.btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 22px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s ease, var(--background-slower) ease, var(--border-slower) ease;
+
+      &.primary {
+        background: var(--color-accent);
+        color: var(--color-text);
+        
+        &:hover {
+          background: var(--color-accent-hover);
+          box-shadow: 0 0 8px var(--color-neon-glow);
+        }
+      }
+    
+      &:hover {
+        transform: translateY(-1px);
+      }
+    }
