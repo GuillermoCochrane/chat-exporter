@@ -31,7 +31,7 @@ body>main {
     grid-template-columns: 1fr;
   }
 
-  @media (max-width: 980px) {
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
 }
