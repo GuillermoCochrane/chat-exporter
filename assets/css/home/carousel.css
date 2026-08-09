@@ -56,7 +56,9 @@
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-top: 18px;
+  margin-top: 18px 0 0;
+  padding: 0;
+  list-style: none;
   grid-column: 1 / -1;
 }
 
