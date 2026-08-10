@@ -57,11 +57,13 @@
     text-decoration: none;
     transition: var(--color-slower) ease;
 
+    &.current,
     &.active{
       text-shadow: 0 0 10px var(--color-neon-glow);
     }
 
     &.active,
+    &.current,
     &:hover {
       color: var(--color-neon);
     }
