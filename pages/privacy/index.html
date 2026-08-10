@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Chat Exporter — Own your conversations</title>
+    <link rel="icon" type="image/png" href="../../assets/img/icons/icon.png" />
+    <link rel="stylesheet" href="../../assets/css/privacy.css" />
+    <script type="module" src="../../assets/js/base.js"></script>
+  </head>
+  <body>
+    <!-- ===== Header ===== -->
+    <header>
+      <a href="#" class="logo">
+        <img src="../../assets/img/icons/icon.png" alt="AI Chat Exporter icon" />
+        AI Chat Exporter
+      </a>
+      <div class="header-right">
+        <a href="../../#install" class="header-btn" title="Install Extension">⚙️</a>
+        <button id="themeToggle" class="header-btn" title="Toggle theme">
+          ☀️
+        </button>
+        <button id="hamburger" title="Menu">☰</button>
+      </div>
+    </header>
+
+    <!-- ===== Main (Grid) ===== -->
+    <main>
+      <nav id="sidebar" class="sidebar">
+        <details name="navbar">
+          <summary>Documentation</summary>
+          <ul>
+            <li><a href="../../">Home</a></li>
+            <li><a href="#" class="current">Privacy</a></li>
+            <li><a href="#">Changelog</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </details>
+        <details  name="navbar" open>
+          <summary>On this page</summary>
+          <ul>
+            <li><a href="#privacy-first">Privacy First</a></li>
+            <li><a href="#local-processing">Local Processing</a></li>
+            <li><a href="#permissions">Permissions</a></li>
+            <li><a href="#third-party-services">Third-party Services</a></li>
+            <li><a href="#open-source">Open Source</a></li>
+            <li><a href="#changes">Changes</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </details>
+      </nav>
+
+      <!-- Main Content -->
+      <article>
+
+        <section id="privacy-first">
+          <header class="section-heading">
+            <h2>Privacy First</h2>
+            <p>AI Chat Exporter is designed with a privacy-first philosophy.</p>
+          </header>
+
+          <p>
+            The extension does not collect, store, transmit, or share personal
+            information, conversation history, browsing activity, analytics, or
+            usage statistics.
+          </p>
+        </section>
+
+        <section id="local-processing">
+          <header class="section-heading">
+            <h2>Local Processing</h2>
+            <p>All processing is performed locally inside your browser.</p>
+          </header>
+
+          <p>
+            When you export a conversation, AI Chat Exporter reads the
+            conversation currently open in ChatGPT and generates the selected
+            Markdown or JSON file directly on your device.
+          </p>
+
+          <p>No conversation content is sent to external servers.</p>
+        </section>
+
+        <section id="permissions">
+          <header class="section-heading">
+            <h2>Permissions</h2>
+            <p>The extension requests only the permissions required for its functionality.</p>
+          </header>
+
+          <ul>
+            <li>
+              <strong>downloads</strong> — Saves exported files to your device.
+            </li>
+
+            <li>
+              <strong>storage</strong> — Stores user preferences such as
+              language, export format, compact mode, and export options.
+            </li>
+
+            <li>
+              <strong>Host permission (chatgpt.com)</strong> — Reads the
+              currently open ChatGPT conversation only to generate the requested
+              export.
+            </li>
+          </ul>
+        </section>
+
+        <section id="third-party-services">
+          <header class="section-heading">
+            <h2>Third-party Services</h2>
+            <p>AI Chat Exporter does not use external services for processing or tracking.</p>
+          </header>
+
+          <ul>
+            <li>Analytics services</li>
+            <li>Advertising networks</li>
+            <li>Tracking technologies</li>
+            <li>Cloud storage</li>
+            <li>External APIs</li>
+            <li>Remote servers</li>
+          </ul>
+        </section>
+
+        <section id="open-source">
+          <header class="section-heading">
+            <h2>Open Source</h2>
+            <p>AI Chat Exporter is released under the MIT License.</p>
+          </header>
+
+          <p>
+            Source code:
+            <br />
+            <a href="https://github.com/GuillermoCochrane/chat-exporter">
+              https://github.com/GuillermoCochrane/chat-exporter
+            </a>
+          </p>
+        </section>
+
+        <section id="changes">
+          <header class="section-heading">
+            <h2>Changes</h2>
+            <p>Privacy Policy updates will always be published on this page.</p>
+          </header>
+
+          <p>
+            If this Privacy Policy changes in future releases, the updated
+            version will be published on this page.
+          </p>
+        </section>
+
+        <section id="contact">
+          <header class="section-heading">
+            <h2>Contact</h2>
+            <p>Questions or issues can be reported through GitHub Issues.</p>
+          </header>
+
+          <p>
+            <a href="https://github.com/GuillermoCochrane/chat-exporter/issues">
+              https://github.com/GuillermoCochrane/chat-exporter/issues
+            </a>
+          </p>
+        </section>
+
+        <aside>
+            AI Chat Exporter is an independent open-source project and is not
+            affiliated with, endorsed by, or associated with OpenAI or ChatGPT.
+        </aside>
+      </article>
+    </main>
+
+    <!-- ===== Footer ===== -->
+    <footer>
+      <span>MIT License</span><span>•</span
+      ><span id="footerVersion">v1.3.1</span><span>•</span>
+      <a href="#privacy-first">Privacy Policy</a><span>•</span>
+      <a href="https://github.com/GuillermoCochrane/chat-exporter">GitHub</a>
+    </footer>
+  </body>
+</html>
