@@ -11,9 +11,13 @@
   details {
     margin-bottom: 0.8rem;
 
-    &[open] summary::after {
-      background: radial-gradient(var(--grad-position), var(--color-bg), var(--color-accent));
-      box-shadow: var(--shadow-radio)
+    &[open] summary{
+      color: var(--color-neon-glow);
+      text-shadow: 0 0 10px var(--color-accent-hover);
+      &::after {
+        background: radial-gradient(var(--grad-position), var(--color-bg), var(--color-accent));
+        box-shadow: var(--shadow-radio)
+      }
     }
   }
 
@@ -25,6 +29,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    color: var(--color-accent);
 
     &::-webkit-details-marker {
       display: none;
