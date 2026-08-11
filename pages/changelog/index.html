@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Changelog - AI Chat Exporter</title>
+    <link rel="icon" type="image/png" href="../../assets/img/icons/icon.png" />
+    <link rel="stylesheet" href="../../assets/css/changelog.css" />
+    <script type="module" src="../../assets/js/base.js"></script>
+  </head>
+  <body>
+    <!-- ===== Header ===== -->
+    <header>
+      <a href="../../" class="logo">
+        <img
+          src="../../assets/img/icons/icon.png"
+          alt="AI Chat Exporter icon"
+        />
+        AI Chat Exporter
+      </a>
+      <div class="header-right">
+        <a href="../../#install" class="header-btn" title="Install Extension"
+          >⚙️</a
+        >
+        <button id="themeToggle" class="header-btn" title="Toggle theme">
+          ☀️
+        </button>
+        <button id="hamburger" title="Menu">☰</button>
+      </div>
+    </header>
+
+    <!-- ===== Main (Grid) ===== -->
+    <main>
+      <nav id="sidebar" class="sidebar">
+        <details name="navbar">
+          <summary>Documentation</summary>
+          <ul>
+            <li><a href="../../">Home</a></li>
+            <li><a href="../privacy/">Privacy</a></li>
+            <li><a href="#" class="current">Changelog</a></li>
+            <li><a href="../faq/">FAQ</a></li>
+          </ul>
+        </details>
+        <details name="navbar" open>
+          <summary>On this page</summary>
+          <ul>
+            <li>
+              <a href="#v1.3.1"><strong>v1.3.1</strong> — Multi-language</a>
+            </li>
+            <li>
+              <a href="#v1.3.0"><strong>v1.3.0</strong> — Stable release</a>
+            </li>
+            <li>
+              <a href="#v1.2.4"><strong>v1.2.4</strong> — Visual redesign</a>
+            </li>
+            <li>
+              <a href="#v1.2.3"><strong>v1.2.3</strong> — Compact & roles</a>
+            </li>
+            <li>
+              <a href="#v1.2.2"><strong>v1.2.2</strong> — Export options</a>
+            </li>
+            <li><a href="#older">Older versions</a></li>
+          </ul>
+        </details>
+      </nav>
+
+      <!-- Main Content -->
+      <article>
+        <header class="hero">
+          <p class="eyebrow">AI Chat Exporter</p>
+          <h1>Changelog</h1>
+          <p class="hero-text">
+            Every update, improvement, and fix — all in one place.
+          </p>
+        </header>
+
+        <section id="v1.3.1">
+          <header class="section-heading">
+            <h2>
+              <strong>v1.3.1</strong> — Multi-language system & publication prep
+            </h2>
+          </header>
+          <ul class="styled-list">
+            <li>Multi-language translation system in the popup:</li>
+            <li>
+              <ul class="styled-list">
+                <li>
+                  Translation helper <strong>(languages.js)</strong> with
+                  Spanish and English support.
+                </li>
+                <li>
+                  Decoupled error messages: background sends error codes
+                  <strong>(errorCode)</strong> and the popup translates them.
+                </li>
+                <li>
+                  Automatic browser language detection on popup load
+                  <strong>(languageSettings.js)</strong>.
+                </li>
+                <li>
+                  Visual toggle with inline SVG flags (Spain / UK) to switch
+                  languages.
+                </li>
+                <li>
+                  Language preference persistence via
+                  <strong>chrome.storage.local</strong>.
+                </li>
+              </ul>
+            </li>
+            <li>
+              Added <strong>storage</strong> permission to <strong>manifest.json</strong> for
+              saving language preference.
+            </li>
+            <li>Prepared materials for Chrome Web Store publication:</li>
+            <li>
+              <ul class="styled-list">
+                <li>Short and long descriptions.</li>
+                <li>Privacy policy.</li>
+                <li>Permissions justification.</li>
+              </ul>
+            </li>
+            <li>
+              Reorganized popup scripts into <strong>js/</strong> folder
+              (<strong>popup.js</strong>, <strong>languages.js</strong>,
+              <strong>languageSettings.js</strong>).
+            </li>
+            <li>
+              Updated extension build to copy <strong>js/</strong> folder to
+              <strong>dist/</strong>.
+            </li>
+            <li>Updated general and extension documentation.</li>
+          </ul>
+        </section>
+
+        <section id="v1.3.0">
+          <header class="section-heading">
+            <h2>
+              <strong>v1.3.0</strong> — Stable release with visual redesign &
+              distribution prep
+            </h2>
+          </header>
+          <ul class="styled-list">
+            <li>Published stable version 1.3.0 on GitHub.</li>
+            <li>Includes all features from the 1.2.x series:</li>
+            <li>
+              <ul class="styled-list">
+                <li>Popup with advanced options <strong>(format, compact, roles)</strong>.</li>
+                <li>
+                  Cyberpunk redesign with <strong>CSS token system</strong>.
+                </li>
+                <li>Automated <strong>ZIP</strong> build.</li>
+                <li>Final icons in all sizes.</li>
+                <li>Progress indicator and UX improvements.</li>
+              </ul>
+            </li>
+            <li>
+              Updated documentation and preparation for Chrome Web Store
+              publication.
+            </li>
+          </ul>
+        </section>
+
+        <section id="v1.2.4">
+          <header class="section-heading">
+            <h2>
+              <strong>v1.2.4</strong> — Visual redesign & UX improvements in the
+              popup
+            </h2>
+          </header>
+          <ul class="styled-list">
+            <li>
+              Added contextual header to the popup showing the conversation
+              provider <strong>(Exporting from ChatGPT)</strong>, ready for
+              future models.
+            </li>
+            <li>
+              Implemented animated CSS spinner as a progress indicator during
+              export, replacing the "Processing..." text.
+            </li>
+            <li>
+              Disabled the Export button during processing to prevent multiple
+              clicks.
+            </li>
+            <li>
+              Improved the error message when no conversation is captured,
+              including the provider name.
+            </li>
+            <li>
+              Added dynamic extension version in the popup footer, retrieved
+              from <strong>chrome.runtime.getManifest()</strong>.
+            </li>
+            <li>Applied a complete cyberpunk redesign to the popup:</li>
+            <li>
+              <ul class="styled-list">
+                <li>Dark background with radial gradient.</li>
+                <li>Glassmorphism effects on surfaces.</li>
+                <li>
+                  Switch and radio buttons with physical hardware look
+                  (raised/pressed).
+                </li>
+                <li>
+                  Native select styled with the new
+                  <strong>appearance: base-select</strong> API.
+                </li>
+              </ul>
+            </li>
+            <li>
+              Implemented a <strong>CSS token system</strong> (design variables)
+              with color palette derived from the extension icon.
+            </li>
+            <li>
+              Modularized popup CSS by responsibility into independent files
+              <strong
+                >(variables.css, base.css, selector.css, options.css,
+                button.css, footer.css)</strong
+              >.
+            </li>
+            <li>
+              Fixed compact mode tests that expected quote formatting
+              <strong>(>)</strong>, which was removed in v1.2.2.
+            </li>
+            <li>Updated general and extension documentation.</li>
+          </ul>
+        </section>
+
+        <section id="v1.2.3">
+          <header class="section-heading">
+            <h2>
+              <strong>v1.2.3</strong> — Compact mode & role filters in the
+              extension
+            </h2>
+          </header>
+          <ul class="styled-list">
+            <li>Added advanced options to the extension popup:</li>
+            <li>
+              <ul class="styled-list">
+                <li>Checkbox for compact mode.</li>
+                <li>
+                  Radio buttons to filter by role
+                  <strong>(all, user, assistant)</strong>.
+                </li>
+              </ul>
+            </li>
+            <li>Markdown-specific options hidden when JSON is selected.</li>
+            <li>
+              Extracted popup CSS to an independent file
+              <strong>(popup.css)</strong>.
+            </li>
+            <li>
+              Updated <strong>background.js</strong> to propagate
+              <strong>compact</strong> and <strong>roleFilter</strong> to the
+              pipeline.
+            </li>
+            <li>
+              Updated extension build to include <strong>popup.css</strong>.
+            </li>
+            <li>Updated general and extension documentation.</li>
+          </ul>
+        </section>
+
+        <section id="v1.2.2">
+          <header class="section-heading">
+            <h2>
+              <strong>v1.2.2</strong> — Role filter & compact mode improvements
+              in CLI
+            </h2>
+          </header>
+          <ul class="styled-list">
+            <li>
+              Extended <strong>filter.js</strong> to accept an optional
+              <strong>targetRole</strong> parameter to filter messages by user,
+              assistant, or keep all.
+            </li>
+            <li>
+              Integrated role filter into <strong>pipeline.js</strong> via
+              <strong>config.roleFilter</strong>.
+            </li>
+            <li>
+              Added <strong>--role</strong> / <strong>-r</strong> option to CLI
+              with validation in <strong>validator.js</strong>.
+            </li>
+            <li>Improved compact mode in the Markdown generator:</li>
+            <li>
+              <ul class="styled-list">
+                <li>
+                  Now preserves horizontal rules <strong>(---)</strong> and
+                  lists <strong>(- , 1. )</strong> that require specific spacing
+                  in Markdown.
+                </li>
+                <li>
+                  Implemented a placeholder technique
+                  <strong>(protect → process → restore)</strong> to handle edge
+                  cases like list-to-paragraph transitions.
+                </li>
+              </ul>
+            </li>
+            <li>Added automated tests for role filtering.</li>
+            <li>Updated general documentation.</li>
+          </ul>
+        </section>
+
+        <section id="older">
+          <header class="section-heading">
+            <h2>Older versions</h2>
+          </header>
+          <p>
+            For the complete history from v0.5.0 to v1.2.1, see the full
+            changelog in the project repository.
+          </p>
+          <a
+            href="https://github.com/GuillermoCochrane/chat-exporter/blob/main/docs/CHANGELOG.md"
+            class="btn ghost"
+            >View full changelog on GitHub</a
+          >
+        </section>
+      </article>
+    </main>
+
+    <!-- ===== Footer ===== -->
+    <footer>
+      <span>MIT License</span><span>•</span
+      ><span id="footerVersion">v1.3.1</span><span>•</span>
+      <a href="../privacy/">Privacy Policy</a><span>•</span>
+      <a href="https://github.com/GuillermoCochrane/chat-exporter">GitHub</a>
+    </footer>
+  </body>
+</html>

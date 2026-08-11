@@ -1,0 +1,15 @@
+/*? ======================== Changelog Page Styles ======================== */
+
+h2 strong {
+  color: var(--color-neon);
+  font-weight: bold;
+}
+
+section ul li strong,
+li strong {
+  color: var(--color-neon-glow);
+  transition: var(--color-slower);
+  &:hover {
+    color: var(--color-neon);
+  }
+}
