@@ -1,0 +1,21 @@
+/*? ======================== FAQ Page Styles ======================== */
+
+.faq .privacy-note {
+  margin-top: 1.5rem;
+  color: var(--color-text-dim);
+  font-size: 0.9rem;
+
+  a {
+    color: var(--color-neon);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover {
+      text-shadow: 0 0 10px var(--color-neon-glow);
+    }
+  }
+}
+
+.section-heading  {
+  margin-bottom: 3rem;
+}
