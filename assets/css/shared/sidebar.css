@@ -69,8 +69,9 @@
 
     &.active,
     &.current,
-    &:hover {
-      color: var(--color-neon);
+    &:hover,
+    &:hover strong {
+      color: var(--color-neon)!important;
     }
   }
 
