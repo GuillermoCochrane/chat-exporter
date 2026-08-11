@@ -15,6 +15,7 @@ body>main {
     scroll-behavior: smooth;
     scrollbar-color: var(--color-neon-glow) var(--color-accent-hover);
 
+    header,
     section {
       max-width: 960px;
       margin: 0 auto 5rem;
@@ -23,6 +24,11 @@ body>main {
 
     &::-webkit-scrollbar-thumb:hover {
         background-color: var(--color-neon);
+    }
+
+    header {
+      min-height: unset!important;
+      margin-bottom: 3rem;
     }
   }
 
