@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ - AI Chat Exporters</title>
+    <link rel="icon" type="image/png" href="../../assets/img/icons/icon.png" />
+    <link rel="stylesheet" href="../../assets/css/faq.css" />
+    <script type="module" src="../../assets/js/base.js"></script>
+  </head>
+  <body>
+    <!-- ===== Header ===== -->
+    <header>
+      <a href="../../" class="logo">
+        <img
+          src="../../assets/img/icons/icon.png"
+          alt="AI Chat Exporter icon"
+        />
+        AI Chat Exporter
+      </a>
+      <div class="header-right">
+        <a href="../../#install" class="header-btn" title="Install Extension"
+          >⚙️</a
+        >
+        <button id="themeToggle" class="header-btn" title="Toggle theme">
+          ☀️
+        </button>
+        <button id="hamburger" title="Menu">☰</button>
+      </div>
+    </header>
+
+    <!-- ===== Main (Grid) ===== -->
+    <main>
+      <nav id="sidebar" class="sidebar">
+        <details name="navbar">
+          <summary>Documentation</summary>
+          <ul>
+            <li><a href="../../">Home</a></li>
+            <li><a href="../privacy/">Privacy</a></li>
+            <li><a href="#">Changelog</a></li>
+            <li><a href="#" class="current">FAQ</a></li>
+          </ul>
+        </details>
+        <details name="navbar" open>
+          <summary>On this page</summary>
+          <ul>
+            <li><a href="#general">General</a></li>
+            <li><a href="#privacy">Privacy & Security</a></li>
+            <li><a href="#export">Export Features</a></li>
+            <li><a href="#permissions">Permissions</a></li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+            <li><a href="#future">Future Plans</a></li>
+          </ul>
+        </details>
+      </nav>
+
+      <!-- Main Content -->
+      <article>
+        <!-- FAQ -->
+        <header class="hero">
+          <p class="eyebrow">AI Chat Exporter</p>
+          <h1>Frequently Asked Questions</h1>
+          <p class="hero-text">Everything you need to know about AI Chat Exporter.</p>
+        </header>
+
+        <section id="general">
+          <header class="section-heading">
+            <h2>General</h2>
+            <p>What AI Chat Exporter is and how to get started.</p>
+          </header>
+
+          <div class="faq">
+            <details>
+              <summary><span>What is AI Chat Exporter?</span></summary>
+              <p>
+                AI Chat Exporter is an open-source browser extension and CLI
+                tool that lets you export your ChatGPT conversations as clean
+                Markdown or JSON files, entirely on your device.
+              </p>
+            </details>
+
+            <details>
+              <summary><span>Which AI platforms are supported?</span></summary>
+              <p>
+                Currently, ChatGPT is fully supported. DeepSeek, Gemini, Claude,
+                and others are on the roadmap.
+              </p>
+            </details>
+
+            <details>
+              <summary><span>Is it free?</span></summary>
+              <p>
+                Yes. AI Chat Exporter is free and open source under the MIT
+                License. No hidden costs, no premium features.
+              </p>
+            </details>
+
+            <details>
+              <summary><span>Do I need an account?</span></summary>
+              <p>
+                No. The extension works with your existing ChatGPT session. No
+                registration required.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                <span>Can I use it without the extension?</span>
+              </summary>
+              <p>
+                Yes. AI Chat Exporter includes a standalone CLI that converts
+                exported ChatGPT JSON files into Markdown from the terminal.
+              </p>
+            </details>
+
+            <details>
+              <summary><span>Where can I find the source code?</span></summary>
+              <p>
+                The complete source code is available on GitHub under the MIT
+                License. Contributions are welcome.
+              </p>
+            </details>
+          </div>
+        </section>
+
+        <section id="privacy">
+          <header class="section-heading">
+            <h2>Privacy & Security</h2>
+            <p>How your data is handled.</p>
+          </header>
+
+          <div class="faq">
+            <details>
+              <summary>
+                <span>Are my conversations uploaded anywhere?</span>
+              </summary>
+              <p>
+                No. Everything is processed locally in your browser. Your
+                conversations never leave your computer.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                <span>Does the extension collect any data?</span>
+              </summary>
+              <p>
+                No. AI Chat Exporter does not collect, store, or transmit any
+                personal information, analytics, or usage data.
+              </p>
+            </details>
+
+            <details>
+              <summary><span>Does it use analytics or tracking?</span></summary>
+              <p>
+                No. There are no analytics, no telemetry, no tracking scripts,
+                and no third-party services of any kind.
+              </p>
+            </details>
+
+            <p class="privacy-note">
+              For complete details, read the full
+              <a href="../privacy/">Privacy Policy</a>.
+            </p>
+          </div>
+        </section>
+
+        <section id="export">
+          <header class="section-heading">
+            <h2>Export Features</h2>
+            <p>What you can export and how to customize it.</p>
+          </header>
+
+          <div class="faq">
+            <details>
+              <summary><span>What formats can I export?</span></summary>
+              <p>
+                Markdown and JSON. Markdown is optimized for documentation and
+                note-taking; JSON preserves the original conversation structure.
+              </p>
+            </details>
+
+            <details>
+              <summary><span>What is Compact Mode?</span></summary>
+              <p>
+                Compact Mode reduces unnecessary spacing and removes quote
+                formatting, producing smaller and cleaner Markdown files. Ideal
+                for long conversations or documentation.
+              </p>
+            </details>
+
+            <details>
+              <summary><span>Can I export only user messages?</span></summary>
+              <p>
+                Yes. The role filter lets you export only user messages, only
+                assistant messages, or the entire conversation.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                <span>Can I export only assistant messages?</span>
+              </summary>
+              <p>
+                Yes. Simply select "Assistant only" in the role filter before
+                exporting.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                <span>Can I use exported Markdown in my documentation?</span>
+              </summary>
+              <p>
+                Absolutely. The generated Markdown is clean, readable, and ready
+                for tools like Obsidian, Notion, or GitHub.
+              </p>
+            </details>
+          </div>
+        </section>
+
+        <section id="permissions">
+          <header class="section-heading">
+            <h2>Permissions</h2>
+            <p>Why the extension requests each permission.</p>
+          </header>
+
+          <div class="faq">
+            <details>
+              <summary>
+                <span>Why does the extension need "downloads"?</span>
+              </summary>
+              <p>
+                To save the exported Markdown or JSON files directly to your
+                device.
+              </p>
+            </details>
+
+            <details>
+              <summary><span>Why does it need "storage"?</span></summary>
+              <p>
+                To remember your preferences, such as language, export format,
+                and filter options, across sessions.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                <span>Why does it need access to chatgpt.com?</span>
+              </summary>
+              <p>
+                The extension reads the currently open ChatGPT conversation to
+                generate the export. It does not access any other websites or
+                data.
+              </p>
+            </details>
+          </div>
+        </section>
+
+        <section id="troubleshooting">
+          <header class="section-heading">
+            <h2>Troubleshooting</h2>
+            <p>Common issues and how to solve them.</p>
+          </header>
+
+          <div class="faq">
+            <details>
+              <summary><span>Why can't I export a conversation?</span></summary>
+              <p>
+                Make sure you have a conversation open in ChatGPT and that the
+                page has fully loaded. If you just navigated to the
+                conversation, try refreshing the page first.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                <span>Why is my export empty or incomplete?</span>
+              </summary>
+              <p>
+                AI Chat Exporter captures the conversation as it was when the
+                page loaded. Messages sent or received after that moment may not
+                be included. For best results, export immediately after the
+                conversation finishes.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                <span>The extension icon doesn't respond. What can I do?</span>
+              </summary>
+              <p>
+                Try refreshing the ChatGPT page. If the issue persists, remove
+                and reinstall the extension from the Chrome Web Store.
+              </p>
+            </details>
+          </div>
+        </section>
+
+        <section id="future">
+          <header class="section-heading">
+            <h2>Future Plans</h2>
+            <p>What's coming next.</p>
+          </header>
+
+          <div class="faq">
+            <details>
+              <summary><span>Will DeepSeek be supported?</span></summary>
+              <p>
+                Yes. DeepSeek integration is currently under research and
+                planned for an upcoming release.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                <span>Will Gemini and Claude be supported?</span>
+              </summary>
+              <p>
+                Yes. Support for additional AI providers is part of the project
+                roadmap.
+              </p>
+            </details>
+
+            <details>
+              <summary><span>Will you add more export formats?</span></summary>
+              <p>HTML and PDF exports are planned for future releases.</p>
+            </details>
+
+            <details>
+              <summary><span>Will there be a Firefox version?</span></summary>
+              <p>A Firefox extension is on the long-term roadmap.</p>
+            </details>
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <!-- ===== Footer ===== -->
+    <footer>
+      <span>MIT License</span><span>•</span
+      ><span id="footerVersion">v1.3.1</span><span>•</span>
+      <a href="#privacy-first">Privacy Policy</a><span>•</span>
+      <a href="https://github.com/GuillermoCochrane/chat-exporter">GitHub</a>
+    </footer>
+  </body>
+</html>
