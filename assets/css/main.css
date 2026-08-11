@@ -1,9 +1,8 @@
 /*? ======================== Home Page ======================== */
 
 @import  url("./shared/shared.css");
-@import  url("./home/hero.css");
 @import  url("./home/carousel.css");
 @import  url("./home/features.css");
 @import  url("./home/install.css");
 @import  url("./home/roadmap.css");
-@import  url("./home/faq.css");
+@import  url("./shared/faq.css");
