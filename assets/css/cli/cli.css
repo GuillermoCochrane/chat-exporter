@@ -1,0 +1,84 @@
+pre.cli-command {
+  margin: 1rem 0;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  background: rgba(var(--rgb-black), 0.35);
+  color: var(--color-neon);
+  font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+dl.cli-options{
+  div {
+    display: grid;
+    grid-template-columns: minmax(180px, 260px) 1fr;
+    gap: 0.75rem 1rem;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border-light);
+
+    dt {
+      color: var(--color-neon);
+      font-weight: 700;
+      font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+    }
+    
+    dd {
+      color: var(--color-text-dim);
+      margin-left: 0;
+    }
+    
+    &:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 750px) {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
+  }
+}
+
+ul.cli-examples {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  .cli-example {
+    margin: 1.25rem 0;
+
+    .cli-example p {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+.pipeline {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  overflow-x: auto;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  background: rgba(var(--rgb-black), 0.3);
+  color: var(--color-text-dim);
+  font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+  line-height: 1.6;
+
+  .highlight {
+    color: var(--color-neon);
+  }
+}
+
+.highlight {
+  color: var(--color-neon-glow);
+  transition: var(--color-slow);
+
+  &:hover {
+    color: var(--color-neon);
+  }
+}
