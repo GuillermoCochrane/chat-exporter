@@ -27,3 +27,43 @@ body {
 [hidden] {
   display: none !important;
 }
+
+/* Evita la transparencia/mezcla por defecto entre la página vieja y la nueva */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  mix-blend-mode: normal;
+  animation-fill-mode: both;
+}
+
+/* Representa la página VIEJA que está saliendo/desapareciendo (hacia arriba) */
+::view-transition-old(root) {
+  animation-name: slide-out-up;
+}
+
+/* Representa la página NUEVA que está entrando/apareciendo (desde abajo) */
+::view-transition-new(root) {
+  animation-name: slide-in-down;
+}
+
+/* Animación para la página VIEJA (sube y desaparece) */
+@keyframes slide-out-up {
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+/* Animación para la página NUEVA (aparece subiendo desde el fondo) */
+@keyframes slide-in-down {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
