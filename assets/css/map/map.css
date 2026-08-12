@@ -1,0 +1,89 @@
+div.sitemap-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 18px;
+
+  
+  @media (max-width: 700px) {
+      grid-template-columns: 1fr;
+  }
+}
+
+a.sitemap-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 22px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 16px;
+  background: rgba(var(--rgb-blue), 0.55);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 12px 28px var(--shadow-color-dark);
+  text-decoration: none;
+  color: inherit;
+  transition: var(--background-slow) ease, var(--border-slower) ease, var(--shadow-slower) ease, transform 0.2s ease;
+
+  h3 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 1.15rem;
+  }
+  
+  p {
+    margin: 0;
+    color: var(--color-text-dim);
+    line-height: 1.55;
+  }
+  
+  .path {
+    margin-top: auto;
+    color: var(--color-neon);
+    font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+    font-size: 0.82rem;
+  }
+  &.external::after {
+    content: "↗";
+    align-self: flex-end;
+    margin-top: -1.5rem;
+    color: var(--color-neon);
+    font-size: 1.1rem;
+  }
+  
+  &:hover {
+    border-color: var(--color-neon);
+    background: rgba(var(--rgb-blue), 0.7);
+    box-shadow: 0 16px 34px var(--shadow-color-dark), 0 0 14px var(--color-neon-glow);
+    transform: translateY(-2px);
+  }
+}
+
+.sitemap-note {
+  margin-top: 1.5rem;
+  color: var(--color-text-dim);
+  line-height: 1.7;
+}
+
+.repository-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 1.5rem;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 16px;
+    border: 1px solid var(--color-border-light);
+    border-radius: 10px;
+    background: rgba(var(--rgb-white), 0.03);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: var(--color-slower) ease, var(--background-slower) ease, var(--border-slower) ease;
+    
+    &:hover {
+      border-color: var(--color-neon);
+      background: rgba(var(--rgb-white), 0.06);
+      color: var(--color-neon);
+    }
+  }
+}

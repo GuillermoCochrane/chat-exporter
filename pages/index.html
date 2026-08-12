@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Site Map - AI Chat Exporter</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="../assets/img/icons/icon.png" />
+    <link rel="stylesheet" href="../assets/css/map.css">
+    <script type="module" src="../assets/js/base.js"></script>
+  </head>
+  <body>
+    <!-- ===== Header ===== -->
+    <header>
+      <a href="#" class="logo">
+        <img src="../../assets/img/icons/icon.png" alt="AI Chat Exporter icon" />
+        AI Chat Exporter
+      </a>
+      <div class="header-right">
+        <a href="../#install" class="header-btn" title="Install Extension">⚙️</a>
+        <button id="themeToggle" class="header-btn" title="Toggle theme">
+          ☀️
+        </button>
+        <button id="hamburger" title="Menu">☰</button>
+      </div>
+    </header>
+
+    <!-- ===== Main (Grid) ===== -->
+    <main>
+      <nav id="sidebar" class="sidebar">
+        <details name="navbar">
+          <summary>Documentation</summary>
+          <ul>
+            <li><a href="../">Home</a></li>
+            <li><a href="privacy/">Privacy</a></li>
+            <li><a href="cli/">CLI</a></li>
+            <li><a href="changelog/">Changelog</a></li>
+            <li><a href="faq/">FAQ</a></li>
+          </ul>
+        </details>
+        <details name="navbar" open>
+          <summary>On this page</summary>
+          <ul>
+            <li><a href="#web-documentation">Web Documentation</a></li>
+            <li><a href="#project-documentation">Project Documentation</a></li>
+            <li><a href="#extension-documentation">Extension Documentation</a></li>
+            <li><a href="#repository">Repository</a></li>
+          </ul>
+        </details>
+      </nav>
+
+      <article>
+        <header class="hero">
+          <p class="eyebrow">AI Chat Exporter</p>
+          <h1>Documentation</h1>
+          <p class="hero-text">
+            Everything you need to understand, use, and explore the project.
+          </p>
+        </header>
+
+        <section id="web-documentation">
+          <header class="section-heading">
+            <h2>Web Documentation</h2>
+            <p>
+              Guides and reference pages available directly from the project
+              website.
+            </p>
+          </header>
+          <div class="sitemap-grid">
+            <a href="privacy/" class="sitemap-card">
+              <h3>Privacy Policy</h3>
+              <p>
+                How AI Chat Exporter handles conversations, permissions, and
+                local processing.
+              </p>
+              <span class="path">/pages/privacy/</span>
+            </a>
+            <a href="faq/" class="sitemap-card">
+              <h3>FAQ</h3>
+              <p>
+                Common questions about the extension, privacy, exports,
+                permissions, and future plans.
+              </p>
+              <span class="path">/pages/faq/</span>
+            </a>
+            <a href="cli/" class="sitemap-card">
+              <h3>CLI</h3>
+              <p>
+                Command-line installation, usage, options, examples, and
+                pipeline overview.
+              </p>
+              <span class="path">/pages/cli/</span>
+            </a>
+            <a href="changelog/" class="sitemap-card">
+              <h3>Changelog</h3>
+              <p>
+                Recent releases, improvements, fixes, and project evolution.
+              </p>
+              <span class="path">/pages/changelog/</span>
+            </a>
+          </div>
+        </section>
+
+        <section id="project-documentation">
+          <header class="section-heading">
+            <h2>Project Documentation</h2>
+            <p>
+              Technical documentation covering the architecture, data flow,
+              decisions, testing, and evolution of the project.
+            </p>
+          </header>
+          <div class="sitemap-grid">
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter/blob/main/README.md"
+              class="sitemap-card external"
+              target="_blank"
+              rel="noopener"
+            >
+              <h3>README</h3>
+              <p>
+                Project overview, installation, CLI usage, extension usage,
+                architecture, testing, and documentation index.
+              </p>
+              <span class="path">README.md</span>
+            </a>
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter/blob/main/docs/ARCHITECTURE.md"
+              class="sitemap-card external"
+              target="_blank"
+              rel="noopener"
+            >
+              <h3>Architecture</h3>
+              <p>
+                Internal organization of the system and its modular,
+                decoupled architecture.
+              </p>
+              <span class="path">docs/ARCHITECTURE.md</span>
+            </a>
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter/blob/main/docs/DATA_FLOW.md"
+              class="sitemap-card external"
+              target="_blank"
+              rel="noopener"
+            >
+              <h3>Data Flow</h3>
+              <p>
+                Conceptual flow of conversation data through the processing
+                pipeline.
+              </p>
+              <span class="path">docs/DATA_FLOW.md</span>
+            </a>
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter/blob/main/docs/INTEGRATION.md"
+              class="sitemap-card external"
+              target="_blank"
+              rel="noopener"
+            >
+              <h3>Integration</h3>
+              <p>
+                Contracts and relationships between the interfaces and the
+                Core.
+              </p>
+              <span class="path">docs/INTEGRATION.md</span>
+            </a>
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter/blob/main/docs/DECISIONS.md"
+              class="sitemap-card external"
+              target="_blank"
+              rel="noopener"
+            >
+              <h3>Architecture Decisions</h3>
+              <p>
+                Architectural Decision Records documenting important design
+                choices.
+              </p>
+              <span class="path">docs/DECISIONS.md</span>
+            </a>
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter/blob/main/docs/LABORATORY.md"
+              class="sitemap-card external"
+              target="_blank"
+              rel="noopener"
+            >
+              <h3>Laboratory</h3>
+              <p>
+                Hypotheses, experiments, discoveries, and technical
+                investigations.
+              </p>
+              <span class="path">docs/LABORATORY.md</span>
+            </a>
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter/blob/main/docs/MANUAL-TESTING.md"
+              class="sitemap-card external"
+              target="_blank"
+              rel="noopener"
+            >
+              <h3>Manual Testing</h3>
+              <p>
+                Manual test cases used to verify project behavior.
+              </p>
+              <span class="path">docs/MANUAL-TESTING.md</span>
+            </a>
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter/blob/main/docs/ROADMAP.md"
+              class="sitemap-card external"
+              target="_blank"
+              rel="noopener"
+            >
+              <h3>Roadmap</h3>
+              <p>
+                Current project status and planned evolution.
+              </p>
+              <span class="path">docs/ROADMAP.md</span>
+            </a>
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter/blob/main/docs/CHANGELOG.md"
+              class="sitemap-card external"
+              target="_blank"
+              rel="noopener"
+            >
+              <h3>Changelog</h3>
+              <p>
+                Complete version history and project changes.
+              </p>
+              <span class="path">docs/CHANGELOG.md</span>
+            </a>
+          </div>
+        </section>
+
+        <section id="extension-documentation">
+          <header class="section-heading">
+            <h2>Extension Documentation</h2>
+            <p>
+              Documentation specific to the Chrome Extension and its capture
+              architecture.
+            </p>
+          </header>
+          <div class="sitemap-grid">
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter/blob/main/docs/extension/ARCHITECTURE.md"
+              class="sitemap-card external"
+              target="_blank"
+              rel="noopener"
+            >
+              <h3>Extension Architecture</h3>
+              <p>
+                Internal design and architecture of the Chrome Extension.
+              </p>
+              <span class="path">
+                docs/extension/ARCHITECTURE.md
+              </span>
+            </a>
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter/blob/main/docs/extension/CAPTURE_RESEARCH.md"
+              class="sitemap-card external"
+              target="_blank"
+              rel="noopener"
+            >
+              <h3>Capture Research</h3>
+              <p>
+                Research and findings related to capturing conversation data
+                from ChatGPT.
+              </p>
+              <span class="path">
+                docs/extension/CAPTURE_RESEARCH.md
+              </span>
+            </a>
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter/blob/main/docs/extension/ROADMAP.md"
+              class="sitemap-card external"
+              target="_blank"
+              rel="noopener"
+            >
+              <h3>Extension Roadmap</h3>
+              <p>
+                Current status and planned evolution of the Chrome Extension.
+              </p>
+              <span class="path">
+                docs/extension/ROADMAP.md
+              </span>
+            </a>
+          </div>
+        </section>
+
+        <section id="repository">
+          <header class="section-heading">
+            <h2>Repository</h2>
+            <p>
+              The complete source code and project history are available on
+              GitHub.
+            </p>
+          </header>
+          <div class="repository-links">
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter"
+              target="_blank"
+              rel="noopener"
+            >
+              GitHub Repository ↗
+            </a>
+            <a
+              href="https://github.com/GuillermoCochrane/chat-exporter/issues"
+              target="_blank"
+              rel="noopener"
+            >
+              Issues ↗
+            </a>
+          </div>
+          <p class="sitemap-note">
+            AI Chat Exporter is open source and released under the MIT License.
+          </p>
+        </section>
+
+      </article>
+
+    </main>
+
+
+    <!-- ===== Footer ===== -->
+    <footer>
+      <span>MIT License</span><span>•</span
+      ><span id="footerVersion">v1.3.1</span><span>•</span>
+      <a href="./privacy/">Privacy Policy</a><span>•</span>
+      <a href="https://github.com/GuillermoCochrane/chat-exporter">GitHub</a>
+    </footer>
+  </body>
+</html>
