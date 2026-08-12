@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1200, initial-scale=1.0" />
+  <title>AI Chat Exporter - Social Preview</title>
+
+  <style>
+    :root {
+      --rgb-black: 0, 0, 0;
+      --rgb-white: 255, 255, 255;
+      --rgb-blue: 13, 27, 42;
+      --rgb-accent: 37, 73, 107;
+
+      --color-accent: #25496b;
+      --color-accent-hover: #1a3550;
+      --color-bg: #0d1b2a;
+      --color-text: #ebebeb;
+      --color-text-dim: #969696;
+      --color-neon: #00d4ff;
+      --color-neon-glow: rgba(0, 212, 255, 0.4);
+      --color-border-light: rgba(150, 150, 150, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;      
+      padding-top: 30px; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+
+    main {
+      width: 1200px;
+      height: 630px;
+      margin: 0;
+    }
+
+    main {
+      overflow: hidden;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .hero {
+      width: 1200px;
+      height: 630px;
+      position: relative;
+      overflow: hidden;
+
+      background:
+        radial-gradient(
+          circle at 20% 20%,
+          var(--color-accent-hover),
+          var(--color-bg) 78%
+        ),
+        linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.03),
+          transparent 40%
+        );
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.035;
+      background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--color-neon-glow);
+      filter: blur(140px);
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      /* Safe vertical area for social-platform cropping. */
+      padding: 70px 100px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .brand-logo {
+      width: 86px;
+      height: 86px;
+      object-fit: contain;
+      margin-bottom: 14px;
+
+      /* Follows the transparent PNG silhouette. */
+      filter:
+        drop-shadow(0 0 8px rgba(0, 212, 255, 0.28))
+        drop-shadow(0 8px 16px rgba(0, 0, 0, 0.55));
+    }
+
+    .brand-name {
+      margin: 0;
+      color: var(--color-text);
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
+
+    .brand-name span {
+      color: var(--color-neon);
+    }
+
+    .slogan {
+      margin: 0 0 34px;
+      color: var(--color-text);
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-align: center;
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+    }
+
+    .file {
+      width: 190px;
+      padding: 18px 18px 16px;
+      border-radius: 14px;
+
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid var(--color-border-light);
+
+      box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+      text-align: center;
+    }
+
+    .file .ext {
+      font-size: 34px;
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .file.json .ext {
+      color: #ff6b6b;
+    }
+
+    .file.md .ext {
+      color: var(--color-neon);
+    }
+
+    .file .name {
+      margin-top: 10px;
+      color: var(--color-text-dim);
+      font-size: 13px;
+    }
+
+    .arrow {
+      color: var(--color-neon);
+      font-size: 34px;
+      font-weight: 700;
+      text-shadow: 0 0 10px var(--color-neon-glow);
+    }
+
+    .icon-container {
+      width: 112px;
+      height: 112px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--color-border-light);
+
+      box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.45),
+        0 0 24px rgba(0, 212, 255, 0.08);
+    }
+
+    .icon-container img {
+      width: 82px;
+      height: 82px;
+      object-fit: contain;
+
+      filter:
+        drop-shadow(0 0 7px rgba(0, 212, 255, 0.25))
+        drop-shadow(0 5px 10px rgba(0, 0, 0, 0.5));
+    }
+
+    .footer {
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--color-text-dim);
+      font-size: 13px;
+    }
+
+    .footer span {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+
+    <div class="hero">
+      <div class="wrapper">
+        
+        <div class="brand">
+          <img
+          class="brand-logo"
+          src="icon.png"
+          alt="AI Chat Exporter logo"
+          />
+          
+          <h1 class="brand-name">
+            AI <span>Chat Exporter</span>
+          </h1>
+        </div>
+        
+        <p class="slogan">OWN YOUR CONVERSATIONS.</p>
+        
+        <div class="flow">
+          <div class="file json">
+            <div class="ext">{ }</div>
+            <div class="name">conversation.json</div>
+          </div>
+          
+          <div class="arrow">↔</div>
+          
+          <div class="icon-container">
+            <img src="icon.png" alt="" />
+          </div>
+          
+          <div class="arrow">↔</div>
+          
+          <div class="file md">
+            <div class="ext">#</div>
+            <div class="name">conversation.md</div>
+          </div>
+        </div>
+        
+        <div class="footer">
+          <span>Private</span>
+          <span>Local</span>
+          <span>Open Source</span>
+        </div>
+        
+      </div>
+    </div>
+  </main>
+</body>
+</html>
