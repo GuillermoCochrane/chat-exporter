@@ -21,3 +21,14 @@ export function loadLanguage() {
 export function saveLanguage(lang) {
   localStorage.setItem("language", lang);
 }
+
+// Traducción dinámica de textos en el DOM
+export function setLanguage(lang, translations) {
+  for (const entry in translations) {
+    const value = translations[entry];
+    const selector = `#${entry}`;
+    const element = $(selector);
+    const property = element?.hasAttribute("title") ? "title" : "textContent";
+    element && setValue(selector, property, value[lang] || value.en);
+  }
+}
