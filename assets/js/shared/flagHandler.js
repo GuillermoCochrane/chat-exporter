@@ -1,4 +1,4 @@
-//* Language Flag Handler
+//* Language flag Handler
 import { $,  $$} from '../utilities/dom.js';
 
 // Handler de banderas de la UI
@@ -23,4 +23,14 @@ console.log("nextFlag", $nextFlag);
   $nextFlag.removeAttribute('hidden');
 
   return nextLang;
+}
+
+// Mostrar la bandera correcta según el idioma inicial
+export function setStartingFlag(currentLanguage = "en") {
+  const $$flags = $$(".flag");
+  for  (const $flag of $$flags) {
+    const isActive = $flag.dataset.lang === currentLanguage;
+    $flag.classList.toggle("active", isActive);
+    $flag.toggleAttribute("hidden", !isActive);
+  }
 }
