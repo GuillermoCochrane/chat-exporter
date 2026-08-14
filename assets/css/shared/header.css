@@ -32,20 +32,7 @@ body>header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-
-  #hamburger {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--color-border-light);
-    background: rgba(var(--rgb-white), 0.04);
-    color: var(--color-text);
-    border-radius: 10px;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-  }
-
+  
   .header-btn {
     background: none;
     border: none;
@@ -61,6 +48,41 @@ body>header {
       background: rgba(255, 255, 255, 0.1);
     }
   }
+
+  #hamburger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border-light);
+    background: rgba(var(--rgb-white), 0.04);
+    color: var(--color-text);
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
+
+#langToggle {
+  background: rgba(var(--rgb-blue), 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: var(--glass-blur);
+  transition: transform 0.4s ease, background var(--speed-slow);
+
+  &:hover {
+    background: rgba(var(--rgb-accent), 0.6);
+    border-color: var(--color-neon);
+    box-shadow: 0 0 6px var(--color-neon-glow);
+  }
+
+  svg.flag {
+    width: 26px;
+    height: 26px;
+    border-radius: 3px;
+  }
+}
 
   a.header-btn {
     text-decoration: none;
