@@ -10,9 +10,6 @@ export function flagHandler() {
   const $nextFlag = $langToggle.querySelector(".flag:not(.active)");
   if (!$currentFlag || !$nextFlag) return null;
 
-console.log("activeFlag", $currentFlag);
-console.log("nextFlag", $nextFlag);
-
   const nextLang = $nextFlag.dataset.lang;
 
 // Intercambiar visibilidad usando atributos (SVG)

@@ -8,13 +8,17 @@ export const COMMONTRANSLATIONS = {
     en: "Install Extension",
     es: "Instalar Extensión"
   },
-  "toggle-theme": {
+  "themeToggle": {
     en: "Toggle theme",
     es: "Cambiar tema"
   },
-  "open-menu": {
+  "hamburger": {
     en: "Menu",
     es: "Menú"
+  },
+  langToggle: {
+    en: "Switch language",
+    es: "Cambiar idioma"
   },
 
   // Sidebar - Documentation
