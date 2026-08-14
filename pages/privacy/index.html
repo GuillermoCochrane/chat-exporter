@@ -118,18 +118,18 @@
       <!-- Main Content -->
       <article>
         <header class="hero">
-          <p class="eyebrow">AI Chat Exporter</p>
-          <h1>Privacy Policy</h1>
-          <p class="hero-text">How your data is handled.</p>
+          <p class="eyebrow" id="hero-eyebrow">AI Chat Exporter</p>
+          <h1 id="hero-title">Privacy Policy</h1>
+          <p class="hero-text" id="hero-text">How your data is handled.</p>
         </header>
 
         <section id="privacy-first">
           <header class="section-heading">
-            <h2>Privacy First</h2>
-            <p>AI Chat Exporter is designed with a privacy-first philosophy.</p>
+            <h2 id="privacy-first-title">Privacy First</h2>
+            <p id="privacy-first-subtitle">AI Chat Exporter is designed with a privacy-first philosophy.</p>
           </header>
 
-          <p>
+          <p id="privacy-first-description">
             The extension does not collect, store, transmit, or share personal
             information, conversation history, browsing activity, analytics, or
             usage statistics.
@@ -138,104 +138,98 @@
 
         <section id="local-processing">
           <header class="section-heading">
-            <h2>Local Processing</h2>
-            <p>All processing is performed locally inside your browser.</p>
+            <h2 id="local-processing-title">Local Processing</h2>
+            <p id="local-processing-subtitle">All processing is performed locally inside your browser.</p>
           </header>
 
-          <p>
+          <p id="local-processing-description">
             When you export a conversation, AI Chat Exporter reads the
             conversation currently open in ChatGPT and generates the selected
             Markdown or JSON file directly on your device.
           </p>
 
-          <p>No conversation content is sent to external servers.</p>
+          <p id="local-processing-noserver">No conversation content is sent to external servers.</p>
         </section>
 
-        <section id="permissions">
-          <header class="section-heading">
-            <h2>Permissions</h2>
-            <p>The extension requests only the permissions required for its functionality.</p>
-          </header>
+      <section id="permissions">
+        <header class="section-heading">
+          <h2 id="permissions-title">Permissions</h2>
+          <p id="permissions-subtitle">The extension requests only the permissions required for its functionality.</p>
+        </header>
 
-          <ul>
-            <li>
-              <strong>downloads</strong> — Saves exported files to your device.
-            </li>
+        <ul>
+          <li>
+            <strong>downloads</strong> — <span id="permission-downloads">Saves exported files to your device.</span>
+          </li>
+          <li>
+            <strong>storage</strong> — <span id="permission-storage">Stores user preferences such as language, export format, compact mode, and export options.</span>
+          </li>
+          <li>
+            <strong>Host permission (chatgpt.com)</strong> — <span id="permission-host">Reads the currently open ChatGPT conversation only to generate the requested export.</span>
+          </li>
+        </ul>
+      </section>
 
-            <li>
-              <strong>storage</strong> — Stores user preferences such as
-              language, export format, compact mode, and export options.
-            </li>
+      <section id="third-party-services">
+        <header class="section-heading">
+          <h2 id="third-party-title">Third-party Services</h2>
+          <p id="third-party-subtitle">AI Chat Exporter does not use external services for processing or tracking.</p>
+        </header>
 
-            <li>
-              <strong>Host permission (chatgpt.com)</strong> — Reads the
-              currently open ChatGPT conversation only to generate the requested
-              export.
-            </li>
-          </ul>
-        </section>
+        <ul>
+          <li id="third-party-1">Analytics services</li>
+          <li id="third-party-2">Advertising networks</li>
+          <li id="third-party-3">Tracking technologies</li>
+          <li id="third-party-4">Cloud storage</li>
+          <li id="third-party-5">External APIs</li>
+          <li id="third-party-6">Remote servers</li>
+        </ul>
+      </section>
 
-        <section id="third-party-services">
-          <header class="section-heading">
-            <h2>Third-party Services</h2>
-            <p>AI Chat Exporter does not use external services for processing or tracking.</p>
-          </header>
+      <section id="open-source">
+        <header class="section-heading">
+          <h2 id="open-source-title">Open Source</h2>
+          <p id="open-source-subtitle">AI Chat Exporter is released under the MIT License.</p>
+        </header>
 
-          <ul>
-            <li>Analytics services</li>
-            <li>Advertising networks</li>
-            <li>Tracking technologies</li>
-            <li>Cloud storage</li>
-            <li>External APIs</li>
-            <li>Remote servers</li>
-          </ul>
-        </section>
+        <p>
+          <span id="open-source-source-label">Source code:</span>
+          <br />
+          <a href="https://github.com/GuillermoCochrane/chat-exporter">
+            https://github.com/GuillermoCochrane/chat-exporter
+          </a>
+        </p>
+      </section>
 
-        <section id="open-source">
-          <header class="section-heading">
-            <h2>Open Source</h2>
-            <p>AI Chat Exporter is released under the MIT License.</p>
-          </header>
+      <section id="changes">
+        <header class="section-heading">
+          <h2 id="changes-title">Changes</h2>
+          <p id="changes-subtitle">Privacy Policy updates will always be published on this page.</p>
+        </header>
 
-          <p>
-            Source code:
-            <br />
-            <a href="https://github.com/GuillermoCochrane/chat-exporter">
-              https://github.com/GuillermoCochrane/chat-exporter
-            </a>
-          </p>
-        </section>
+        <p id="changes-description">
+          If this Privacy Policy changes in future releases, the updated
+          version will be published on this page.
+        </p>
+      </section>
 
-        <section id="changes">
-          <header class="section-heading">
-            <h2>Changes</h2>
-            <p>Privacy Policy updates will always be published on this page.</p>
-          </header>
+      <section id="contact">
+        <header class="section-heading">
+          <h2 id="contact-title">Contact</h2>
+          <p id="contact-subtitle">Questions or issues can be reported through GitHub Issues.</p>
+        </header>
 
-          <p>
-            If this Privacy Policy changes in future releases, the updated
-            version will be published on this page.
-          </p>
-        </section>
+        <p>
+          <a href="https://github.com/GuillermoCochrane/chat-exporter/issues">
+            https://github.com/GuillermoCochrane/chat-exporter/issues
+          </a>
+        </p>
+      </section>
 
-        <section id="contact">
-          <header class="section-heading">
-            <h2>Contact</h2>
-            <p>Questions or issues can be reported through GitHub Issues.</p>
-          </header>
-
-          <p>
-            <a href="https://github.com/GuillermoCochrane/chat-exporter/issues">
-              https://github.com/GuillermoCochrane/chat-exporter/issues
-            </a>
-          </p>
-        </section>
-
-        <aside>
-            AI Chat Exporter is an independent open-source project and is not
-            affiliated with, endorsed by, or associated with OpenAI or ChatGPT.
-        </aside>
-      </article>
+      <aside id="disclaimer">
+        AI Chat Exporter is an independent open-source project and is not
+        affiliated with, endorsed by, or associated with OpenAI or ChatGPT.
+      </aside>
     </main>
 
     <!-- ===== Footer ===== -->
