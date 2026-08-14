@@ -39,53 +39,76 @@
     <style>
       /* Habilita transiciones automáticas para navegación entre páginas */
       /* incluimos esta regla aqui porque si lo hacemos en una hoja CSS externo, no funciona */
-      @view-transition { navigation: auto; }
+      /* @view-transition { navigation: auto; } */
     </style>
 
     <link rel="stylesheet" href="../../assets/css/cli.css" />
-    <script type="module" src="../../assets/js/base.js"></script>
+    <script type="module" src="../../assets/js/cli.js"></script>
   </head>
   <body>
     <!-- ===== Header ===== -->
-    <header>
-      <a href="../../" class="logo">
-        <img
-          src="../../assets/img/icons/icon.png"
-          alt="AI Chat Exporter icon"
-        />
-        AI Chat Exporter
-      </a>
-      <div class="header-right">
-        <a href="../../#install" class="header-btn" title="Install Extension">⚙️</a
-        >
-        <button id="themeToggle" class="header-btn" title="Toggle theme">☀️</button>
-        <button id="hamburger" title="Menu">☰</button>
-      </div>
-    </header>
+  <header>
+    <a href="../../" class="logo">
+      <img
+        src="../../assets/img/icons/icon.png"
+        alt="AI Chat Exporter icon"
+      />
+      <span id="brand-name">AI Chat Exporter</span>
+    </a>
+
+    <div class="header-right">
+      <a href="../../#install" class="header-btn" title="Install Extension" id="install-extension">⚙️</a>
+
+      <button id="themeToggle" class="header-btn" title="Toggle theme">☀️</button>
+
+      <button id="langToggle" class="header-btn" aria-label="Switch language" title="Switch language" type="button">
+        <!-- Bandera de España (ES) -->
+        <svg class="flag active" data-lang="es" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <rect y="4" width="24" height="5" fill="#c60b1e"/>
+          <rect y="9" width="24" height="6" fill="#ffc400"/>
+          <rect y="15" width="24" height="5" fill="#c60b1e"/>
+        </svg>
+
+        <!-- Bandera del Reino Unido (EN) -->
+        <svg class="flag" data-lang="en" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 30" width="1000" height="600" hidden>
+          <clipPath id="t">
+            <path d="M25,15h25v15zv15h-25zh-25v-15zv-15h25z"/>
+          </clipPath>
+          <path d="M0,0v30h50v-30z" fill="#012169"/>
+          <path d="M0,0 50,30M50,0 0,30" stroke="#fff" stroke-width="6"/>
+          <path d="M0,0 50,30M50,0 0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4"/>
+          <path d="M-1 11h22v-12h8v12h22v8h-22v12h-8v-12h-22z" fill="#C8102E" stroke="#FFF" stroke-width="2"/>
+        </svg>
+      </button>
+
+      <button id="hamburger" title="Menu">☰</button>
+    </div>
+  </header>
 
     <!-- ===== Main (Grid) ===== -->
     <main>
       <nav id="sidebar" class="sidebar">
-        <details name="navbar">
-          <summary>Documentation</summary>
+        <details open>
+          <summary id="nav-documentation">Documentation</summary>
           <ul>
-            <li><a href="../../">Home</a></li>
-            <li><a href="../privacy/">Privacy</a></li>
-            <li><a href="#" class="current">CLI</a></li>
-            <li><a href="../changelog/">Changelog</a></li>
-            <li><a href="../faq/">FAQ</a></li>
+            <li><a href="../../" id="nav-home">Home</a></li>
+            <li><a href="../privacy/" id="nav-privacy">Privacy</a></li>
+            <li><a href="./" class="current" id="nav-cli">CLI</a></li>
+            <li><a href="../changelog/" id="nav-changelog">Changelog</a></li>
+            <li><a href="../faq/" id="nav-faq">FAQ</a></li>
           </ul>
         </details>
-        <details name="navbar" open>
-          <summary>On this page</summary>
+
+        <details open>
+          <summary id="on-this-page">On this page</summary>
           <ul>
-            <li><a href="#overview">Overview</a></li>
-            <li><a href="#requirements">Requirements</a></li>
-            <li><a href="#installation">Installation</a></li>
-            <li><a href="#usage">Basic Usage</a></li>
-            <li><a href="#options">Options</a></li>
-            <li><a href="#examples">Examples</a></li>
-            <li><a href="#pipeline">How It Works</a></li>
+            <li><a href="#overview" id="anchor-overview">Overview</a></li>
+            <li><a href="#requirements" id="anchor-requirements">Requirements</a></li>
+            <li><a href="#installation" id="anchor-installation">Installation</a></li>
+            <li><a href="#usage" id="anchor-usage">Basic Usage</a></li>
+            <li><a href="#options" id="anchor-options">Options</a></li>
+            <li><a href="#examples" id="anchor-examples">Examples</a></li>
+            <li><a href="#pipeline" id="anchor-pipeline">How It Works</a></li>
           </ul>
         </details>
       </nav>
@@ -319,10 +342,13 @@ Conversation
 
     <!-- ===== Footer ===== -->
     <footer>
-      <span>MIT License</span><span>•</span
-      ><span id="footerVersion">v1.3.1</span><span>•</span>
-      <a href="../privacy/">Privacy Policy</a><span>•</span>
-      <a href="https://github.com/GuillermoCochrane/chat-exporter">GitHub</a>
+      <span id="footer-license">MIT License</span>
+      <span>•</span>
+      <span id="footerVersion">v1.3.1</span>
+      <span>•</span>
+      <a href="../privacy/" id="footer-privacy">Privacy Policy</a>
+      <span>•</span>
+      <a href="https://github.com/GuillermoCochrane/chat-exporter" id="footer-github">GitHub</a>
     </footer>
   </body>
 </html>
