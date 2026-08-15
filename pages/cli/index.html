@@ -117,25 +117,25 @@
       <article>
         <header class="hero">
           <p class="eyebrow">AI Chat Exporter</p>
-          <h1>Command Line Interface</h1>
-          <p class="hero-text">
-            Export ChatGPT conversations directly from your termstronginal.
+          <h1 id="hero-title">Command Line Interface</h1>
+          <p class="hero-text" id="hero-text">
+            Export ChatGPT conversations directly from your terminal.
           </p>
         </header>
 
         <section id="overview">
           <header class="section-heading">
-            <h2>Overview</h2>
+            <h2 id="overview-title">Overview</h2>
           </header>
-          <p>
+          <p id="overview-p1">
             The CLI lets you process exported ChatGPT JSON files directly from
             the terminal and generate clean Markdown documents.
           </p>
-          <p>
+          <p id="overview-p2">
             It uses the same modular pipeline as the Chrome Extension, without
             requiring a browser.
           </p>
-          <p>
+          <p id="overview-p3">
             This makes the CLI useful for local processing, automation,
             experimentation, and integration into other workflows.
           </p>
@@ -143,22 +143,25 @@
 
         <section id="requirements">
           <header class="section-heading">
-            <h2>Requirements</h2>
+            <h2 id="requirements-title">Requirements</h2>
           </header>
-          <p><strong class="highlight">Node.js 20</strong> - or newer.</p>
           <p>
-            The core pipeline has no external npm dependencies. The project uses
-            <strong class="highlight">esbuild </strong> as a development dependency for building
-            the Chrome Extension.
+            <strong class="highlight">Node.js 20</strong>
+            <span id="requirements-p1"> — or newer.</span>
+          </p>
+          <p>
+            <span id="requirements-p2-intro">The core pipeline has no external npm dependencies. The project uses</span>
+            <strong class="highlight">esbuild</strong>
+            <span id="requirements-p2-outro"> as a development dependency for building the Chrome Extension.</span>
           </p>
         </section>
 
         <section id="installation">
           <header class="section-heading">
-            <h2>Installation</h2>
+            <h2 id="installation-title">Installation</h2>
           </header>
 
-          <p>Clone the repository and install the dependencies:</p>
+          <p id="installation-instructions">Clone the repository and install the dependencies:</p>
 
           <pre class="cli-command"><code>git clone https://github.com/GuillermoCochrane/chat-exporter.git
 
@@ -169,59 +172,61 @@ npm install</code></pre>
 
         <section id="usage">
           <header class="section-heading">
-            <h2>Basic Usage</h2>
+            <h2 id="usage-title">Basic Usage</h2>
           </header>
-          <p>Run the exporter with its default configuration:</p>
+          <p id="usage-intro">Run the exporter with its default configuration:</p>
           <pre class="cli-command"><code>npm start</code></pre>
           <p>
-            By default, the CLI reads:
+            <span id="usage-input">By default, the CLI reads:</span>
             <strong class="highlight">assets/input/conversation.json</strong>
           </p>
           <p>
-            The generated Markdown file is written to:
+            <span id="usage-output">The generated Markdown file is written to:</span>
             <strong class="highlight">assets/output/conversacion.md</strong>
           </p>
         </section>
 
         <section id="options">
           <header class="section-heading">
-            <h2>Options</h2>
+            <h2 id="options-title">Options</h2>
           </header>
           <dl class="cli-options">
             <div>
               <dt>-h, --help</dt>
-              <dd>Display the CLI help.</dd>
+              <dd id="option-help">Display the CLI help.</dd>
             </div>
             <div>
               <dt>-v, --version</dt>
-              <dd>Display the current version.</dd>
+              <dd id="option-version">Display the current version.</dd>
             </div>
             <div>
               <dt>-i, --input &lt;file&gt;</dt>
-              <dd>Specify the input JSON file.</dd>
+              <dd id="option-input">Specify the input JSON file.</dd>
             </div>
             <div>
               <dt>-o, --output &lt;file&gt;</dt>
-              <dd>Specify the output Markdown file.</dd>
+              <dd id="option-output">Specify the output Markdown file.</dd>
             </div>
             <div>
               <dt>-in, --inspect</dt>
-              <dd>Show conversation statistics without exporting.</dd>
+              <dd id="option-inspect">Show conversation statistics without exporting.</dd>
             </div>
             <div>
               <dt>-nw, --no-write</dt>
-              <dd>Run the complete pipeline without writing the output file.</dd>
+              <dd id="option-nowrite">Run the complete pipeline without writing the output file.</dd>
             </div>
             <div>
               <dt>-c, --compact</dt>
-              <dd>Remove unnecessary line breaks from the generated Markdown.</dd>
+              <dd id="option-compact">Remove unnecessary line breaks from the generated Markdown.</dd>
             </div>
             <div>
               <dt>-r, --role &lt;role&gt;</dt>
               <dd>
-                Filter messages by role:
-                <strong class="highlight">all</strong>, <strong class="highlight">user</strong>, or
-                <strong class="highlight">assistant</strong>.
+                <span id="option-role">Filter messages by role:</span>
+                <strong class="highlight" id="option-role-all">all</strong>, 
+                <strong class="highlight" id="option-role-user">user</strong>, 
+                <span id="option-role-or">or</span>
+                <strong class="highlight" id="option-role-assistant">assistant</strong>.
               </dd>
             </div>
           </dl>
@@ -229,50 +234,40 @@ npm install</code></pre>
 
         <section id="examples">
           <header class="section-heading">
-            <h2>Examples</h2>
+            <h2 id="examples-title">Examples</h2>
           </header>
 
           <ul class="cli-examples">
             <li class="cli-example">
-              <p>Export using the default paths:</p>
+              <p id="example-default">Export using the default paths:</p>
               <pre class="cli-command"><code>npm start</code></pre>
             </li>
             <li class="cli-example">
-              <p>Use a custom input file:</p>
-              <pre
-                class="cli-command"
-              ><code>npm start -- -i assets/input/conversation.json</code></pre>
+              <p id="example-custom-input">Use a custom input file:</p>
+              <pre class="cli-command"><code>npm start -- -i assets/input/conversation.json</code></pre>
             </li>
             <li class="cli-example">
-              <p>Use a custom output file:</p>
-              <pre
-                class="cli-command"
-              ><code>npm start -- -i assets/input/conversation.json -o assets/output/prueba.md</code></pre>
+              <p id="example-custom-output">Use a custom output file:</p>
+              <pre class="cli-command"><code>npm start -- -i assets/input/conversation.json -o assets/output/prueba.md</code></pre>
             </li>
             <li class="cli-example">
-              <p>Enable compact mode:</p>
-              <pre
-                class="cli-command"
-              ><code>npm start -- -i assets/input/conversation.json -o assets/output/prueba.md -c</code></pre>
+              <p id="example-compact">Enable compact mode:</p>
+              <pre class="cli-command"><code>npm start -- -i assets/input/conversation.json -o assets/output/prueba.md -c</code></pre>
             </li>
             <li class="cli-example">
-              <p>Export only user messages:</p>
-              <pre
-                class="cli-command"
-              ><code>npm start -- -i assets/input/conversation.json -o assets/output/user.md --role user</code></pre>
+              <p id="example-user">Export only user messages:</p>
+              <pre class="cli-command"><code>npm start -- -i assets/input/conversation.json -o assets/output/user.md --role user</code></pre>
             </li>
             <li class="cli-example">
-              <p>Export only assistant messages:</p>
-              <pre
-                class="cli-command"
-              ><code>npm start -- -i assets/input/conversation.json -o assets/output/assistant.md --role assistant</code></pre>
+              <p id="example-assistant">Export only assistant messages:</p>
+              <pre class="cli-command"><code>npm start -- -i assets/input/conversation.json -o assets/output/assistant.md --role assistant</code></pre>
             </li>
             <li class="cli-example">
-              <p>Inspect a conversation without exporting it:</p>
+              <p id="example-inspect">Inspect a conversation without exporting it:</p>
               <pre class="cli-command"><code>npm start -- --inspect</code></pre>
             </li>
             <li class="cli-example">
-              <p>Run the pipeline without writing an output file:</p>
+              <p id="example-no-write">Run the pipeline without writing an output file:</p>
               <pre class="cli-command"><code>npm start -- --no-write</code></pre>
             </li>
           </ul>
@@ -280,61 +275,62 @@ npm install</code></pre>
 
         <section id="pipeline">
           <header class="section-heading">
-            <h2>How It Works</h2>
+            <h2 id="pipeline-title">How It Works</h2>
           </header>
-          <p>
+          <p id="pipeline-intro">
             The CLI is intentionally thin. It parses the command-line arguments,
             builds the pipeline configuration, and delegates the actual
             processing to the shared Core.
           </p>
-          <pre class="pipeline"><code>CLI
- │
- ▼
-<span class="highlight">Pipeline Profile</span>
- │
- ▼
-<span class="highlight">Pipeline Config</span>
- │
- ▼
-<span class="highlight">runExporter</span>
- │
- ▼
-Conversation Source
- │
- ▼
-Conversation
- │
- ▼
-<span class="highlight">runPipeline</span>
- │
- ├── Inspector
- ├── Parser
- ├── Filter
- └── Normalizer
- │
- ▼
-<span class="highlight">Renderer</span>
- │
- ▼
-<span class="highlight">Output</span></code></pre>
-          <p>
+          <pre class="pipeline"><code>         CLI
+          │
+          ▼
+<span class="highlight">   Pipeline Profile</span>
+          │
+          ▼
+<span class="highlight">   Pipeline Config</span>
+          │
+          ▼
+<span class="highlight">     runExporter</span>
+          │
+          ▼
+ Conversation Source
+          │
+          ▼
+    Conversation
+          │
+          ▼
+<span class="highlight">     runPipeline</span>
+          │
+          ├── Inspector
+          ├── Parser
+          ├── Filter
+          └── Normalizer
+          │
+          ▼
+<span class="highlight">       Renderer</span>
+          │
+          ▼
+<span class="highlight">        Output</span></code></pre>
+          <p id="pipeline-module">
             Each module has a single responsibility. The Core does not depend on
             the interface that started the process or on the destination of the
             generated result.
           </p>
-          <p>
+          <p id="pipeline-interface">
             The CLI therefore acts as one interface over the same processing
             engine used by the Chrome Extension.
           </p>
           <p>
-            For a deeper look at the architecture, see the
+            <span id="pipeline-docs-intro">For a deeper look at the architecture, see the</span>
             <a
               href="https://github.com/GuillermoCochrane/chat-exporter/blob/main/README.md"
               target="_blank"
               rel="noopener"
+              id="pipeline-docs-link"
             >
-              project documentation on GitHub </a
-            >.
+              project documentation on GitHub
+            </a>.
           </p>
         </section>
       </article>
