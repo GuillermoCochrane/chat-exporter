@@ -42,6 +42,10 @@ body>main {
   }
 }
 
+li.unstyled {
+  list-style: none;
+}
+
 /*? ===================== Section Headings ======================== */
 
 .section-heading h2 {
