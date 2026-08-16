@@ -39,7 +39,7 @@ body {
 
 /* Representa la página VIEJA que está saliendo/desapareciendo (hacia arriba) */
 ::view-transition-old(root) {
-  animation-name: slide-out-up;
+  animation-name: slide-out-down;
 }
 
 /* Representa la página NUEVA que está entrando/apareciendo (desde abajo) */
@@ -48,9 +48,14 @@ body {
 }
 
 /* Animación para la página VIEJA (sube y desaparece) */
-@keyframes slide-out-up {
+@keyframes slide-out-down {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
   to {
-    transform: translateY(-100%);
+    transform: translateY(100%);
     opacity: 0;
   }
 }
