@@ -1,4 +1,9 @@
 export const CHANGELOGTRANSLATIONS = {
+  // Changelog navbar
+  "anchor-v140": {
+    en: "v1.4.0 — Official website",
+    es: "v1.4.0 — Sitio web oficial",
+  },
   "anchor-v131": {
     en: "v1.3.1 — Multi-language",
     es: "v1.3.1 — Multiidioma",
@@ -22,6 +27,80 @@ export const CHANGELOGTRANSLATIONS = {
   "anchor-older": {
     en: "Older versions",
     es: "Versiones anteriores",
+  },
+
+  // v1.4.0
+  "changelog-v140-title": {
+    en: " — Official website & multi-language system",
+    es: " — Sitio web oficial y sistema multiidioma",
+  },
+  "changelog-v140-item1": {
+    en: "Created the official project website, hosted on GitHub Pages, with the same cyberpunk visual identity as the extension.",
+    es: "Se creó el sitio web oficial del proyecto, alojado en GitHub Pages, con la misma identidad visual cyberpunk de la extensión.",
+  },
+  "changelog-v140-item2": {
+    en: "Implemented the following pages:",
+    es: "Se implementaron las siguientes páginas:",
+  },
+  "changelog-v140-sub1": {
+    en: "Landing page.",
+    es: "Landing page.",
+  },
+  "changelog-v140-sub2": {
+    en: "Privacy policy page.",
+    es: "Página de política de privacidad.",
+  },
+  "changelog-v140-sub3": {
+    en: "FAQ page.",
+    es: "Página de preguntas frecuentes.",
+  },
+  "changelog-v140-sub4": {
+    en: "CLI documentation page.",
+    es: "Página de documentación de la CLI.",
+  },
+  "changelog-v140-sub5": {
+    en: "Changelog page.",
+    es: "Página de historial de cambios.",
+  },
+  "changelog-v140-sub6": {
+    en: "Sitemap page as navigation fallback.",
+    es: "Página de mapa del sitio como respaldo de navegación.",
+  },
+  "changelog-v140-item3": {
+    en: "Added a multi-language system (Spanish / English) to all website pages, including translation helpers per page, reusable language handlers, visual language toggle with SVG flags, preference persistence in localStorage, and automatic browser language detection.",
+    es: "Se agregó un sistema multiidioma (español / inglés) a todas las páginas del sitio, incluyendo helpers de traducción por página, handlers de idioma reutilizables, toggle visual con banderas SVG, persistencia de preferencias en localStorage y detección automática del idioma del navegador.",
+  },
+  "changelog-v140-item4": {
+    en: "Modularized the site's CSS and JavaScript by responsibility.",
+    es: "Se modularizaron el CSS y JavaScript del sitio por responsabilidad.",
+  },
+  "changelog-v140-item5": {
+    en: "Added complete SEO, Open Graph, and Twitter Card meta tags across all pages.",
+    es: "Se agregaron meta tags completos de SEO, Open Graph y Twitter Cards en todas las páginas.",
+  },
+  "changelog-v140-item6": {
+    en: "Created the social preview image and its HTML template.",
+    es: "Se creó la imagen social de vista previa y su plantilla HTML.",
+  },
+  "changelog-v140-item7": {
+    en: "Added Google Search Console verification meta tag.",
+    es: "Se agregó la meta tag de verificación de Google Search Console.",
+  },
+  "changelog-v140-item8": {
+    en: "Implemented page transitions using the View Transitions API.",
+    es: "Se implementaron transiciones de página usando la API de View Transitions.",
+  },
+  "changelog-v140-item9": {
+    en: "Improved active section detection in the sidebar during scroll.",
+    es: "Se mejoró la detección de la sección activa en la sidebar durante el scroll.",
+  },
+  "changelog-v140-item10": {
+    en: "Fixed multiple responsive, style, and navigation issues.",
+    es: "Se corrigieron múltiples problemas de responsive, estilos y navegación.",
+  },
+  "changelog-v140-item11": {
+    en: "Updated general and extension documentation to reflect the new website.",
+    es: "Se actualizó la documentación general y de la extensión para reflejar la nueva web.",
   },
 
   // v1.3.1
