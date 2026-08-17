@@ -11,27 +11,36 @@
   - [Procesamiento](#procesamiento)
 - [Testing](#testing)
 - [Responsabilidades](#responsabilidades)
-  - [sources/](#sources)
-  - [configuration/](#configuration)
-  - [exporter.js](#exporterjs)
-  - [pipeline.js](#pipelinejs)
-  - [inspector.js](#inspectorjs)
-  - [parser.js](#parserjs)
-  - [filter.js](#filterjs)
-  - [normalizer.js](#normalizerjs)
-  - [formatter.js](#formatterjs)
-  - [renderers/](#renderers)
-  - [outputs/](#outputs)
-  - [writer.js](#writerjs)
-  - [cli.js](#clijs)
-  - [validator.js](#validatorjs)
-  - [main.js](#mainjs)
-  - [extensionCore.js](#extensioncorejs)
-  - [inject.js](#injectjs)
-  - [content.js](#contentjs)
-  - [background.js](#backgroundjs)
-  - [popup.html / js/ / styles/](#popuphtml--js--styles)
-  - [buildExtension.js](#buildextensionjs)
+  - [Core](#core)
+    - [sources/](#sources)
+    - [configuration/](#configuration)
+    - [exporter.js](#exporterjs)
+    - [pipeline.js](#pipelinejs)
+    - [inspector.js](#inspectorjs)
+    - [parser.js](#parserjs)
+    - [filter.js](#filterjs)
+    - [normalizer.js](#normalizerjs)
+    - [formatter.js](#formatterjs)
+    - [renderers/](#renderers)
+    - [outputs/](#outputs)
+    - [writer.js](#writerjs)
+  - [Interfaces](#interfaces)
+    - [cli.js](#clijs)
+    - [validator.js](#validatorjs)
+  - [Extensión](#extensión)
+    - [main.js](#mainjs)
+    - [extensionCore.js](#extensioncorejs)
+    - [inject.js](#injectjs)
+    - [content.js](#contentjs)
+    - [background.js](#backgroundjs)
+    - [popup.html / js/ / styles/](#popuphtml--js--styles)
+  - [Web](#web)
+    - [Páginas](#páginas)
+    - [Estilos](#estilos)
+    - [JavaScript](#javascript)
+    - [Sistema multiidioma](#sistema-multiidioma)
+  - [Utilities](#utilities)
+    - [dom.js](#domjs)
 - [Distribución](#distribución)
 
 ---
@@ -55,60 +64,133 @@ La arquitectura busca que el núcleo del motor permanezca completamente independ
 # Estructura
 
 ```text
-src/
+/
+├── src/
+│   ├── main.js
+│   ├── configuration/
+│   │   ├── pipelineConfig.js
+│   │   └── pipelineProfiles.js
+│   ├── core/
+│   │   ├── exporter.js
+│   │   ├── pipeline.js
+│   │   ├── inspector.js
+│   │   ├── parser.js
+│   │   ├── filter.js
+│   │   ├── normalizer.js
+│   │   ├── markdown.js
+│   │   ├── writer.js
+│   │   ├── sources/
+│   │   │   ├── index.js
+│   │   │   ├── jsonFile.js
+│   │   │   ├── jsonFile.stub.js
+│   │   │   └── extensionSource.js
+│   │   ├── renderers/
+│   │   │   └── .gitkeep
+│   │   └── outputs/
+│   │       └── .gitkeep
+│   ├── interfaces/
+│   │   ├── cli.js
+│   │   └── extension/
+│   │       ├── background.js
+│   │       ├── content.js
+│   │       ├── extensionCore.js
+│   │       ├── inject.js
+│   │       ├── manifest.json
+│   │       ├── popup.html
+│   │       ├── js/
+│   │       │   ├── popup.js
+│   │       │   ├── languages.js
+│   │       │   └── languageSettings.js
+│   │       ├── styles/
+│   │       │   ├── popup.css
+│   │       │   ├── variables.css
+│   │       │   ├── base.css
+│   │       │   ├── selector.css
+│   │       │   ├── options.css
+│   │       │   ├── button.css
+│   │       │   └── footer.css
+│   │       └── icons/
+│   └── utilities/
+│       ├── formatter.js
+│       └── validator.js
 │
-├── main.js
+├── assets/
+│   ├── css/
+│   │   ├── main.css
+│   │   ├── privacy.css
+│   │   ├── faq.css
+│   │   ├── cli.css
+│   │   ├── changelog.css
+│   │   ├── map.css
+│   │   ├── shared/
+│   │   │   ├── shared.css
+│   │   │   ├── content.css
+│   │   │   ├── variables.css
+│   │   │   ├── base.css
+│   │   │   ├── header.css
+│   │   │   ├── sidebar.css
+│   │   │   ├── main.css
+│   │   │   └── footer.css
+│   │   ├── home/
+│   │   │   ├── hero.css
+│   │   │   ├── carousel.css
+│   │   │   ├── features.css
+│   │   │   ├── install.css
+│   │   │   ├── roadmap.css
+│   │   │   └── faq.css
+│   │   └── ... (otros módulos de página)
+│   ├── js/
+│   │   ├── main.js
+│   │   ├── base.js
+│   │   ├── privacy.js
+│   │   ├── faq.js
+│   │   ├── cli.js
+│   │   ├── changelog.js
+│   │   ├── sitemap.js
+│   │   ├── languages/
+│   │   │   ├── common.js
+│   │   │   ├── home.js
+│   │   │   ├── privacy.js
+│   │   │   ├── faq.js
+│   │   │   ├── cli.js
+│   │   │   ├── changelog.js
+│   │   │   └── sitemap.js
+│   │   ├── shared/
+│   │   │   ├── commonHandler.js
+│   │   │   ├── languageHandler.js
+│   │   │   ├── languageSettings.js
+│   │   │   ├── flaghandler.js
+│   │   │   ├── intersectionObserver.js
+│   │   │   ├── sidebarToggle.js
+│   │   │   ├── themeToggle.js
+│   │   │   └── versionHandler.js
+│   │   └── utilities/
+│   │       └── dom.js
+│   ├── img/
+│   │   ├── icons/
+│   │   ├── store/
+│   │   └── social/
+│   └── scripts/
+│       ├── buildExtension.js
+│       └── buildExtensionZip.js
 │
-├── configuration/
-│   ├── pipelineConfig.js
-│   └── pipelineProfiles.js
+├── pages/
+│   ├── index.html
+│   ├── privacy/
+│   │   └── index.html
+│   ├── faq/
+│   │   └── index.html
+│   ├── cli/
+│   │   └── index.html
+│   ├── changelog/
+│   │   └── index.html
+│   └── sitemap/
+│       └── index.html
 │
-├── core/
-│   ├── exporter.js
-│   ├── pipeline.js
-│   ├── inspector.js
-│   ├── parser.js
-│   ├── filter.js
-│   ├── normalizer.js
-│   │
-│   ├── sources/
-│   │   ├── index.js
-│   │   ├── jsonFile.js
-│   │   ├── jsonFile.stub.js
-│   │   └── extensionSource.js
-│   │
-│   ├── renderers/
-│   │   └── .gitkeep
-│   │
-│   └── outputs/
-│       └── .gitkeep
-│
-├── interfaces/
-│   ├── cli.js
-│   └── extension/
-│       ├── background.js
-│       ├── content.js
-│       ├── extensionCore.js
-│       ├── inject.js
-│       ├── manifest.json
-│       ├── popup.html
-│       ├── js/
-│       │   ├── popup.js
-│       │   ├── languages.js
-│       │   └── languageSettings.js
-│       ├── styles/
-│       │   ├── popup.css
-│       │   ├── variables.css
-│       │   ├── base.css
-│       │   ├── selector.css
-│       │   ├── options.css
-│       │   ├── button.css
-│       │   └── footer.css
-│       └── icons/
-│
-└── utilities/
-    ├── formatter.js
-    └── validator.js
+├── docs/
+├── test/
+├── package.json
+└── README.md
 ```
 
 La arquitectura separa cuatro responsabilidades claramente diferenciadas:
@@ -119,11 +201,6 @@ La arquitectura separa cuatro responsabilidades claramente diferenciadas:
 - **Renderers / Outputs**, encargados de transformar y entregar el resultado.
 
 Esta separación permite incorporar nuevas interfaces, nuevas fuentes y nuevos formatos de exportación sin modificar el núcleo del motor.
-
-El proyecto incluye además:
-
-- `assets/scripts/buildExtension.js`: script de build que empaqueta el core para la extensión mediante esbuild.
-- `assets/img/`: variantes de íconos exploradas durante el diseño de la extensión.
 
 ---
 
@@ -213,7 +290,11 @@ Además de la suite automatizada, el proyecto incorpora validaciones manuales pa
 
 # Responsabilidades
 
-## sources/
+## Core
+
+Los módulos dentro de `src/core/` y `src/configuration/` forman el núcleo del motor y no dependen de la interfaz que los use.
+
+### sources/
 
 Implementa las distintas fuentes de conversación soportadas por el sistema.
 
@@ -229,9 +310,7 @@ Las Sources siempre entregan una `Conversation` sin interpretar su contenido.
 
 El Core permanece completamente desacoplado del origen de los datos.
 
----
-
-## configuration/
+### configuration/
 
 Centraliza la configuración compartida del pipeline.
 
@@ -242,9 +321,7 @@ Actualmente define:
 
 Las interfaces reutilizan esta configuración sin duplicar valores por defecto.
 
----
-
-## exporter.js
+### exporter.js
 
 Coordina la ejecución completa del proceso de exportación.
 
@@ -260,9 +337,7 @@ No implementa procesamiento de conversaciones.
 
 No conoce el mecanismo concreto de salida (archivo, descarga, etc.).
 
----
-
-## pipeline.js
+### pipeline.js
 
 Representa el núcleo del motor.
 
@@ -282,9 +357,7 @@ No conoce:
 - renderizadores;
 - mecanismos de salida.
 
----
-
-## inspector.js
+### inspector.js
 
 Obtiene estadísticas de la conversación.
 
@@ -292,9 +365,7 @@ No modifica información.
 
 Puede utilizarse como punto de finalización anticipada mediante `--inspect`.
 
----
-
-## parser.js
+### parser.js
 
 Transforma el árbol (`mapping`) en una lista de mensajes.
 
@@ -302,9 +373,7 @@ No filtra ni modifica contenido.
 
 Cuenta con pruebas automatizadas independientes.
 
----
-
-## filter.js
+### filter.js
 
 Filtra los mensajes conversacionales.
 
@@ -314,9 +383,7 @@ Filtra los mensajes conversacionales.
 
 Cuenta con pruebas automatizadas independientes.
 
----
-
-## normalizer.js
+### normalizer.js
 
 Transforma los mensajes filtrados al modelo interno del proyecto.
 
@@ -324,9 +391,7 @@ Elimina la dependencia del formato original de ChatGPT.
 
 Cuenta con pruebas automatizadas independientes.
 
----
-
-## formatter.js
+### formatter.js
 
 Centraliza el formateo reutilizable.
 
@@ -340,9 +405,7 @@ No conoce ningún formato de salida.
 
 Cuenta con pruebas automatizadas independientes.
 
----
-
-## renderers/
+### renderers/
 
 Contendrá los distintos renderizadores soportados por el proyecto.
 
@@ -350,9 +413,7 @@ Actualmente se encuentra preparado mediante `.gitkeep`.
 
 El primer renderer previsto es Markdown.
 
----
-
-## outputs/
+### outputs/
 
 Contendrá los distintos mecanismos de salida.
 
@@ -365,9 +426,7 @@ Ejemplos futuros:
 
 Actualmente se encuentra preparado mediante `.gitkeep`.
 
----
-
-## writer.js
+### writer.js
 
 Implementa la escritura de archivos en disco.
 
@@ -377,7 +436,11 @@ Representa únicamente uno de los posibles mecanismos de salida.
 
 ---
 
-## cli.js
+## Interfaces
+
+Las interfaces construyen la configuración y delegan en el Core.
+
+### cli.js
 
 Construye el perfil de ejecución solicitado por el usuario.
 
@@ -399,9 +462,7 @@ La validación se delega completamente a `validator.js`.
 
 No conoce la ejecución del pipeline.
 
----
-
-## validator.js
+### validator.js
 
 Centraliza todas las validaciones de la CLI.
 
@@ -420,9 +481,13 @@ Cuenta con pruebas automatizadas independientes.
 
 ---
 
-## main.js
+## Extensión
 
-Punto de entrada mínimo de la aplicación.
+La extensión captura conversaciones desde ChatGPT y las envía al Core.
+
+### main.js
+
+Punto de entrada mínimo de la aplicación Node.
 
 Su única responsabilidad consiste en:
 
@@ -432,9 +497,7 @@ Su única responsabilidad consiste en:
 
 No contiene lógica de negocio.
 
----
-
-## extensionCore.js
+### extensionCore.js
 
 Punto de entrada del core para la extensión de Chrome.
 
@@ -442,9 +505,7 @@ Importa `runExporter` y lo expone en el ámbito global para que `background.js` 
 
 Este archivo es empaquetado por esbuild junto con todas las dependencias del pipeline, generando `dist/extensionBundle.js`.
 
----
-
-## inject.js
+### inject.js
 
 Script inyectado en el contexto de la página de ChatGPT.
 
@@ -453,9 +514,7 @@ Intercepta `window.fetch()` para capturar la respuesta del endpoint de conversac
 Al detectar una conversación completa, la envía inmediatamente al `content.js` mediante `window.postMessage` con el tipo `CONVERSATION`.  
 Ya no espera una solicitud explícita; el envío es automático ante cada nueva captura.
 
----
-
-## content.js
+### content.js
 
 Actúa como puente entre la página y la extensión.
 
@@ -464,9 +523,7 @@ Actúa como puente entre la página y la extensión.
 
 No procesa datos; solo retransmite.
 
----
-
-## background.js
+### background.js
 
 Coordina la extensión de Chrome.
 
@@ -480,9 +537,7 @@ Sus responsabilidades:
 - No interpreta la conversación ni genera Markdown directamente; toda la lógica de procesamiento se delega al Core.
 - Los errores se comunican mediante códigos (`errorCode`) y parámetros para que el popup pueda traducirlos al idioma del usuario.
 
----
-
-## popup.html / js/ / styles/
+### popup.html / js/ / styles/
 
 Interfaz de usuario de la extensión con estética cyberpunk y sistema multi‑idioma.
 
@@ -510,17 +565,47 @@ Los estilos están modularizados en `styles/`:
 
 ---
 
-## buildExtension.js
+## Web
 
-Script de build para la extensión.
+La web oficial del proyecto, alojada en GitHub Pages, comparte la identidad visual cyberpunk y el sistema multiidioma.
 
-Utiliza esbuild para empaquetar `extensionCore.js` junto con todas las dependencias del core en un único archivo `dist/extensionBundle.js`.
+### Páginas
 
-Incorpora un plugin que reemplaza `jsonFile.js` por `jsonFile.stub.js` para evitar dependencias de Node.js en el contexto del navegador.
+- `index.html`: landing page (raíz).
+- `pages/privacy/`: política de privacidad.
+- `pages/faq/`: preguntas frecuentes.
+- `pages/cli/`: documentación de la CLI.
+- `pages/changelog/`: historial de versiones.
+- `pages/sitemap/`: índice de navegación (fallback).
 
-Copia recursivamente los archivos estáticos de la extensión (manifest, background, content, inject, popup, scripts del popup en `js/`, estilos modulares en `styles/`, íconos) al directorio `dist/`.
+### Estilos
 
-El manifiesto incluye el permiso `storage` necesario para la persistencia del idioma.
+- `assets/css/shared/`: módulos compartidos (tokens, base, header, sidebar, main, footer, content).
+- `assets/css/home/`: estilos específicos de la landing.
+- `assets/css/privacy.css`, `faq.css`, `cli.css`, `changelog.css`, `map.css`: orquestadores por página.
+
+### JavaScript
+
+- `assets/js/shared/`: módulos comunes (tema, sidebar, idioma, scroll spy, versión).
+- `assets/js/languages/`: traducciones por página.
+- `assets/js/*.js`: orquestadores por página (main, privacy, faq, cli, changelog, sitemap).
+
+### Sistema multiidioma
+
+- Detección automática del idioma del navegador.
+- Toggle con banderas SVG en el header.
+- Persistencia en `localStorage`.
+- Traducción dinámica de textos mediante IDs.
+
+---
+
+## Utilities
+
+Utilidades compartidas entre las interfaces.
+
+### dom.js
+
+Helpers de manipulación del DOM (`$`, `$$`, `setText`, `setValue`).
 
 ---
 
@@ -535,8 +620,10 @@ Actualmente cualquier interfaz puede reutilizar el mismo motor proporcionando ú
 - un renderer;
 - un mecanismo de salida.
 
-Esta organización permite incorporar nuevas interfaces (como la extensión de Chrome), nuevos formatos y nuevas salidas sin modificar el Core.
+Esta organización permite incorporar nuevas interfaces (como la extensión de Chrome y la web), nuevos formatos y nuevas salidas sin modificar el Core.
 
 La extensión de Chrome ya utiliza este mecanismo: captura el JSON, lo entrega al core mediante `ExtensionSource`, y recibe el Markdown generado para descargarlo mediante un `outputHandler` basado en `chrome.downloads`. Incluye un popup con opciones avanzadas de exportación (formato, modo compacto, filtro de roles) y soporte multi‑idioma.
+
+La web documenta y presenta el proyecto al público, reutilizando los mismos principios y estética visual.
 
 ---

@@ -10,7 +10,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 ## Versión
 
-**1.3.1 (Development)**
+**1.4.0 (Development)**
 
 ## Estado general
 
@@ -32,6 +32,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 - [x] CLI
 - [x] Chrome Extension (con popup y opciones avanzadas)
+- [x] Web (GitHub Pages)
 - [ ] REST API
 
 ### Testing
@@ -82,9 +83,16 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Popup con selector de formato (Markdown / JSON)
 - [x] Modo compacto en popup
 - [x] Filtro de roles en popup
-- [x] Indicador de progreso y manejo de errores visua
+- [x] Indicador de progreso y manejo de errores visual
 - [x] Sistema multi‑idioma (español / inglés) con toggle visual
 
+### Web
+
+- [x] Landing page
+- [x] Páginas internas (Privacy, FAQ, CLI, Changelog, Sitemap)
+- [x] Sistema multiidioma (español / inglés)
+- [x] Meta tags SEO y redes sociales
+- [x] Transiciones de vista
 
 ### Deuda técnica
 
@@ -129,11 +137,10 @@ Output
 
 ## Próximo objetivo
 
-### Estabilización, sitio de documentación y DeepSeek
+### Estabilización, actualización web y DeepSeek
 
 - Lanzar la extensión en la Chrome Web Store una vez aprobada.
-- Agregar la marquesina promocional (opcional) en la ficha de la store.
-- Construir un sitio web de documentación estático con la identidad visual del proyecto (cyberpunk, GitHub Pages).
+- Actualizar la página web del changelog y roadmap con la v1.4.0.
 - Investigar la estructura del JSON de DeepSeek para integrarlo como nuevo Conversation Source.
 - Corregir la deuda técnica de la captura parcial y el bug de la doble descarga.
 

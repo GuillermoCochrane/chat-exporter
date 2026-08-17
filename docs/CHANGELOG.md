@@ -4,6 +4,33 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
+# v1.4.0 — Sitio web oficial y sistema multiidioma
+
+* Se crea el sitio web oficial del proyecto, alojado en GitHub Pages, con la misma identidad visual cyberpunk de la extensión.
+* Se implementan las siguientes páginas:
+  - Landing page (`index.html`) con hero, carrusel, features, roadmap y FAQ.
+  - Página de privacidad (`pages/privacy/`).
+  - Página de FAQ (`pages/faq/`).
+  - Página de la CLI (`pages/cli/`).
+  - Página de changelog (`pages/changelog/`).
+  - Página de sitemap (`pages/index.html`) como fallback de navegación.
+* Se agrega un sistema multiidioma (español / inglés) a todas las páginas del sitio:
+  - Helper de traducciones por página (`languages/`).
+  - Orquestadores de idioma reutilizables (`languageHandler`, `languageSettings`).
+  - Toggle visual con banderas SVG en el header.
+  - Persistencia de la preferencia en `localStorage`.
+  - Detección automática del idioma del navegador.
+* Se modularizan los estilos y scripts del sitio por responsabilidad (`shared/`, `home/`, `privacy/`, etc.).
+* Se agregan meta tags completos de SEO, Open Graph y Twitter Cards en todas las páginas.
+* Se crea la imagen social `social.png` (1200×630) y su template HTML.
+* Se agrega la meta tag de verificación de Google Search Console.
+* Se implementan transiciones de vista entre páginas con la API de View Transitions.
+* Se mejora la detección de la sección activa en la sidebar durante el scroll.
+* Se corrigen múltiples detalles de responsive, estilos y navegación en el sitio.
+* Se actualiza la documentación general y de la extensión para reflejar la nueva web.
+
+---
+
 # v1.3.1 — Sistema multi‑idioma y preparación para publicación
 
 * Se implementa un sistema de traducción multi‑idioma en el popup:
