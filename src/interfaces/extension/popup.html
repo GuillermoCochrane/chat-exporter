@@ -75,14 +75,29 @@
       </label>
     </div>
     <button id="exportBtn">Exportar</button>
-  </main>
 
+    <!-- Advertencia de conversación posiblemente incompleta -->
+    <section id="captureWarning" hidden>
+      <p id="captureWarningText">
+        The conversation may be incomplete. For best results, reload the page before exporting.
+      </p>
+      <a id="learnMoreLink" href="https://guillermocochrane.github.io/chat-exporter/pages/faq/#troubleshooting" target="_blank" rel="noopener">Learn more</a>
+      <label>
+        <input type="checkbox" id="dismissWarning">
+        <span id="dismissLabel">Don't show this again</span>
+      </label>
+      <button id="continueExportBtn" type="button">Continue</button>
+    </section>
+  </main>
 
   <footer id="status">
     <output class="spinner"></output>
     <strong id="statusText"></strong>
   </footer>
 
-  <aside class="version">v1.2.x</aside>
+  <aside class="version">
+    <span id="versionText"></span>
+    <a id="faqLink" href="https://guillermocochrane.github.io/chat-exporter/pages/faq/#troubleshooting" target="_blank" rel="noopener" title="Help">?</a>
+  </aside>
 </body>
 </html>

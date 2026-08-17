@@ -51,4 +51,24 @@ export const TRANSLATIONS = {
     es: "Exportar",
     en: "Export",
   },
+  captureWarningText: {
+    es: "La conversación puede estar incompleta. Para mejores resultados, recarga la página antes de exportar.",
+    en: "The conversation may be incomplete. For best results, reload the page before exporting.",
+  },
+  learnMore: {
+    es: "Más información",
+    en: "Learn more",
+  },
+  dismissLabel: {
+    es: "No volver a mostrar",
+    en: "Don't show this again",
+  },
+  continueBtn: {
+    es: "Continuar",
+    en: "Continue",
+  },
+  faqLinkTitle: {
+    es: "Ayuda",
+    en: "Help",
+  },
 };

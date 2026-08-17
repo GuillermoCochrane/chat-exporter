@@ -89,3 +89,73 @@ label {
   font-weight: 500;
   color: var(--color-text-dim);
 }
+
+/*? ------------------------------------------------------------------ */
+/*? Advertencia de recarga                                            */
+/*? ------------------------------------------------------------------ */
+
+#captureWarning {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  background: rgba(var(--rgb-blue), 0.55);
+  backdrop-filter: var(--glass-blur);
+}
+
+#captureWarning p {
+  color: var(--color-text-dim);
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+
+#learnMoreLink {
+  color: var(--color-neon);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-size: 0.9rem;
+}
+
+#captureWarning label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 8px;
+  font-weight: 400;
+  color: var(--color-text-dim);
+  cursor: pointer;
+}
+
+#captureWarning label span {
+  font-size: 0.9rem;
+}
+
+#continueExportBtn {
+  margin-top: 4px;
+}
+
+/*? ------------------------------------------------------------------ */
+/*? Enlace de ayuda en versión                                        */
+/*? ------------------------------------------------------------------ */
+
+aside.version {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 10px;
+  color: var(--color-border);
+  text-align: center;
+}
+
+#faqLink {
+  color: var(--color-border);
+  text-decoration: none;
+  font-size: 11px;
+  transition: color var(--speed-slower);
+
+  &:hover {
+    color: var(--color-neon);
+  }
+}
