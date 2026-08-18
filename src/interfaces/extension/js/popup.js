@@ -1,9 +1,6 @@
 import { TRANSLATIONS } from './languages/translations.js';
 import { loadLanguage, saveLanguagePreference, setLanguage } from './languages/languageSettings.js';
-
-// Helpers
-const $ = (selector) => document.querySelector(selector);
-const setText = (selector, text) => { ($(selector)) && ($(selector).textContent = text); };
+import { $, setText } from './utilities/dom.js';
 
 // Elementos estáticos
 const $formatSelect = $("#format");
