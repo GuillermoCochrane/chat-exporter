@@ -1,5 +1,5 @@
-import { TRANSLATIONS } from './languages.js';
-import { loadLanguage, saveLanguagePreference } from './languageSettings.js';
+import { TRANSLATIONS } from './languages/translations.js';
+import { loadLanguage, saveLanguagePreference, setLanguage } from './languages/languageSettings.js';
 
 // Helpers
 const $ = (selector) => document.querySelector(selector);
@@ -20,28 +20,20 @@ const $dismissWarning = $("#dismissWarning");
 const $continueExportBtn = $("#continueExportBtn");
 const $formatLabel = $("#formatLabel");
 
-// Traducción dinámica de textos en el DOM
-function setlanguage(lang, translations) {
-  for (const entry in translations) {
-    const value = translations[entry];
-    const selector = `#${entry}`;
-    const element = $(selector);
-    if (!element) continue;
-
-    const property = element.hasAttribute("title") ? "title" : "textContent";
-    element[property] = value[lang] || value.en;
-  }
-}
-
 // Versión dinámica
 setText('#versionText', `v${chrome.runtime.getManifest().version}`);
+
+// Mostrar / ocultar opciones de Markdown según el formato
+$formatSelect.addEventListener("change", () => {
+  $formatSelect.value === "md" ? $mdOptions.hidden = false : $mdOptions.hidden = true;
+});
 
 // Idioma actual (se cargará de forma asíncrona)
 let currentLang;
 
 async function initLanguage() {
   currentLang = await loadLanguage();
-  setlanguage(currentLang, TRANSLATIONS);
+  setLanguage(currentLang, TRANSLATIONS);
   // Mostrar la bandera correcta según el idioma inicial
   const flags = $langToggle.querySelectorAll(".flag");
   flags.forEach(flag => {
@@ -53,11 +45,6 @@ async function initLanguage() {
 
 // Inicializar idioma al cargar el popup
 initLanguage();
-
-// Mostrar / ocultar opciones de Markdown según el formato
-$formatSelect.addEventListener("change", () => {
-  $formatSelect.value === "md" ? $mdOptions.hidden = false : $mdOptions.hidden = true;
-});
 
 // Toggle de idioma
 $langToggle.addEventListener("click", () => {
@@ -77,7 +64,7 @@ $langToggle.addEventListener("click", () => {
 
   // Actualizar idioma
   currentLang = nextLang;
-  setlanguage(currentLang, TRANSLATIONS);
+  setLanguage(currentLang, TRANSLATIONS);
 
   // Persistir preferencia
   saveLanguagePreference(currentLang);
