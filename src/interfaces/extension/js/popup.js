@@ -1,6 +1,5 @@
 import { TRANSLATIONS } from './languages/translations.js';
-import { loadLanguage, saveLanguagePreference, setLanguage } from './languages/languageSettings.js';
-import { setStartingFlag, flagHandler } from './languages/flagHandler.js';
+import { languageHandler, getCurrentLanguage } from './languages/languageHandler.js';
 import { $, setText } from './utilities/dom.js';
 
 // Elementos estáticos
@@ -26,28 +25,9 @@ $formatSelect.addEventListener("change", () => {
   $formatSelect.value === "md" ? $mdOptions.hidden = false : $mdOptions.hidden = true;
 });
 
-// Idioma actual (se cargará de forma asíncrona)
-let currentLang;
+// Iniclizamos el handler de idioma 
+languageHandler(TRANSLATIONS);
 
-async function initLanguage() {
-  currentLang = await loadLanguage();
-  setLanguage(currentLang, TRANSLATIONS);
-  // Mostrar la bandera correcta según el idioma inicial
-  setStartingFlag(currentLang);
-}
-
-// Inicializar idioma al cargar el popup
-initLanguage();
-
-// Toggle de idioma
-$langToggle.addEventListener("click", () => {
-  // Actualizar idioma
-  currentLang = flagHandler();
-  setLanguage(currentLang, TRANSLATIONS);
-
-  // Persistir preferencia
-  saveLanguagePreference(currentLang);
-});
 
 // Oculta temporalmente las opciones de exportación
 function hideOptions() {
@@ -91,6 +71,8 @@ function executeExport(config) {
         $statusText.textContent = "⚠️ " + chrome.runtime.lastError.message;
         return;
       }
+
+      const currentLang = getCurrentLanguage();
 
       if (response && response.success === false) {
         const errorPrefix = TRANSLATIONS[response.errorCode]?.[currentLang] 
