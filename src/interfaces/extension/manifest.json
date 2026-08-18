@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "AI Chat Exporter",
   "description": "Capture ChatGPT conversations and export them as Markdown or JSON.",
-  "version": "1.4.0",
+  "version": "1.4.1",
 
   "icons": {
     "16": "icons/icon16.png",
