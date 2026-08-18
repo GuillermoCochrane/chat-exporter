@@ -10,7 +10,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 ## Versión
 
-**1.4.0 (Development)**
+**1.4.1 (Development)**
 
 ## Estado general
 
@@ -99,7 +99,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [ ] La captura del `mapping` ocurre solo al cargar la página; los mensajes nuevos posteriores no se incluyen en la exportación.
 - [ ] Las conversaciones nuevas desde cero no generan una captura inicial, por lo que la extensión no puede exportarlas.
 - [ ] La segunda exportación sin recargar la página falla porque el Service Worker pierde el estado en memoria.
-- [ ] Agregar un modal de advertencia cuando la conversación pueda estar incompleta, con recomendación de recargar la página y enlace a un futuro FAQ.
+- [x] Agregar advertencia cuando la conversación pueda estar incompleta, con recomendación de recargar la página y enlace al FAQ.
 
 ---
 
@@ -137,12 +137,14 @@ Output
 
 ## Próximo objetivo
 
-### Estabilización, actualización web y DeepSeek
+### Refactor, deuda técnica pendiente y DeepSeek
 
-- Lanzar la extensión en la Chrome Web Store una vez aprobada.
-- Actualizar la página web del changelog y roadmap con la v1.4.0.
+- Refactorizar el popup de la extensión modularizando lógica y estilos.
+- Corregir la deuda técnica restante:
+  - Mensajes nuevos posteriores no incluidos en la exportación.
+  - Conversaciones nuevas sin captura inicial.
+  - Segunda exportación sin recargar la página falla.
 - Investigar la estructura del JSON de DeepSeek para integrarlo como nuevo Conversation Source.
-- Corregir la deuda técnica de la captura parcial y el bug de la doble descarga.
 
 ---
 

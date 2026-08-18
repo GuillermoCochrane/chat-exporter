@@ -161,6 +161,7 @@ Construir la interfaz definitiva de la extensión.
 - ✅ Estética cyberpunk con glassmorphism y sistema de tokens CSS
 - ✅ Estilos modularizados por responsabilidad
 - ✅ Sistema multi‑idioma (español / inglés) con toggle visual
+- ✅ Advertencia de recarga antes de exportar con persistencia de preferencia
 
 ### Pendiente
 

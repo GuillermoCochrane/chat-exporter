@@ -4,6 +4,18 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
+# v1.4.1 — Advertencia de recarga antes de exportar
+
+* Se agrega una advertencia opcional que se muestra al hacer clic en **Exportar** cuando no existe una preferencia guardada.
+* La advertencia pausa la exportación y permite continuar con la misma configuración original.
+* Se incluye un checkbox para **no volver a mostrar** la advertencia, que se persiste en `chrome.storage.local`.
+* Se agrega un enlace contextual a la sección **Troubleshooting** del FAQ dentro de la advertencia.
+* Se agrega un enlace discreto de ayuda (`?`) en el footer del popup, que también lleva al FAQ.
+* Durante la advertencia, se ocultan temporalmente las opciones de exportación para evitar desbordes en el área del popup.
+* Se actualiza la documentación del proyecto.
+
+---
+
 # v1.4.0 — Sitio web oficial y sistema multiidioma
 
 * Se crea el sitio web oficial del proyecto, alojado en GitHub Pages, con la misma identidad visual cyberpunk de la extensión.

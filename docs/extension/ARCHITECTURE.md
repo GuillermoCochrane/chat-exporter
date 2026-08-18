@@ -160,8 +160,8 @@ No debe:
 - tomar decisiones sobre el flujo de datos.
 
 ---
-
 ## Background
+
 
 Responsabilidades:
 
@@ -169,16 +169,13 @@ Responsabilidades:
 - atender las solicitudes de exportación provenientes del popup;
 - despachar la exportación según el formato solicitado:
   - JSON: descarga directa del objeto almacenado;
-  - Markdown: construir configuración del pipeline, invocar `runExporter` y descargar el resultado mediante `outputHandler`.
+  - Markdown: construir configuración del pipeline, invocar `runExporter` y descargar el resultado mediante `outputHandler`;
+- comunicar los errores mediante códigos (`errorCode`) y parámetros para que el popup pueda traducirlos al idioma del usuario.
 
 No debe:
 
 - interpretar la conversación;
 - modificar el JSON.
-
-
-- Los errores se comunican mediante códigos (`errorCode`) y parámetros para que el popup pueda traducirlos al idioma del usuario.
-
 ---
 
 ### Popup
@@ -194,6 +191,7 @@ Responsabilidades:
 - ocultar automáticamente las opciones de Markdown cuando se selecciona JSON;
 - mostrar un spinner animado y deshabilitar el botón Exportar durante el procesamiento;
 - mostrar el estado de la operación (éxito o error detallado traducido);
+- mostrar una advertencia de recarga antes de exportar cuando la conversación pueda estar incompleta, con opción de no volver a mostrar, enlace al FAQ y persistencia en `chrome.storage.local`;
 - mostrar la versión dinámica de la extensión en el footer, obtenida desde `chrome.runtime.getManifest()`.
 
 La interfaz sigue una estética cyberpunk con glassmorphism, tokens CSS y componentes con efecto de hardware físico (relieve/hundido).
