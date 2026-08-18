@@ -1,5 +1,6 @@
 import { TRANSLATIONS } from './languages/translations.js';
 import { loadLanguage, saveLanguagePreference, setLanguage } from './languages/languageSettings.js';
+import { setStartingFlag, flagHandler } from './languages/flagHandler.js';
 import { $, setText } from './utilities/dom.js';
 
 // Elementos estáticos
@@ -32,12 +33,7 @@ async function initLanguage() {
   currentLang = await loadLanguage();
   setLanguage(currentLang, TRANSLATIONS);
   // Mostrar la bandera correcta según el idioma inicial
-  const flags = $langToggle.querySelectorAll(".flag");
-  flags.forEach(flag => {
-    const isActive = flag.dataset.lang === currentLang;
-    flag.classList.toggle("active", isActive);
-    flag.hidden = !isActive;
-  });
+  setStartingFlag(currentLang);
 }
 
 // Inicializar idioma al cargar el popup
@@ -45,22 +41,8 @@ initLanguage();
 
 // Toggle de idioma
 $langToggle.addEventListener("click", () => {
-  const currentFlag = $langToggle.querySelector(".flag.active");
-  const nextFlag = $langToggle.querySelector(".flag:not(.active)");
-  const nextLang = nextFlag.dataset.lang;
-
-  // Intercambiar visibilidad
-  currentFlag.classList.remove("active");
-  currentFlag.hidden = true;
-  nextFlag.classList.add("active");
-  nextFlag.hidden = false;
-
-  // Efecto de rotación
-  $langToggle.classList.add("rotated");
-  setTimeout(() => $langToggle.classList.remove("rotated"), 400);
-
   // Actualizar idioma
-  currentLang = nextLang;
+  currentLang = flagHandler();
   setLanguage(currentLang, TRANSLATIONS);
 
   // Persistir preferencia
