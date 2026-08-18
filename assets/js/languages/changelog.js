@@ -1,5 +1,9 @@
 export const CHANGELOGTRANSLATIONS = {
   // Changelog navbar
+  "anchor-v141": {
+    en: "v1.4.1 — Reload warning",
+    es: "v1.4.1 — Advertencia de recarga",
+  },
   "anchor-v140": {
     en: "v1.4.0 — Official website",
     es: "v1.4.0 — Sitio web oficial",
@@ -27,6 +31,40 @@ export const CHANGELOGTRANSLATIONS = {
   "anchor-older": {
     en: "Older versions",
     es: "Versiones anteriores",
+  },
+
+  // v1.4.1
+  "changelog-v141-title": {
+    en: " — Reload warning before export",
+    es: " — Advertencia de recarga antes de exportar",
+  },
+  "changelog-v141-item1": {
+    en: "Added an optional warning that appears when clicking Export if no saved preference exists.",
+    es: "Se agregó una advertencia opcional que aparece al hacer clic en Exportar si no existe una preferencia guardada.",
+  },
+  "changelog-v141-item2": {
+    en: "The warning pauses the export and allows continuing with the same selected options.",
+    es: "La advertencia pausa la exportación y permite continuar con las mismas opciones seleccionadas.",
+  },
+  "changelog-v141-item3": {
+    en: "Added a checkbox to not show the warning again, persisted in chrome.storage.local.",
+    es: "Se agregó una casilla para no volver a mostrar la advertencia, que se guarda en chrome.storage.local.",
+  },
+  "changelog-v141-item4": {
+    en: "Added a contextual link to the Troubleshooting section of the FAQ inside the warning.",
+    es: "Se agregó un enlace contextual a la sección de Solución de problemas del FAQ dentro de la advertencia.",
+  },
+  "changelog-v141-item5": {
+    en: "Added a discreet help link (?) in the popup footer that also points to the FAQ.",
+    es: "Se agregó un enlace discreto de ayuda (?) en el footer del popup que también lleva al FAQ.",
+  },
+  "changelog-v141-item6": {
+    en: "During the warning, export options are temporarily hidden to avoid layout overflow.",
+    es: "Durante la advertencia, las opciones de exportación se ocultan temporalmente para evitar el desborde del layout.",
+  },
+  "changelog-v141-item7": {
+    en: "Updated project documentation.",
+    es: "Se actualizó la documentación del proyecto.",
   },
 
   // v1.4.0
