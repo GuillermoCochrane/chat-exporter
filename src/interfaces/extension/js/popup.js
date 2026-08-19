@@ -1,5 +1,6 @@
 import { TRANSLATIONS } from './languages/translations.js';
 import { languageHandler, getCurrentLanguage } from './languages/languageHandler.js';
+import { getExportConfig, hideOptions, showOptions, executeExport } from './export/exportHelpers.js';
 import { $, setText } from './utilities/dom.js';
 
 // Elementos estáticos
@@ -27,66 +28,6 @@ $formatSelect.addEventListener("change", () => {
 
 // Iniclizamos el handler de idioma 
 languageHandler(TRANSLATIONS);
-
-
-// Oculta temporalmente las opciones de exportación
-function hideOptions() {
-  $formatLabel.hidden = true;
-  $formatSelect.hidden = true;
-  $mdOptions.hidden = true;
-  $exportBtn.hidden = true;
-}
-
-// Muestra nuevamente las opciones de exportación
-function showOptions() {
-  $formatLabel.hidden = false;
-  $formatSelect.hidden = false;
-  $mdOptions.hidden = false;
-  $exportBtn.hidden = false;
-}
-
-// Obtener configuración actual de exportación
-function getExportConfig() {
-  return {
-    format: $formatSelect.value,
-    compact: $compactCheck.checked,
-    roleFilter: [...$roleRadios].find((r) => r.checked).value,
-  };
-}
-
-// Ejecutar exportación real con la configuración dada
-function executeExport(config) {
-  $exportBtn.disabled = true;
-  $statusText.textContent = "";
-  $spinner.style.display = "inline-block";
-
-  chrome.runtime.sendMessage(
-    { type: "EXPORT", ...config },
-    (response) => {
-      // Restaurar estado
-      $spinner.style.display = "none";
-      $exportBtn.disabled = false;
-
-      if (chrome.runtime.lastError) {
-        $statusText.textContent = "⚠️ " + chrome.runtime.lastError.message;
-        return;
-      }
-
-      const currentLang = getCurrentLanguage();
-
-      if (response && response.success === false) {
-        const errorPrefix = TRANSLATIONS[response.errorCode]?.[currentLang] 
-                            ?? TRANSLATIONS[response.errorCode]?.en 
-                            ?? "";
-        const errorParam = Object.values(response.params ?? {})[0] ?? "";
-        $statusText.textContent = "⚠️ " + errorPrefix + errorParam;
-        return;
-      }
-
-      $statusText.textContent = `✔️ ${config.format.toUpperCase()}${TRANSLATIONS.success[currentLang]}`;
-    }
-  );
-}
 
 // Exportar conversación (con posible pausa por advertencia)
 $exportBtn.addEventListener("click", async () => {
