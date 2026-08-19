@@ -2,11 +2,11 @@ import { TRANSLATIONS } from './languages/translations.js';
 import { languageHandler } from './languages/languageHandler.js';
 import { exportHandler } from './export/exportHandler.js';
 import { formatHandler } from './export/formatHandler.js';
-import { setText } from './utilities/dom.js';
+import { versionHandler } from './versionHandler.js';
 
 
-// Versión dinámica
-setText('#versionText', `v${chrome.runtime.getManifest().version}`);
+// Inicializamos el handler de versión  
+versionHandler();
 
 // Inicializamos el handler de formato de exportación
 formatHandler();
@@ -14,5 +14,5 @@ formatHandler();
 // Inicializamos el handler de idioma
 languageHandler(TRANSLATIONS);
 
-// Iniciamos el handler de exportación
+// Inicializamos el handler de exportación
 exportHandler();
