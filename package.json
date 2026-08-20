@@ -1,6 +1,6 @@
 {
   "name": "chat-exporter",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Capture ChatGPT conversations and export them as Markdown or JSON.",
   "keywords": [
     "chatgpt",
