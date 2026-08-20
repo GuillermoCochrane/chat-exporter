@@ -104,6 +104,7 @@
         <details open>
           <summary id="on-this-page">On this page</summary>
           <ul>
+            <li><a href="#v1.4.2" id="anchor-v142"><strong>v1.4.2</strong> — Popup refactor & fix</a></li>
             <li><a href="#v1.4.1" id="anchor-v141"><strong>v1.4.1</strong> — Reload warning</a></li>
             <li><a href="#v1.4.0" id="anchor-v140"><strong>v1.4.0</strong> — Official website</a></li>
             <li><a href="#v1.3.1" id="anchor-v131"><strong>v1.3.1</strong> — Multi-language</a></li>
@@ -125,6 +126,23 @@
             Every update, improvement, and fix — all in one place.
           </p>
         </header>
+
+        <section id="v1.4.2">
+          <header class="section-heading">
+            <h2>
+              <strong>v1.4.2</strong>
+              <span id="changelog-v142-title"> — Popup refactor and conversation recovery</span>
+            </h2>
+          </header>
+          <ul class="styled-list">
+            <li id="changelog-v142-item1">Modularized popup code into reusable handlers (DOM helpers, language management, export flow, format toggle, version handler).</li>
+            <li id="changelog-v142-item2">Converted popup.js into a lightweight orchestrator.</li>
+            <li id="changelog-v142-item3">Fixed consecutive exports without page reload by recovering the conversation from the page if the Service Worker loses state.</li>
+            <li id="changelog-v142-item4">Removed debug logs from inject.js, content.js, and background.js.</li>
+            <li id="changelog-v142-item5">Kept existing functionality unchanged for the user.</li>
+            <li id="changelog-v142-item6">Updated project documentation.</li>
+          </ul>
+        </section>
 
         <section id="v1.4.1">
           <header class="section-heading">
@@ -455,7 +473,7 @@
     <footer>
       <span id="footer-license">MIT License</span>
       <span>•</span>
-      <span id="footerVersion">v1.3.1</span>
+      <span id="footerVersion">v1.X.X</span>
       <span>•</span>
       <a href="../privacy/" id="footer-privacy">Privacy Policy</a>
       <span>•</span>

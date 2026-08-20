@@ -1,5 +1,9 @@
 export const CHANGELOGTRANSLATIONS = {
   // Changelog navbar
+  "anchor-v142": {
+    en: "v1.4.2 — Popup refactor & fix",
+    es: "v1.4.2 — Refactor y corrección del popup",
+  },
   "anchor-v141": {
     en: "v1.4.1 — Reload warning",
     es: "v1.4.1 — Advertencia de recarga",
@@ -31,6 +35,37 @@ export const CHANGELOGTRANSLATIONS = {
   "anchor-older": {
     en: "Older versions",
     es: "Versiones anteriores",
+  },
+
+
+  // v1.4.2
+  "changelog-v142-title": {
+    en: " — Popup refactor and conversation recovery",
+    es: " — Refactor del popup y recuperación de conversación",
+  },
+  "changelog-v142-item1": {
+    en: "Modularized popup code into reusable handlers (DOM helpers, language management, export flow, format toggle, version handler).",
+    es: "Se modularizó el código del popup en handlers reutilizables (helpers de DOM, gestión de idioma, flujo de exportación, toggle de formato, handler de versión).",
+  },
+  "changelog-v142-item2": {
+    en: "Converted popup.js into a lightweight orchestrator.",
+    es: "Se convirtió popup.js en un orquestador liviano.",
+  },
+  "changelog-v142-item3": {
+    en: "Fixed consecutive exports without page reload by recovering the conversation from the page if the Service Worker loses state.",
+    es: "Se corrigieron las exportaciones consecutivas sin recargar la página, recuperando la conversación desde la página si el Service Worker pierde el estado.",
+  },
+  "changelog-v142-item4": {
+    en: "Removed debug logs from inject.js, content.js, and background.js.",
+    es: "Se eliminaron los logs de depuración de inject.js, content.js y background.js.",
+  },
+  "changelog-v142-item5": {
+    en: "Kept existing functionality unchanged for the user.",
+    es: "La funcionalidad existente se mantiene sin cambios visibles para el usuario.",
+  },
+  "changelog-v142-item6": {
+    en: "Updated project documentation.",
+    es: "Se actualizó la documentación del proyecto.",
   },
 
   // v1.4.1
