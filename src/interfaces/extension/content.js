@@ -6,7 +6,7 @@ script.src = chrome.runtime.getURL("inject.js");
 script.onload = () => script.remove();
 (document.head || document.documentElement).appendChild(script);
 
-// Listener permanente: reenvía cualquier conversación capturada al background.
+// Reenvía automáticamente cualquier conversación capturada al background.
 window.addEventListener("message", (event) => {
   if (event.source !== window) return;
 
@@ -17,14 +17,38 @@ window.addEventListener("message", (event) => {
     return;
   }
 
-  if (!event.data.conversation) {
-    console.warn("[AI Chat Exporter] Conversación vacía recibida.");
-    return;
-  }
+  if (!event.data.conversation) return;
 
-  console.log("[AI Chat Exporter] Reenviando conversación al background.");
   chrome.runtime.sendMessage({
     type: "DOWNLOAD_JSON",
     conversation: event.data.conversation,
   });
+});
+
+// Atiende solicitudes del background para obtener la conversación
+// directamente desde la página.
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type !== "GET_CONVERSATION_FROM_PAGE") return;
+
+  window.postMessage(
+    {
+      source: "AI_CHAT_EXPORTER",
+      type: "GET_CONVERSATION",
+    },
+    "*",
+  );
+
+  const listener = (event) => {
+    if (event.source !== window) return;
+    if (
+      event.data?.source === "AI_CHAT_EXPORTER" &&
+      event.data?.type === "CONVERSATION"
+    ) {
+      window.removeEventListener("message", listener);
+      sendResponse({ conversation: event.data.conversation });
+    }
+  };
+
+  window.addEventListener("message", listener);
+  return true; // canal abierto para respuesta asíncrona
 });

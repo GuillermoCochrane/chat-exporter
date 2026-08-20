@@ -3,8 +3,6 @@
 
 importScripts("extensionBundle.js");
 
-console.log("[AI Chat Exporter] Background iniciado.");
-
 // ---------------------------------------------------------------------------
 // Estado interno
 // ---------------------------------------------------------------------------
@@ -27,18 +25,15 @@ const downloadFile = (dataUrl, extension) =>
 
 // ---------------------------------------------------------------------------
 // Handlers de formato de exportación
-// Cada handler recibe el mensaje completo del popup y extrae lo que necesita.
 // ---------------------------------------------------------------------------
 
 const exportHandlers = {
-  // Descarga el JSON original sin procesar.
   json: (message) => {
     const jsonStr = JSON.stringify(capturedConversation, null, 2);
     const url = buildDataUrl(jsonStr, "application/json");
     return downloadFile(url, "json");
   },
 
-  // Procesa la conversación con el pipeline y descarga Markdown.
   md: (message) => {
     const config = {
       source: "extension",
@@ -57,17 +52,36 @@ const exportHandlers = {
 };
 
 // ---------------------------------------------------------------------------
+// Obtener conversación desde la página activa
+// ---------------------------------------------------------------------------
+
+async function getConversationFromPage() {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (!tab?.id) return null;
+
+  const response = await chrome.tabs.sendMessage(tab.id, {
+    type: "GET_CONVERSATION_FROM_PAGE",
+  });
+
+  return response?.conversation ?? null;
+}
+
+// ---------------------------------------------------------------------------
 // Handlers de mensajes entrantes
 // ---------------------------------------------------------------------------
 
-// Handlers de mensajes entrantes
 const messageHandlers = {
   DOWNLOAD_JSON: (message) => {
     capturedConversation = message.conversation;
-    console.log("[AI Chat Exporter] Conversación almacenada.");
   },
 
-  EXPORT: (message, sendResponse, model = "ChatGPT") => {
+  EXPORT: async (message, sendResponse, model = "ChatGPT") => {
+    // Intentar usar la conversación en memoria; si no está,
+    // recuperarla desde la página.
+    if (!capturedConversation) {
+      capturedConversation = await getConversationFromPage();
+    }
+
     if (!capturedConversation) {
       sendResponse({
         success: false,
@@ -87,19 +101,16 @@ const messageHandlers = {
       return;
     }
 
-    Promise.resolve(handler(message))
-      .then(() => sendResponse({ success: true }))
-      .catch((error) => {
-        console.error("[AI Chat Exporter]", error);
-        // Error inesperado del pipeline: enviamos el mensaje original como fallback
-        sendResponse({
-          success: false,
-          errorCode: "PIPELINE_ERROR",
-          params: { message: error.message },
-        });
+    try {
+      await handler(message);
+      sendResponse({ success: true });
+    } catch (error) {
+      sendResponse({
+        success: false,
+        errorCode: "PIPELINE_ERROR",
+        params: { message: error.message },
       });
-
-    return true;
+    }
   },
 };
 
@@ -111,5 +122,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const handler = messageHandlers[message.type];
   if (!handler) return;
 
-  return handler(message, sendResponse);
+  // Manejar funciones asíncronas: devolver true mantiene el canal abierto.
+  Promise.resolve(handler(message, sendResponse)).catch((error) => {
+    sendResponse({
+      success: false,
+      errorCode: "PIPELINE_ERROR",
+      params: { message: error.message },
+    });
+  });
+
+  return true;
 });
