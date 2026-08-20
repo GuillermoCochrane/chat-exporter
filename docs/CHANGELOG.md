@@ -4,6 +4,23 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
+# v1.4.2 — Refactor del popup y recuperación de conversación
+
+* Se modulariza el código del popup en handlers reutilizables:
+  - Helpers de DOM (`utilities/dom.js`).
+  - Gestión de idioma (`languages/languageSettings.js`, `languages/flagHandler.js`, `languages/languageHandler.js`).
+  - Flujo de exportación (`export/exportHelpers.js`, `export/exportHandler.js`).
+  - Toggle de formato (`export/formatHandler.js`).
+  - Versión dinámica (`versionHandler.js`).
+* `popup.js` queda reducido a un orquestador que inicializa los handlers.
+* Se corrige la segunda exportación consecutiva sin recargar la página:
+  - Ahora, si el Service Worker perdió la conversación en memoria, se la recupera desde la página a través del content script.
+* Se eliminan logs de depuración en `inject.js`, `content.js` y `background.js`.
+* Se mantiene la funcionalidad existente sin cambios visibles para el usuario.
+* Se actualiza la documentación del proyecto.
+
+---
+
 # v1.4.1 — Advertencia de recarga antes de exportar
 
 * Se agrega una advertencia opcional que se muestra al hacer clic en **Exportar** cuando no existe una preferencia guardada.

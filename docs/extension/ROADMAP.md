@@ -66,7 +66,7 @@ Definir un mecanismo de almacenamiento temporal desacoplado entre la captura y l
 
 ### Decisión adoptada
 
-La conversación capturada permanece en memoria en `capturedConversation` dentro del background.
+La conversación capturada permanece en memoria en `capturedConversation` dentro del background. Además, si el Service Worker se reinicia y pierde `capturedConversation`, la extensión puede recuperar la conversación desde la página mediante el content script, evitando fallos en la segunda exportación.
 
 ### Motivos
 
@@ -162,6 +162,8 @@ Construir la interfaz definitiva de la extensión.
 - ✅ Estilos modularizados por responsabilidad
 - ✅ Sistema multi‑idioma (español / inglés) con toggle visual
 - ✅ Advertencia de recarga antes de exportar con persistencia de preferencia
+- ✅ Popup modularizado en handlers reutilizables
+- ✅ Recuperación de conversación desde la página si el Service Worker se reinicia
 
 ### Pendiente
 
@@ -182,8 +184,6 @@ Preparar la extensión para distribución.
 
 ### Alcance
 
-- limpieza del código;
-- eliminación de logs de depuración;
 - revisión general;
 - documentación;
 - pruebas manuales;

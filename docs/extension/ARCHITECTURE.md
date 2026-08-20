@@ -86,6 +86,8 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 │ • Actúa como puente                   │
 │ • Reenvía CONVERSATION al             │
 │   background como DOWNLOAD_JSON       │
+│ • Atiende solicitudes de              │
+│   recuperación desde background       │
 └───────────────────────────────────────┘
                   │
       chrome.runtime.sendMessage()
@@ -129,7 +131,7 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 
 ## Inject Script
 
-Responsabilidades:
+### Responsabilidades:
 
 - interceptar `window.fetch`;
 - detectar la respuesta correcta del endpoint de conversación;
@@ -137,7 +139,7 @@ Responsabilidades:
 - conservar el JSON completo en memoria;
 - enviar automáticamente la conversación capturada al content script mediante `window.postMessage`.
 
-No debe:
+### No debe:
 
 - descargar archivos;
 - interpretar conversaciones;
@@ -147,13 +149,14 @@ No debe:
 
 ## Content Script
 
-Responsabilidades:
+### Responsabilidades:
 
 - inyectar `inject.js` en el contexto de la página;
 - actuar como puente pasivo entre la página y la extensión;
-- reenviar cualquier conversación recibida de `inject.js` al `background.js`.
+- reenviar cualquier conversación recibida de `inject.js` al `background.js`;
+- atender solicitudes de recuperación de conversación desde `background.js` pidiéndosela a `inject.js`.
 
-No debe:
+### No debe:
 
 - procesar conversaciones;
 - exportar archivos;
@@ -163,16 +166,17 @@ No debe:
 ## Background
 
 
-Responsabilidades:
+### Responsabilidades:
 
 - recibir y almacenar la conversación capturada enviada por el content script;
 - atender las solicitudes de exportación provenientes del popup;
+- si no hay conversación en memoria al exportar, recuperarla desde la página a través del content script;
 - despachar la exportación según el formato solicitado:
   - JSON: descarga directa del objeto almacenado;
   - Markdown: construir configuración del pipeline, invocar `runExporter` y descargar el resultado mediante `outputHandler`;
 - comunicar los errores mediante códigos (`errorCode`) y parámetros para que el popup pueda traducirlos al idioma del usuario.
 
-No debe:
+### No debe:
 
 - interpretar la conversación;
 - modificar el JSON.
@@ -180,7 +184,7 @@ No debe:
 
 ### Popup
 
-Responsabilidades:
+### Responsabilidades:
 
 - presentar al usuario las opciones de exportación:
   - toggle de idioma con banderas SVG (español / inglés) en el encabezado;
@@ -196,12 +200,19 @@ Responsabilidades:
 
 La interfaz sigue una estética cyberpunk con glassmorphism, tokens CSS y componentes con efecto de hardware físico (relieve/hundido).
 
-Los scripts están organizados en `js/`:
-- `popup.js`: punto de entrada principal que gestiona la interfaz, el envío del mensaje `EXPORT` y la traducción de la interfaz.
-- `languages.js`: helper con las claves textuales para español e inglés.
-- `languageSettings.js`: detecta el idioma inicial (navegador o preferencia guardada) y persiste la elección del usuario en `chrome.storage.local`.
+#### Los scripts están organizados en `js/`:
+- `popup.js`: orquestador principal que inicializa los handlers del popup.
+- `languages/translations.js`: helper con las claves textuales para español e inglés.
+- `languages/languageSettings.js`: detecta el idioma inicial (navegador o preferencia guardada) y persiste la elección del usuario en `chrome.storage.local`.
+- `languages/flagHandler.js`: gestiona el toggle visual de banderas.
+- `languages/languageHandler.js`: orquesta la carga, el cambio y la persistencia del idioma.
+- `export/exportHelpers.js`: lógica de bajo nivel para la exportación y los mensajes de estado.
+- `export/exportHandler.js`: flujo de exportación con advertencia de recarga.
+- `export/formatHandler.js`: toggle de opciones Markdown según el formato.
+- `utilities/dom.js`: helpers genéricos de manipulación del DOM.
+- `versionHandler.js`: muestra la versión dinámica de la extensión.
 
-Los estilos están modularizados en `styles/`:
+#### Los estilos están modularizados en `styles/`:
 - `variables.css`: tokens de diseño (colores, sombras, transiciones).
 - `base.css`: estilos del body, tipografía y encabezado.
 - `selector.css`: estilos del `<select>` nativo.
@@ -210,7 +221,7 @@ Los estilos están modularizados en `styles/`:
 - `footer.css`: estilos del estado de exportación (spinner, mensajes) y versión.
 - `popup.css`: punto de entrada que importa todos los módulos.
 
-No debe:
+### No debe:
 
 - acceder directamente al Core;
 - ejecutar lógica de procesamiento;
@@ -220,7 +231,7 @@ No debe:
 
 ## AI Chat Exporter Core
 
-Responsabilidades:
+### Responsabilidades:
 
 - interpretar el JSON;
 - reconstruir la conversación;
