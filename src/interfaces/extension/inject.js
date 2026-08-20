@@ -1,5 +1,4 @@
-// Responsable de interceptar las APIs
-// utilizadas por ChatGPT.
+// Responsable de interceptar las APIs utilizadas por ChatGPT.
 
 const originalFetch = window.fetch;
 
@@ -15,11 +14,6 @@ window.fetch = async (...args) => {
     try {
       const json = await clone.json();
 
-      console.log("[AI Chat Exporter] JSON completo:", json);
-      console.log("[AI Chat Exporter] Tipo:", typeof json);
-      console.log("[AI Chat Exporter] Es array:", Array.isArray(json));
-      console.log("[AI Chat Exporter] Keys:", Object.keys(json));
-
       if (json?.mapping) {
         window.__AI_CHAT_EXPORTER__.conversation = json;
 
@@ -32,11 +26,9 @@ window.fetch = async (...args) => {
           },
           "*",
         );
-
-        console.log("[AI Chat Exporter] Conversación completa almacenada.");
       }
     } catch {
-      console.warn("[AI Chat Exporter] No se pudo capturar la conversación.");
+      // No se pudo capturar la conversación; se ignora.
     }
   }
 
@@ -53,11 +45,6 @@ window.addEventListener("message", (event) => {
   ) {
     return;
   }
-
-  console.log(
-    "[AI Chat Exporter] Enviando conversación:",
-    window.__AI_CHAT_EXPORTER__.conversation?.mapping ? "OK" : "VACÍA",
-  );
 
   window.postMessage(
     {
