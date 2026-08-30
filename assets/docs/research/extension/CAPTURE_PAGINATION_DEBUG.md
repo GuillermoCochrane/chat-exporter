@@ -49,7 +49,10 @@ Estado: ✅ Confirmada
 ### H2
 El parámetro `num_turns` controla cuántos turnos/mensajes se traen por página.
 
-Estado: ✅ Confirmada
+Estado: ✅ Confirmada con observaciones
+
+**Nota:**  
+En las pruebas realizadas, `num_turns=10` devolvió páginas con más de 10 mensajes (por ejemplo, 16, 32 y 42). Esto sugiere que `num_turns` no limita la cantidad exacta de mensajes, sino que influye en la cantidad de turnos o en la profundidad de la página.
 
 ### H3
 La página no carga toda la conversación de una vez. Al hacer scroll hacia arriba, se disparan nuevas peticiones con `before=<cursor>`.
@@ -59,12 +62,18 @@ Estado: ✅ Confirmada
 ### H4
 Las respuestas de páginas distintas contienen `messages` que no se solapan. Si se solapan, será necesario deduplicar.
 
-Estado: ⏳ Pendiente
+Estado: ✅ Confirmada
+
+**Nota:**  
+En las tres páginas analizadas no se detectaron mensajes repetidos. Los rangos de IDs fueron disjuntos.
 
 ### H5
 El objeto `message` dentro de `messages[]` es compatible (o fácilmente transformable) con el viejo `message` dentro de `mapping`, al menos en los campos que usa el parser.
 
 Estado: ✅ Confirmada parcialmente
+
+**Nota:**  
+La estructura del mensaje es similar, pero ahora se presenta como una lista plana con referencias `parent_id`, en lugar de un árbol de nodos con `children`. Los campos comunes (`id`, `author`, `content`, `create_time`, `metadata`) se mantienen.
 
 ### H6
 La página mantiene en memoria solo una parte de la conversación. Al agotarse esa caché, solicita más mensajes al servidor.
@@ -112,6 +121,8 @@ Se identificaron dos endpoints relevantes:
   - `has_next_page: true`
 - El campo `mapping` no aparece en ninguna de las respuestas observadas.
 - Los mensajes ahora se presentan como una lista plana con referencias `parent_id`.
+- No se detectó solapamiento de mensajes entre las páginas analizadas.
+- Los `content_type` observados incluyen: `text`, `model_editable_context`, `reasoning_recap`, `code`, `thoughts`, `execution_output`, `multimodal_text`.
 
 **Conclusión**
 
