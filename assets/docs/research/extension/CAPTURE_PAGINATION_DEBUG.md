@@ -44,17 +44,17 @@ El campo `mapping` desapareció de esta respuesta.
 ### H1
 El endpoint `/backend-api/conversations/{id}` devuelve solo una página limitada de mensajes, determinada por `num_turns` o por cursor.
 
-Estado: ⏳ Pendiente
+Estado: ✅ Confirmada
 
 ### H2
 El parámetro `num_turns` controla cuántos turnos/mensajes se traen por página.
 
-Estado: ⏳ Pendiente
+Estado: ✅ Confirmada
 
 ### H3
 La página no carga toda la conversación de una vez. Al hacer scroll hacia arriba, se disparan nuevas peticiones con `before=<cursor>`.
 
-Estado: ⏳ Pendiente
+Estado: ✅ Confirmada
 
 ### H4
 Las respuestas de páginas distintas contienen `messages` que no se solapan. Si se solapan, será necesario deduplicar.
@@ -64,12 +64,12 @@ Estado: ⏳ Pendiente
 ### H5
 El objeto `message` dentro de `messages[]` es compatible (o fácilmente transformable) con el viejo `message` dentro de `mapping`, al menos en los campos que usa el parser.
 
-Estado: ⏳ Pendiente
+Estado: ✅ Confirmada parcialmente
 
 ### H6
 La página mantiene en memoria solo una parte de la conversación. Al agotarse esa caché, solicita más mensajes al servidor.
 
-Estado: ⏳ Pendiente
+Estado: ✅ Confirmada
 
 ---
 
@@ -92,14 +92,31 @@ Observar el flujo real de peticiones al cargar y navegar una conversación larga
 
 **Resultado**
 
-⏳ Pendiente
+Se identificaron dos endpoints relevantes:
+
+- `GET /backend-api/conversations/{id}`  
+  Devuelve la conversación inicial con `messages[]` y `page_info`.
+
+- `GET /backend-api/conversations/{id}/messages?before=<cursor>`  
+  Se dispara al hacer scroll hacia arriba y devuelve mensajes anteriores.
 
 **Observaciones**
 
-⏳ Pendiente
+- La petición inicial incluye `num_turns=10` y devuelve una página limitada de mensajes.
+- El `page_info` de la respuesta inicial indicó:
+  - `has_previous_page: true`
+  - `has_next_page: false`
+- Al hacer scroll hacia arriba, se disparó una nueva petición con `before=<start_cursor>`.
+- La respuesta de la segunda página también incluyó `page_info` con:
+  - `has_previous_page: true`
+  - `has_next_page: true`
+- El campo `mapping` no aparece en ninguna de las respuestas observadas.
+- Los mensajes ahora se presentan como una lista plana con referencias `parent_id`.
 
 **Conclusión**
 
-⏳ Pendiente
+El frontend de ChatGPT ya no recibe la conversación completa en una única respuesta.  
+La conversación se obtiene de forma paginada, solicitando páginas anteriores a medida que el usuario navega hacia arriba.  
+La extensión actual no captura estas respuestas porque espera un endpoint distinto y un campo `mapping` que ya no existe.
 
 ---
