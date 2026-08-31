@@ -65,7 +65,7 @@ Las respuestas de páginas distintas contienen `messages` que no se solapan. Si 
 Estado: ✅ Confirmada
 
 **Nota:**  
-En las tres páginas analizadas no se detectaron mensajes repetidos. Los rangos de IDs fueron disjuntos.
+Durante la captura completa de una conversación de 187 páginas, no se detectaron mensajes repetidos entre páginas. Los rangos de IDs fueron disjuntos.
 
 ### H5
 El objeto `message` dentro de `messages[]` es compatible (o fácilmente transformable) con el viejo `message` dentro de `mapping`, al menos en los campos que usa el parser.
@@ -79,6 +79,9 @@ La estructura del mensaje es similar, pero ahora se presenta como una lista plan
 La página mantiene en memoria solo una parte de la conversación. Al agotarse esa caché, solicita más mensajes al servidor.
 
 Estado: ✅ Confirmada
+
+**Nota:**  
+Al recorrer la conversación completa, la última página capturada tuvo `has_previous_page=false`, lo que indica que se llegó al inicio del historial.
 
 ---
 
@@ -111,23 +114,253 @@ Se identificaron dos endpoints relevantes:
 
 **Observaciones**
 
-- La petición inicial incluye `num_turns=10` y devuelve una página limitada de mensajes.
+- La petición inicial incluye `num_turns=10`.
 - El `page_info` de la respuesta inicial indicó:
   - `has_previous_page: true`
   - `has_next_page: false`
-- Al hacer scroll hacia arriba, se disparó una nueva petición con `before=<start_cursor>`.
-- La respuesta de la segunda página también incluyó `page_info` con:
-  - `has_previous_page: true`
-  - `has_next_page: true`
+- Al hacer scroll hacia arriba, se dispararon nuevas peticiones con `before=<start_cursor>`.
 - El campo `mapping` no aparece en ninguna de las respuestas observadas.
 - Los mensajes ahora se presentan como una lista plana con referencias `parent_id`.
-- No se detectó solapamiento de mensajes entre las páginas analizadas.
-- Los `content_type` observados incluyen: `text`, `model_editable_context`, `reasoning_recap`, `code`, `thoughts`, `execution_output`, `multimodal_text`.
 
 **Conclusión**
 
 El frontend de ChatGPT ya no recibe la conversación completa en una única respuesta.  
-La conversación se obtiene de forma paginada, solicitando páginas anteriores a medida que el usuario navega hacia arriba.  
-La extensión actual no captura estas respuestas porque espera un endpoint distinto y un campo `mapping` que ya no existe.
+La conversación se obtiene de forma paginada, solicitando páginas anteriores a medida que el usuario navega hacia arriba.
+
+---
+
+### E-002 — Captura pasiva instrumentada
+
+**Objetivo**
+
+Validar que `inject.js` puede capturar y acumular respuestas de conversaciones paginadas sin intervenir en el flujo de la página.
+
+**Método**
+
+1. Modificar temporalmente `inject.js` para:
+   - interceptar cualquier respuesta JSON de `/backend-api/conversations/`;
+   - guardar la respuesta cruda en `window.__AI_CHAT_EXPORTER__.conversation`.
+2. Recargar una conversación.
+3. Hacer scroll manual.
+4. Inspeccionar el array acumulado desde consola.
+
+**Resultado**
+
+La captura pasiva funcionó correctamente.  
+Se obtuvieron múltiples respuestas correspondientes a páginas distintas de la misma conversación.
+
+**Observaciones**
+
+- Las respuestas se acumularon sin sobrescribirse.
+- Se mantuvo el flujo `inject → content → background` sin modificaciones.
+- El array crudo pudo exportarse como JSON sin tocar el Core.
+
+**Conclusión**
+
+La interceptación pasiva es suficiente para capturar los datos crudos de cada página.  
+El desafío restante es cómo forzar la carga de todas las páginas sin intervención manual.
+
+---
+
+### E-003 — Recolección activa mediante `fetch`
+
+**Objetivo**
+
+Evaluar si `inject.js` podía obtener las páginas directamente mediante `fetch`, sin depender del scroll.
+
+**Método**
+
+1. Desde `inject.js`, obtener el `conversation_id`.
+2. Reproducir las peticiones usando el `fetch` original de la página.
+3. Leer `page_info.has_previous_page` y pedir páginas anteriores con `before`.
+
+**Resultado**
+
+Falló.
+
+Todas las peticiones activas devolvieron:
+
+```text
+401 Unauthorized
+```
+
+**Observaciones**
+
+- Las peticiones pasivas de la página sí llegan autenticadas.
+- Nuestro `fetch` activo no incluyó los headers/cookies/contexto necesarios.
+- Replicar ese contexto no es viable desde la extensión sin complejidad adicional.
+
+**Conclusión**
+
+La recolección activa mediante `fetch` queda descartada por ahora.  
+Se prioriza continuar con captura pasiva + scroll programático.
+
+---
+
+### E-004 — Scroll automático para recolección completa
+
+**Objetivo**
+
+Diseñar un mecanismo que fuerce a la página a cargar todas las páginas de la conversación y las capture pasivamente.
+
+**Iteraciones**
+
+#### E-004a — Scroll gradual
+
+Se intentó subir el contenedor scrolleable con pasos de scroll.
+
+Resultado: ❌ No disparó nuevas peticiones.
+
+Conclusión: el trigger no es el desplazamiento gradual, sino llegar al borde superior.
+
+#### E-004b — Scroll al tope con recálculo de métricas
+
+Se forzó `scrollTop = 0` y, tras cada página, se recalculó `scrollHeight`/`clientHeight`.
+
+Resultado: ✅ Funcionó parcialmente. Capturó varias páginas, pero se cortó por timeout.
+
+Conclusión: el mecanismo es correcto, pero requiere tolerancia a demoras de red.
+
+#### E-004c — Scroll con evento de captura
+
+Se emitió un `CustomEvent` cada vez que `inject.js` capturaba una página. El script de consola esperaba ese evento en lugar de tiempos fijos.
+
+Resultado: ✅ Funcionó mejor. Capturó muchas páginas, pero un pico de red provocó timeout.
+
+Conclusión: el evento es mucho más confiable que el tiempo fijo. Falta reintento.
+
+#### E-004d — Scroll con reintentos y timeout extendido
+
+Se combinó:
+
+- `CustomEvent` para esperar páginas.
+- `timeoutMs` ampliado a 45 segundos.
+- Reintento automático ante timeout.
+- Oscilación de scroll en reintentos.
+
+Resultado: ✅ Funcionó completamente. Capturó **187 páginas** y llegó a `has_previous_page=false`.
+
+Conclusión: el enfoque es viable y permite capturar la conversación completa sin intervención manual.
+
+---
+
+## Conclusión general
+
+La conversación completa de ChatGPT puede capturarse mediante:
+
+1. Interceptación pasiva de respuestas JSON desde `inject.js`.
+2. Scroll automático hacia el tope del contenedor de mensajes.
+3. Espera reactiva mediante `CustomEvent`.
+4. Recálculo del contenedor después de cada página.
+5. Reintentos ante demoras de red.
+6. Detención cuando `page_info.has_previous_page` sea `false`.
+
+No fue necesario modificar el Core, el parser ni el flujo de exportación.
+
+Este mecanismo será la base para la solución definitiva de captura en la extensión.
+
+---
+
+## Anexo — Script final funcional
+
+```js
+(async () => {
+  console.log("[EXPERIMENTO] Iniciando scroll completo...");
+
+  const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+
+  function findScrollableContainer() {
+    const all = [...document.querySelectorAll("*")];
+    const candidates = all
+      .filter((el) => {
+        const style = getComputedStyle(el);
+        return (
+          el.scrollHeight > el.clientHeight &&
+          (style.overflowY === "auto" || style.overflowY === "scroll")
+        );
+      })
+      .sort((a, b) => b.scrollHeight - a.scrollHeight);
+
+    return candidates[0] ?? document.scrollingElement ?? document.documentElement;
+  }
+
+  function waitForNewPage(timeoutMs = 45000) {
+    return new Promise((resolve) => {
+      const handler = (event) => {
+        window.removeEventListener("AI_CHAT_EXPORTER_PAGE_CAPTURED", handler);
+        clearTimeout(timer);
+        resolve(event.detail);
+      };
+
+      const timer = setTimeout(() => {
+        window.removeEventListener("AI_CHAT_EXPORTER_PAGE_CAPTURED", handler);
+        resolve(null);
+      }, timeoutMs);
+
+      window.addEventListener("AI_CHAT_EXPORTER_PAGE_CAPTURED", handler);
+    });
+  }
+
+  const container = findScrollableContainer();
+  const state = window.__AI_CHAT_EXPORTER__;
+
+  if (!state?.conversation) {
+    console.warn("[EXPERIMENTO] No hay array de conversación.");
+    return;
+  }
+
+  const initialCount = state.conversation.length;
+  let lastPage = state.conversation[state.conversation.length - 1]?.data;
+  let pageCount = initialCount;
+  let consecutiveTimeouts = 0;
+
+  console.log(`[EXPERIMENTO] Páginas iniciales: ${initialCount}`);
+
+  while (lastPage?.page_info?.has_previous_page) {
+    container.scrollTop = 0;
+
+    const newPage = await waitForNewPage();
+
+    if (!newPage) {
+      consecutiveTimeouts++;
+      console.warn(`[EXPERIMENTO] Timeout #${consecutiveTimeouts}. Reintentando...`);
+
+      if (consecutiveTimeouts >= 3) {
+        console.log("[EXPERIMENTO] Demasiados timeouts consecutivos. Deteniendo.");
+        break;
+      }
+
+      container.scrollTop = 200;
+      await sleep(500);
+      container.scrollTop = 0;
+
+      continue;
+    }
+
+    consecutiveTimeouts = 0;
+    pageCount = state.conversation.length;
+    lastPage = newPage.data;
+
+    await sleep(1500);
+    container.scrollTop = 0;
+    await sleep(300);
+
+    if (pageCount % 10 === 0 || !lastPage?.page_info?.has_previous_page) {
+      console.log(`[EXPERIMENTO] Páginas capturadas: ${pageCount} | has_previous_page: ${lastPage?.page_info?.has_previous_page}`);
+    }
+  }
+
+  console.log(`[EXPERIMENTO] Fin. Total páginas: ${state.conversation.length}`);
+
+  const last = state.conversation[state.conversation.length - 1];
+  if (last?.data?.page_info) {
+    console.log("[EXPERIMENTO] Última página:", {
+      has_previous_page: last.data.page_info.has_previous_page,
+      has_next_page: last.data.page_info.has_next_page,
+      messages: last.data.messages?.length ?? 0,
+    });
+  }
+})();
+```
 
 ---
