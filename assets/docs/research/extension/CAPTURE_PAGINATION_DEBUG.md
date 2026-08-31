@@ -244,6 +244,58 @@ Conclusión: el enfoque es viable y permite capturar la conversación completa s
 
 ---
 
+## Problemas encontrados
+
+### P-001 — Ambigüedad en el tipo de mensaje `CONVERSATION`
+
+**Contexto**
+
+Durante la integración, la exportación JSON se descargaba con solo 2 objetos, a pesar de que la recolección continuaba.
+
+**Causa**
+
+`inject.js` emitía el tipo `CONVERSATION` en dos situaciones:
+
+1. Al capturar pasivamente una página (notificación espontánea).
+2. Al finalizar la recolección completa (respuesta final).
+
+`content.js` escuchaba `CONVERSATION` y respondía al `background` con el primer array que llegara. Por lo tanto, la descarga se disparaba antes de tiempo.
+
+**Solución**
+
+Se creó un tipo de mensaje nuevo:
+
+- `CONVERSATION`: notificación espontánea de captura pasiva.
+- `CONVERSATION_COMPLETE`: respuesta final luego de `collectViaScroll()`.
+
+El `content.js` solo responde a `GET_CONVERSATION_FROM_PAGE` cuando recibe `CONVERSATION_COMPLETE`.
+
+**Estado**
+
+✅ Resuelto.
+
+---
+
+### P-002 — Error de canal asíncrono en `content.js`
+
+**Síntoma**
+
+Durante la recolección aparece repetidamente:
+
+```text
+Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+```
+
+**Impacto**
+
+No impide la captura ni la descarga. Es un error de comunicación asíncrona entre `content.js` y `background.js`.
+
+**Estado**
+
+⏳ Deuda pendiente. Se resolverá en una iteración posterior.
+
+---
+
 ## Conclusión general
 
 La conversación completa de ChatGPT puede capturarse mediante:
@@ -254,6 +306,7 @@ La conversación completa de ChatGPT puede capturarse mediante:
 4. Recálculo del contenedor después de cada página.
 5. Reintentos ante demoras de red.
 6. Detención cuando `page_info.has_previous_page` sea `false`.
+7. Diferenciación entre notificación espontánea y respuesta final.
 
 No fue necesario modificar el Core, el parser ni el flujo de exportación.
 
