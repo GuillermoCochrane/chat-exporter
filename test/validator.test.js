@@ -20,7 +20,7 @@ const actions = {
 const tests = [
   {
     name: "Argumentos válidos",
-    args: ["-i", "test/fixtures/test_data_SMALL.json"],
+    args: ["-i", "test/fixtures/test_data_paginated_SMALL.json"],
     shouldThrow: false,
   },
 

@@ -5,14 +5,12 @@ import cases from "./cases/loader-cases.js";
 
 const loadConversation = conversationSources.jsonFile;
 
-// Cada fuente recibe el objeto config completo.
 // jsonFile extrae config.input internamente.
-for (const fixture of [cases.MINI, cases.SMALL]) {
-  const data = await loadConversation({ input: fixture });
+const data = await loadConversation({ input: cases.PAGINATED });
 
-  assert.equal(typeof data, "object");
-  assert.ok(data.mapping);
-}
+assert.ok(Array.isArray(data));
+assert.ok(data.length > 0);
+assert.ok(data[0].data.messages.length > 0);
 
 await assert.rejects(
   loadConversation({ input: cases.INVALID }),
@@ -23,7 +21,7 @@ await assert.rejects(
   loadConversation({ input: cases.MISSING }),
 );
 
-console.log("✔ JsonFileSource carga correctamente archivos válidos.");
+console.log("✔ JsonFileSource carga correctamente una conversación paginada.");
 console.log("✔ JsonFileSource detecta JSON inválido.");
 console.log("✔ JsonFileSource detecta archivos inexistentes.");
 console.log("\n4/4 tests superados.");
