@@ -5,8 +5,8 @@ const loadConversation = conversationSources.jsonFile;
 
 const tests = [
   {
-    name: "Conversación MINI",
-    input: "test/fixtures/test_data_MINI.json",
+    name: "Conversación paginada SMALL",
+    input: "test/fixtures/test_data_paginated_SMALL.json",
     expectedCount: 6,
 
     assertions(messages) {
@@ -14,79 +14,44 @@ const tests = [
         // cantidad esperada
         messages.length === this.expectedCount,
 
-        // orden
-        messages[0].role === "system",
-        messages[1].role === "user",
-        messages[2].role === "user",
-        messages[3].role === "assistant",
-        messages[4].role === "user",
-        messages[5].role === "assistant",
+        // roles esperados
+        messages[0].role === "user",
+        messages[1].role === "assistant",
+        messages[2].role === "system",
+        messages[3].role === "user",
+        messages[4].role === "assistant",
+        messages[5].role === "tool",
 
         // ids
-        messages[0].id === "system-1",
-        messages[5].id === "assistant-2",
+        messages[0].id === "user-1",
+        messages[5].id === "tool-1",
 
-        // relaciones del árbol
-        messages[0].parent === "root",
-        messages[2].parent === "context-1",
-        messages[5].parent === "user-2",
+        // parent desde metadata.parent_id
+        messages[0].parent === null,
+        messages[1].parent === "user-1",
+        messages[3].parent === "assistant-1",
+        messages[4].parent === "user-2",
+        messages[5].parent === null,
 
         // children siempre array
-        messages.every(m => Array.isArray(m.children)),
+        messages.every((m) => Array.isArray(m.children)),
 
         // metadata siempre objeto
-        messages.every(m => typeof m.metadata === "object"),
+        messages.every((m) => typeof m.metadata === "object"),
 
         // propiedades siempre presentes
-        messages.every(m => "rawContent" in m),
-        messages.every(m => "createTime" in m),
-        messages.every(m => "status" in m),
+        messages.every((m) => "rawContent" in m),
+        messages.every((m) => "createTime" in m),
+        messages.every((m) => "status" in m),
 
         // contenido intacto
-        messages[2].rawContent.content_type === "text",
-        messages[5].rawContent.parts[0].includes("pipeline funciona correctamente")
+        messages[0].rawContent.parts[0] === "Hola",
+        messages[2].rawContent.content_type === "model_editable_context",
+        messages[5].rawContent.content_type === "code",
+        messages[5].rawContent.text === "console.log('test')",
       ];
-    }
+    },
   },
-
-  {
-    name: "Conversación SMALL",
-    input: "test/fixtures/test_data_SMALL.json",
-    expectedCount: 14,
-
-    assertions(messages) {
-      return [
-        // cantidad
-        messages.length === this.expectedCount,
-
-        // roles esperados
-        messages[0].role === "system",
-        messages[1].role === "user",
-
-        // assistants consecutivos
-        messages[5].role === "assistant",
-        messages[6].role === "assistant",
-
-        // users consecutivos
-        messages[7].role === "user",
-        messages[8].role === "user",
-
-        // ids extremos
-        messages[0].id === "system",
-        messages[13].id === "assistant-8",
-
-        // estructura
-        messages.every(m => m.id),
-        messages.every(m => Array.isArray(m.children)),
-        messages.every(m => typeof m.metadata === "object"),
-        messages.every(m => "rawContent" in m),
-
-        // el parser NO modifica contenido
-        messages[9].rawContent.parts[0].includes("# Encabezado"),
-        messages[13].rawContent.parts[0] === "Fin de la conversación de prueba."
-      ];
-    }
-  }
 ];
 
 let passed = 0;

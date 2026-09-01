@@ -1,0 +1,127 @@
+[
+  {
+    "url": "https://chatgpt.com/backend-api/conversations/paginated-test?include_has_versions=true&num_turns=10",
+    "data": {
+      "messages": [
+        {
+          "id": "user-1",
+          "author": {
+            "role": "user",
+            "name": null,
+            "metadata": {}
+          },
+          "create_time": 100,
+          "content": {
+            "content_type": "text",
+            "parts": ["Hola"]
+          },
+          "status": "finished_successfully",
+          "metadata": {}
+        },
+        {
+          "id": "assistant-1",
+          "author": {
+            "role": "assistant",
+            "name": null,
+            "metadata": {}
+          },
+          "create_time": 101,
+          "content": {
+            "content_type": "text",
+            "parts": ["Hola, ¿cómo estás?"]
+          },
+          "status": "finished_successfully",
+          "metadata": {
+            "parent_id": "user-1"
+          }
+        },
+        {
+          "id": "system-1",
+          "author": {
+            "role": "system",
+            "name": null,
+            "metadata": {}
+          },
+          "create_time": 99,
+          "content": {
+            "content_type": "model_editable_context",
+            "parts": ["Contexto interno"]
+          },
+          "status": "finished_successfully",
+          "metadata": {}
+        }
+      ],
+      "page_info": {
+        "has_previous_page": true,
+        "has_next_page": false,
+        "start_cursor": "system-1",
+        "end_cursor": "assistant-1"
+      }
+    }
+  },
+  {
+    "url": "https://chatgpt.com/backend-api/conversations/paginated-test/messages?before=system-1&include_has_versions=true&num_turns=10",
+    "data": {
+      "messages": [
+        {
+          "id": "user-2",
+          "author": {
+            "role": "user",
+            "name": null,
+            "metadata": {}
+          },
+          "create_time": 102,
+          "content": {
+            "content_type": "text",
+            "parts": ["Otra pregunta"]
+          },
+          "status": "finished_successfully",
+          "metadata": {
+            "parent_id": "assistant-1"
+          }
+        },
+        {
+          "id": "assistant-2",
+          "author": {
+            "role": "assistant",
+            "name": null,
+            "metadata": {}
+          },
+          "create_time": 103,
+          "content": {
+            "content_type": "text",
+            "parts": ["Otra respuesta"]
+          },
+          "status": "finished_successfully",
+          "metadata": {
+            "parent_id": "user-2"
+          }
+        },
+        {
+          "id": "tool-1",
+          "author": {
+            "role": "tool",
+            "name": "web.run",
+            "metadata": {
+              "real_author": "tool:web.run"
+            }
+          },
+          "create_time": 104,
+          "content": {
+            "content_type": "code",
+            "language": "javascript",
+            "text": "console.log('test')"
+          },
+          "status": "finished_successfully",
+          "metadata": {}
+        }
+      ],
+      "page_info": {
+        "has_previous_page": false,
+        "has_next_page": true,
+        "start_cursor": "user-2",
+        "end_cursor": "tool-1"
+      }
+    }
+  }
+]
