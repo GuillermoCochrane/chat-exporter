@@ -35,14 +35,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       source: "AI_CHAT_EXPORTER",
       type: "GET_CONVERSATION",
     },
-    "*",
+    "*"
   );
 
   const listener = (event) => {
     if (event.source !== window) return;
+
     if (
       event.data?.source === "AI_CHAT_EXPORTER" &&
-      event.data?.type === "CONVERSATION"
+      event.data?.type === "CONVERSATION_COMPLETE"
     ) {
       window.removeEventListener("message", listener);
       sendResponse({ conversation: event.data.conversation });
@@ -50,5 +51,5 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   };
 
   window.addEventListener("message", listener);
-  return true; // canal abierto para respuesta asíncrona
+  return true;
 });

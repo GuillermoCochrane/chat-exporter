@@ -28,7 +28,7 @@ const downloadFile = (dataUrl, extension) =>
 // ---------------------------------------------------------------------------
 
 const exportHandlers = {
-  json: (message) => {
+  json: () => {
     const jsonStr = JSON.stringify(capturedConversation, null, 2);
     const url = buildDataUrl(jsonStr, "application/json");
     return downloadFile(url, "json");
@@ -57,7 +57,10 @@ const exportHandlers = {
 
 async function getConversationFromPage() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  if (!tab?.id) return null;
+
+  if (!tab?.id) {
+    return null;
+  }
 
   const response = await chrome.tabs.sendMessage(tab.id, {
     type: "GET_CONVERSATION_FROM_PAGE",
@@ -76,8 +79,34 @@ const messageHandlers = {
   },
 
   EXPORT: async (message, sendResponse, model = "ChatGPT") => {
-    // Intentar usar la conversación en memoria; si no está,
-    // recuperarla desde la página.
+    if (message.format === "json") {
+      const conversation = await getConversationFromPage();
+
+      if (!conversation || !conversation.length) {
+        sendResponse({
+          success: false,
+          errorCode: "NO_CONVERSATION",
+          params: { model },
+        });
+        return;
+      }
+
+      capturedConversation = conversation;
+
+      try {
+        await exportHandlers.json();
+        sendResponse({ success: true });
+      } catch (error) {
+        sendResponse({
+          success: false,
+          errorCode: "PIPELINE_ERROR",
+          params: { message: error.message },
+        });
+      }
+
+      return;
+    }
+
     if (!capturedConversation) {
       capturedConversation = await getConversationFromPage();
     }
@@ -92,6 +121,7 @@ const messageHandlers = {
     }
 
     const handler = exportHandlers[message.format];
+
     if (!handler) {
       sendResponse({
         success: false,
@@ -120,9 +150,11 @@ const messageHandlers = {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const handler = messageHandlers[message.type];
-  if (!handler) return;
 
-  // Manejar funciones asíncronas: devolver true mantiene el canal abierto.
+  if (!handler) {
+    return;
+  }
+
   Promise.resolve(handler(message, sendResponse)).catch((error) => {
     sendResponse({
       success: false,
