@@ -1,42 +1,51 @@
-{
-  "title": "Example Conversation",
-  "mapping": {
-    "user-message": {
-      "id": "user-message",
-      "message": {
-        "author": {
-          "role": "user"
+[
+  {
+    "url": "https://chatgpt.com/backend-api/conversations/example-conversation",
+    "data": {
+      "messages": [
+        {
+          "id": "user-message",
+          "author": {
+            "role": "user",
+            "name": null,
+            "metadata": {}
+          },
+          "create_time": 1740000000,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Hello, ChatGPT!"
+            ]
+          },
+          "status": "finished_successfully",
+          "metadata": {}
         },
-        "create_time": 1740000000,
-        "content": {
-          "content_type": "text",
-          "parts": [
-            "Hello, ChatGPT!"
-          ]
+        {
+          "id": "assistant-message",
+          "author": {
+            "role": "assistant",
+            "name": null,
+            "metadata": {}
+          },
+          "create_time": 1740000005,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Hello! This is an example conversation."
+            ]
+          },
+          "status": "finished_successfully",
+          "metadata": {
+            "parent_id": "user-message"
+          }
         }
-      },
-      "parent": null,
-      "children": [
-        "assistant-message"
-      ]
-    },
-    "assistant-message": {
-      "id": "assistant-message",
-      "message": {
-        "author": {
-          "role": "assistant"
-        },
-        "create_time": 1740000005,
-        "content": {
-          "content_type": "text",
-          "parts": [
-            "Hello! This is an example conversation."
-          ]
-        }
-      },
-      "parent": "user-message",
-      "children": []
+      ],
+      "page_info": {
+        "has_previous_page": false,
+        "has_next_page": false,
+        "start_cursor": "user-message",
+        "end_cursor": "assistant-message"
+      }
     }
-  },
-  "current_node": "assistant-message"
-}
+  }
+]
