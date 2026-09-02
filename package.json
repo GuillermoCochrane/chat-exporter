@@ -32,6 +32,7 @@
     "test:parser": "node test/parser.test.js",
     "test:filter": "node test/filter.test.js",
     "test:normalizer": "node test/normalizer.test.js",
+    "test:sorter": "node test/sorter.test.js",
     "test:markdown": "node test/markdown.test.js",
     "test:markdown:compact": "node test/markdown-compact.test.js",
     "test:loader": "node test/jsonFileSource.test.js",

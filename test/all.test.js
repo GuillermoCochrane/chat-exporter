@@ -3,6 +3,7 @@ import "./validator.test.js";
 import "./parser.test.js";
 import "./filter.test.js";
 import "./normalizer.test.js";
+import "./sorter.test.js";
 import "./markdown.test.js";
 import "./markdown-compact.test.js";
 import "./jsonFileSource.test.js";
