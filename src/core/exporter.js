@@ -2,11 +2,21 @@ import { runPipeline } from "./pipeline.js";
 import { conversationSources } from "./sources/index.js";
 import { buildMarkdown } from "./markdown.js";
 
+// Muestra el reporte de inspección en consola.
+function displayInspectionReport(report) {
+  console.log(`Título: ${report.title}`);
+  console.table(report.rows);
+}
+
 // Coordina la ejecución completa del exportador.
 // Orquesta Sources, Core, Renderers y Outputs.
 export async function runExporter(config) {
   try {
     const source = conversationSources[config.source];
+
+    if (!source) {
+      throw new Error(`Fuente desconocida: ${config.source}`);
+    }
 
     if (!source) {
       throw new Error(`Fuente desconocida: ${config.source}`);
@@ -18,11 +28,10 @@ export async function runExporter(config) {
 
     const result = runPipeline(conversation, config);
 
-  if (config.inspect) {
-    console.log(`Título: ${result.report.title}`);
-    console.table(result.report.rows);
-    return;
-  }
+    if (config.inspect) {
+      displayInspectionReport(result.report);
+      return;
+    }
 
     const markdown = buildMarkdown(result.normalized, config);
 

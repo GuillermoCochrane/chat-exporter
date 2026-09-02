@@ -13,7 +13,7 @@ const CONTENT_TYPE_COLUMNS = {
   code: "Code",
 };
 
-// Devuelve una fila con todas las columnas inicializadas en cero.
+// Inicializa una fila con todas las columnas en cero.
 function createEmptyRow(pageLabel = "") {
   return {
     "Página": pageLabel,
@@ -31,30 +31,95 @@ function createEmptyRow(pageLabel = "") {
   };
 }
 
-// Suma los valores numéricos de una fila a un acumulador.
+// Actualiza la columna correspondiente al rol del mensaje.
+function countRole(row, message) {
+  const role = message.author?.role ?? null;
+  const column = ROLE_COLUMNS[role];
+
+  if (column) {
+    row[column]++;
+  }
+}
+
+// Actualiza la columna correspondiente al tipo de contenido.
+function countContentType(row, message) {
+  const contentType = message.content?.content_type ?? null;
+  const column = CONTENT_TYPE_COLUMNS[contentType] ?? "Otros";
+
+  row[column]++;
+}
+
+// Cuenta si el mensaje posee metadata.parent_id.
+function countParentId(row, message) {
+  if (message.metadata?.parent_id) {
+    row["parent_id"]++;
+  }
+}
+
+// Actualiza el rango de timestamps para una página y el global.
+function updateTimestampRanges(message, pageRange, globalRange) {
+  const timestamp = message.create_time;
+
+  if (timestamp == null) return;
+  if (pageRange.first === null || timestamp < pageRange.first) pageRange.first = timestamp;
+  if (pageRange.last === null || timestamp > pageRange.last) pageRange.last = timestamp;
+  if (globalRange.first === null || timestamp < globalRange.first) globalRange.first = timestamp;
+  if (globalRange.last === null || timestamp > globalRange.last) globalRange.last = timestamp;
+}
+
+// Formatea un timestamp para mostrarlo en la tabla.
+function formatTimestamp(timestamp) {
+  return timestamp != null ? formatDate(timestamp, "human") : "—";
+}
+
+// Llena las columnas de una fila a partir de los mensajes de una página.
+function fillPageRow(row, messages, pageRange, globalRange) {
+  for (const message of messages) {
+    row["Mensajes"]++;
+
+    countRole(row, message);
+    countContentType(row, message);
+    countParentId(row, message);
+    updateTimestampRanges(message, pageRange, globalRange);
+  }
+}
+
+// Procesa una página y devuelve su fila correspondiente.
+function processPage(page, index, totals, globalRange) {
+  const messages = Array.isArray(page.data?.messages)
+    ? page.data.messages
+    : [];
+
+  const row = createEmptyRow(index + 1);
+  const pageRange = { first: null, last: null };
+
+  fillPageRow(row, messages, pageRange, globalRange);
+
+  row["Inicio"] = formatTimestamp(pageRange.first);
+  row["Fin"] = formatTimestamp(pageRange.last);
+
+  accumulateTotals(totals, row);
+
+  return row;
+}
+
+// Suma las columnas numéricas de una fila al acumulador.
 function accumulateTotals(totals, row) {
   for (const [key, value] of Object.entries(row)) {
-    if (typeof value === "number") {
+    if (key !== "Página" && typeof value === "number") {
       totals[key] += value;
     }
   }
 }
 
-// Agrega la fila de totales final usando timestamps originales.
-function appendTotalRow(rows, totals, firstTimestamp, lastTimestamp) {
+// Agrega la fila final de totales.
+function appendTotalRow(rows, totals, globalRange) {
   const totalRow = createEmptyRow("Total");
 
-  // Copiar solo las columnas numéricas, excluyendo "Página".
-  for (const [key, value] of Object.entries(totals)) {
-    if (key !== "Página" && typeof value === "number") {
-      totalRow[key] = value;
-    }
-  }
+  accumulateTotals(totalRow, totals);
 
-  totalRow["Inicio"] =
-    firstTimestamp != null ? formatDate(firstTimestamp, "human") : "—";
-  totalRow["Fin"] =
-    lastTimestamp != null ? formatDate(lastTimestamp, "human") : "—";
+  totalRow["Inicio"] = formatTimestamp(globalRange.first);
+  totalRow["Fin"] = formatTimestamp(globalRange.last);
 
   rows.push(totalRow);
 }
@@ -72,66 +137,16 @@ export function inspectConversation(conversation) {
   const rows = [];
   const totals = createEmptyRow();
 
-  let globalFirstTimestamp = null;
-  let globalLastTimestamp = null;
+  const globalRange = {
+    first: null,
+    last: null,
+  };
 
   conversation.forEach((page, index) => {
-    const messages = Array.isArray(page.data?.messages)
-      ? page.data.messages
-      : [];
-
-    const row = createEmptyRow(index + 1);
-
-    let firstTimestamp = null;
-    let lastTimestamp = null;
-
-    for (const message of messages) {
-      row["Mensajes"]++;
-
-      const role = message.author?.role ?? null;
-      const roleColumn = ROLE_COLUMNS[role];
-      if (roleColumn) row[roleColumn]++;
-
-      const contentType = message.content?.content_type ?? null;
-      const typeColumn = CONTENT_TYPE_COLUMNS[contentType] ?? "Otros";
-      row[typeColumn]++;
-
-      if (message.metadata?.parent_id) {
-        row["parent_id"]++;
-      }
-
-      const timestamp = message.create_time;
-
-      if (timestamp != null) {
-        if (firstTimestamp === null || timestamp < firstTimestamp) {
-          firstTimestamp = timestamp;
-        }
-
-        if (lastTimestamp === null || timestamp > lastTimestamp) {
-          lastTimestamp = timestamp;
-        }
-
-        if (globalFirstTimestamp === null || timestamp < globalFirstTimestamp) {
-          globalFirstTimestamp = timestamp;
-        }
-
-        if (globalLastTimestamp === null || timestamp > globalLastTimestamp) {
-          globalLastTimestamp = timestamp;
-        }
-      }
-    }
-
-    row["Inicio"] =
-      firstTimestamp != null ? formatDate(firstTimestamp, "human") : "—";
-    row["Fin"] =
-      lastTimestamp != null ? formatDate(lastTimestamp, "human") : "—";
-
-    accumulateTotals(totals, row);
-
-    rows.push(row);
+    rows.push(processPage(page, index, totals, globalRange));
   });
 
-  appendTotalRow(rows, totals, globalFirstTimestamp, globalLastTimestamp);
+  appendTotalRow(rows, totals, globalRange);
 
   return { title, rows };
 }
