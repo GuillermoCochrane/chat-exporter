@@ -18,10 +18,11 @@ export async function runExporter(config) {
 
     const result = runPipeline(conversation, config);
 
-    if (config.inspect) {
-      console.table(result.report);
-      return;
-    }
+  if (config.inspect) {
+    console.log(`Título: ${result.report.title}`);
+    console.table(result.report.rows);
+    return;
+  }
 
     const markdown = buildMarkdown(result.normalized, config);
 
