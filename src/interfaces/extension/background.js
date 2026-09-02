@@ -79,7 +79,8 @@ const messageHandlers = {
   },
 
   EXPORT: async (message, sendResponse, model = "ChatGPT") => {
-    if (message.format === "json") {
+    // Tanto JSON como Markdown necesitan la conversación completa.
+    if (message.format === "json" || message.format === "md") {
       const conversation = await getConversationFromPage();
 
       if (!conversation || !conversation.length) {
@@ -94,7 +95,7 @@ const messageHandlers = {
       capturedConversation = conversation;
 
       try {
-        await exportHandlers.json();
+        await exportHandlers[message.format](message);
         sendResponse({ success: true });
       } catch (error) {
         sendResponse({
@@ -107,40 +108,12 @@ const messageHandlers = {
       return;
     }
 
-    if (!capturedConversation) {
-      capturedConversation = await getConversationFromPage();
-    }
-
-    if (!capturedConversation) {
-      sendResponse({
-        success: false,
-        errorCode: "NO_CONVERSATION",
-        params: { model },
-      });
-      return;
-    }
-
-    const handler = exportHandlers[message.format];
-
-    if (!handler) {
-      sendResponse({
-        success: false,
-        errorCode: "UNKNOWN_FORMAT",
-        params: { format: message.format },
-      });
-      return;
-    }
-
-    try {
-      await handler(message);
-      sendResponse({ success: true });
-    } catch (error) {
-      sendResponse({
-        success: false,
-        errorCode: "PIPELINE_ERROR",
-        params: { message: error.message },
-      });
-    }
+    // Formato desconocido.
+    sendResponse({
+      success: false,
+      errorCode: "UNKNOWN_FORMAT",
+      params: { format: message.format },
+    });
   },
 };
 
