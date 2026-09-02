@@ -1,5 +1,6 @@
 import "./formatter.test.js";
 import "./validator.test.js";
+import "./inspector.test.js";
 import "./parser.test.js";
 import "./filter.test.js";
 import "./normalizer.test.js";
