@@ -1,6 +1,5 @@
 // Ordena mensajes crudos por fecha de creación.
-// Trabaja sobre el contrato que producen parser y filter,
-// antes de que normalizer transforme createTime en timestamp.
+// Se conserva para casos donde sea necesario ordenar por timestamp.
 export function sortMessages(messages, isAscending = true) {
   return [...messages].sort((a, b) => {
     const timeA = a.createTime ?? 0;
@@ -9,16 +8,12 @@ export function sortMessages(messages, isAscending = true) {
     return isAscending ? timeA - timeB : timeB - timeA;
   });
 }
+
 // Corrige el orden de mensajes usando la relación parent_id.
-// No ordena por timestamps, porque no son confiables.
+// No invierte el array ni ordena por timestamps.
 // Solo reubica hijos que aparecen antes que sus padres.
 export function sortMessagesSafe(messages) {
-
-  const inversed = Array.isArray(messages)
-    ? [...messages].reverse()
-    : [];
-  
-  const sorted = [...inversed];
+  const sorted = [...messages];
 
   const byId = new Map(sorted.map((message) => [message.id, message]));
 
