@@ -15,26 +15,55 @@ function findScrollableContainer() {
     })
     .sort((a, b) => b.scrollHeight - a.scrollHeight);
 
-  return candidates[0] ?? document.scrollingElement ?? document.documentElement;
+  return (
+    candidates[0] ??
+    document.scrollingElement ??
+    document.documentElement
+  );
 }
 
 function waitForNewPage(timeoutMs = 45000) {
   return new Promise((resolve) => {
     const handler = (event) => {
-      window.removeEventListener("AI_CHAT_EXPORTER_PAGE_CAPTURED", handler);
+      window.removeEventListener(
+        "AI_CHAT_EXPORTER_PAGE_CAPTURED",
+        handler
+      );
+
       clearTimeout(timer);
       resolve(event.detail);
     };
 
     const timer = setTimeout(() => {
-      window.removeEventListener("AI_CHAT_EXPORTER_PAGE_CAPTURED", handler);
+      window.removeEventListener(
+        "AI_CHAT_EXPORTER_PAGE_CAPTURED",
+        handler
+      );
+
       resolve(null);
     }, timeoutMs);
 
-    window.addEventListener("AI_CHAT_EXPORTER_PAGE_CAPTURED", handler);
+    window.addEventListener(
+      "AI_CHAT_EXPORTER_PAGE_CAPTURED",
+      handler
+    );
   });
 }
 
+// Vuelve al fondo de la conversación.
+// Se usa scroll instantáneo porque durante la recuperación
+// la altura del contenido puede seguir cambiando.
+async function scrollToBottom(container) {
+  container.scrollTop = container.scrollHeight;
+  // Dar tiempo al navegador para aplicar el cambio de layout.
+  await sleep(100);
+  // Volver a calcular scrollHeight por si el contenido
+  // terminó de renderizarse después del primer scroll.
+  container.scrollTop = container.scrollHeight;
+}
+
+// Recolecta todas las páginas de la conversación y, al finalizar,
+// devuelve al usuario al último mensaje de la conversación.
 export async function collectViaScroll() {
   const container = findScrollableContainer();
   const state = window.__AI_CHAT_EXPORTER__;
@@ -72,6 +101,8 @@ export async function collectViaScroll() {
     container.scrollTop = 0;
     await sleep(300);
   }
+
+  await scrollToBottom(container);
 
   return state.conversation;
 }
