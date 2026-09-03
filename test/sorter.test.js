@@ -1,4 +1,8 @@
-import { sortMessages, sortMessagesSafe } from "../src/core/sorter.js";
+import {
+  sortMessages,
+  sortMessagesSafe,
+  sortPagesReverse,
+} from "../src/core/sorter.js";
 
 // ------------------------------------------------------------------
 // Casos para sortMessages (orden por createTime)
@@ -75,15 +79,38 @@ const safeCases = [
 ];
 
 // ------------------------------------------------------------------
+// Casos para sortPagesReverse (inversión de páginas)
+// ------------------------------------------------------------------
+
+const pageCases = [
+  {
+    name: "Invierte el array de páginas",
+    input: [{ id: "p1" }, { id: "p2" }, { id: "p3" }],
+    expected: ["p3", "p2", "p1"],
+  },
+  {
+    name: "No muta el array original",
+    input: [{ id: "p1" }, { id: "p2" }],
+    expected: ["p2", "p1"],
+  },
+  {
+    name: "Devuelve array vacío si no es un array",
+    input: "no-array",
+    expected: [],
+  },
+];
+
+// ------------------------------------------------------------------
 // Ejecución
 // ------------------------------------------------------------------
 
 let passed = 0;
-const totalTests = timestampCases.length + safeCases.length;
+const totalTests =
+  timestampCases.length + safeCases.length + pageCases.length;
 
-for (const testCase of timestampCases) {
+function runCase(testCase, sortFn) {
   const original = [...testCase.input];
-  const result = sortMessages(testCase.input, testCase.isAscending ?? true);
+  const result = sortFn(testCase.input);
 
   const resultIds = result.map((m) => m.id);
   const expectedIds = testCase.expected;
@@ -92,47 +119,41 @@ for (const testCase of timestampCases) {
     console.error(`✖ ${testCase.name}`);
     console.error(`  Esperado: ${expectedIds.join(", ")}`);
     console.error(`  Obtenido: ${resultIds.join(", ")}`);
-    continue;
+    return false;
   }
 
   if (testCase.name === "No muta el array original") {
     const originalIds = original.map((m) => m.id);
-    if (JSON.stringify(originalIds) !== JSON.stringify(testCase.input.map((m) => m.id))) {
+    if (
+      JSON.stringify(originalIds) !==
+      JSON.stringify(testCase.input.map((m) => m.id))
+    ) {
       console.error(`✖ ${testCase.name}`);
       console.error("  El array original fue mutado.");
-      continue;
+      return false;
     }
   }
 
   console.log(`✔ ${testCase.name}`);
-  passed++;
+  return true;
+}
+
+for (const testCase of timestampCases) {
+  if (runCase(testCase, (input) => sortMessages(input, testCase.isAscending ?? true))) {
+    passed++;
+  }
 }
 
 for (const testCase of safeCases) {
-  const original = [...testCase.input];
-  const result = sortMessagesSafe(testCase.input);
-
-  const resultIds = result.map((m) => m.id);
-  const expectedIds = testCase.expected;
-
-  if (JSON.stringify(resultIds) !== JSON.stringify(expectedIds)) {
-    console.error(`✖ ${testCase.name}`);
-    console.error(`  Esperado: ${expectedIds.join(", ")}`);
-    console.error(`  Obtenido: ${resultIds.join(", ")}`);
-    continue;
+  if (runCase(testCase, sortMessagesSafe)) {
+    passed++;
   }
+}
 
-  if (testCase.name === "No muta el array original") {
-    const originalIds = original.map((m) => m.id);
-    if (JSON.stringify(originalIds) !== JSON.stringify(testCase.input.map((m) => m.id))) {
-      console.error(`✖ ${testCase.name}`);
-      console.error("  El array original fue mutado.");
-      continue;
-    }
+for (const testCase of pageCases) {
+  if (runCase(testCase, sortPagesReverse)) {
+    passed++;
   }
-
-  console.log(`✔ ${testCase.name}`);
-  passed++;
 }
 
 console.log(`\n${passed}/${totalTests} tests superados.`);
