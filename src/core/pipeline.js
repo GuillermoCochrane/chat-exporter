@@ -1,7 +1,7 @@
 import { inspectConversation } from "./inspector.js";
 import { extractMessages } from "./parser.js";
 import { filterConversationMessages } from "./filter.js";
-import { sortMessages } from "./sorter.js";
+import { sortMessagesSafe } from "./sorter.js";
 import { normalizeMessages } from "./normalizer.js";
 
 // Ejecuta exclusivamente el procesamiento interno del Core.
@@ -14,12 +14,9 @@ export function runPipeline(conversation, config) {
   }
 
   const parsed = extractMessages(conversation);
-  const filtered = filterConversationMessages(parsed, config.roleFilter ?? "all");
-  const sorted = sortMessages(filtered);
-  const normalized = normalizeMessages(sorted);
+  const sorted = sortMessagesSafe(parsed);
+  const filtered = filterConversationMessages(sorted, config.roleFilter ?? "all");
+  const normalized = normalizeMessages(filtered);
 
-  return {
-    report: null,
-    normalized,
-  };
+  return { normalized };
 }

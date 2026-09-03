@@ -1,9 +1,8 @@
 export function extractMessages(conversation) {
-  const pages = Array.isArray(conversation) ? conversation : [];
 
   const messages = [];
 
-  for (const page of pages) {
+  for (const page of conversation) {
     const pageMessages = page.data?.messages ?? [];
 
     for (const message of pageMessages) {
@@ -15,6 +14,7 @@ export function extractMessages(conversation) {
         role: message.author?.role ?? null,
 
         createTime: message.create_time ?? null,
+        updateTime: message.update_time ?? null,
         status: message.status ?? null,
 
         rawContent: message.content ?? null,
