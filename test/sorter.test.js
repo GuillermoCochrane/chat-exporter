@@ -1,6 +1,10 @@
-import { sortMessages } from "../src/core/sorter.js";
+import { sortMessages, sortMessagesSafe } from "../src/core/sorter.js";
 
-const cases = [
+// ------------------------------------------------------------------
+// Casos para sortMessages (orden por createTime)
+// ------------------------------------------------------------------
+
+const timestampCases = [
   {
     name: "Ordena cronológicamente en modo ascendente",
     input: [
@@ -39,9 +43,53 @@ const cases = [
   },
 ];
 
-let passed = 0;
+// ------------------------------------------------------------------
+// Casos para sortMessagesSafe (inversión + parent_id)
+// ------------------------------------------------------------------
 
-for (const testCase of cases) {
+const safeCases = [
+  {
+    name: "Invierte el array y devuelve orden esperado",
+    input: [
+      { id: "3", parent: null },
+      { id: "2", parent: null },
+      { id: "1", parent: null },
+    ],
+    expected: ["1", "2", "3"],
+  },
+  {
+    name: "Reubica hijo que aparece antes que su padre",
+    input: [
+      { id: "parent", parent: null },
+      { id: "child", parent: "parent" },
+    ],
+    expected: ["parent", "child"],
+  },
+  {
+    name: "Mantiene orden si no hay conflictos",
+    input: [
+      { id: "user", parent: null },
+      { id: "assistant", parent: "user" },
+    ],
+    expected: ["user", "assistant"],
+  },
+  {
+    name: "No muta el array original",
+    input: [
+      { id: "child", parent: "parent" },
+      { id: "parent", parent: null },
+    ],
+    expected: ["parent", "child"],
+  },
+];
+// ------------------------------------------------------------------
+// Ejecución
+// ------------------------------------------------------------------
+
+let passed = 0;
+const totalTests = timestampCases.length + safeCases.length;
+
+for (const testCase of timestampCases) {
   const original = [...testCase.input];
   const result = sortMessages(testCase.input, testCase.isAscending ?? true);
 
@@ -68,8 +116,35 @@ for (const testCase of cases) {
   passed++;
 }
 
-console.log(`\n${passed}/${cases.length} tests superados.`);
+for (const testCase of safeCases) {
+  const original = [...testCase.input];
+  const result = sortMessagesSafe(testCase.input);
 
-if (passed !== cases.length) process.exit(1);
+  const resultIds = result.map((m) => m.id);
+  const expectedIds = testCase.expected;
+
+  if (JSON.stringify(resultIds) !== JSON.stringify(expectedIds)) {
+    console.error(`✖ ${testCase.name}`);
+    console.error(`  Esperado: ${expectedIds.join(", ")}`);
+    console.error(`  Obtenido: ${resultIds.join(", ")}`);
+    continue;
+  }
+
+  if (testCase.name === "No muta el array original") {
+    const originalIds = original.map((m) => m.id);
+    if (JSON.stringify(originalIds) !== JSON.stringify(testCase.input.map((m) => m.id))) {
+      console.error(`✖ ${testCase.name}`);
+      console.error("  El array original fue mutado.");
+      continue;
+    }
+  }
+
+  console.log(`✔ ${testCase.name}`);
+  passed++;
+}
+
+console.log(`\n${passed}/${totalTests} tests superados.`);
+
+if (passed !== totalTests) process.exit(1);
 
 console.log("\n✔ sorter.test.js OK");
