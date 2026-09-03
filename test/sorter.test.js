@@ -44,24 +44,15 @@ const timestampCases = [
 ];
 
 // ------------------------------------------------------------------
-// Casos para sortMessagesSafe (inversión + parent_id)
+// Casos para sortMessagesSafe (corrección por parent_id)
 // ------------------------------------------------------------------
 
 const safeCases = [
   {
-    name: "Invierte el array y devuelve orden esperado",
-    input: [
-      { id: "3", parent: null },
-      { id: "2", parent: null },
-      { id: "1", parent: null },
-    ],
-    expected: ["1", "2", "3"],
-  },
-  {
     name: "Reubica hijo que aparece antes que su padre",
     input: [
-      { id: "parent", parent: null },
       { id: "child", parent: "parent" },
+      { id: "parent", parent: null },
     ],
     expected: ["parent", "child"],
   },
@@ -82,6 +73,7 @@ const safeCases = [
     expected: ["parent", "child"],
   },
 ];
+
 // ------------------------------------------------------------------
 // Ejecución
 // ------------------------------------------------------------------

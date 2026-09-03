@@ -14,23 +14,24 @@ const tests = [
         // cantidad esperada
         messages.length === this.expectedCount,
 
-        // roles esperados
-        messages[0].role === "user",
-        messages[1].role === "assistant",
-        messages[2].role === "system",
-        messages[3].role === "user",
-        messages[4].role === "assistant",
-        messages[5].role === "tool",
+        // roles esperados en el nuevo orden (páginas invertidas)
+        messages[0].role === "user",      // user-2
+        messages[1].role === "assistant", // assistant-2
+        messages[2].role === "tool",      // tool-1
+        messages[3].role === "user",      // user-1
+        messages[4].role === "assistant", // assistant-1
+        messages[5].role === "system",    // system-1
 
-        // ids
-        messages[0].id === "user-1",
-        messages[5].id === "tool-1",
+        // ids en el orden nuevo
+        messages[0].id === "user-2",
+        messages[5].id === "system-1",
 
         // parent desde metadata.parent_id
-        messages[0].parent === null,
-        messages[1].parent === "user-1",
-        messages[3].parent === "assistant-1",
-        messages[4].parent === "user-2",
+        messages[0].parent === "assistant-1",
+        messages[1].parent === "user-2",
+        messages[2].parent === null,
+        messages[3].parent === null,
+        messages[4].parent === "user-1",
         messages[5].parent === null,
 
         // children siempre array
@@ -45,10 +46,10 @@ const tests = [
         messages.every((m) => "status" in m),
 
         // contenido intacto
-        messages[0].rawContent.parts[0] === "Hola",
-        messages[2].rawContent.content_type === "model_editable_context",
-        messages[5].rawContent.content_type === "code",
-        messages[5].rawContent.text === "console.log('test')",
+        messages[0].rawContent.parts[0] === "Otra pregunta",
+        messages[2].rawContent.content_type === "code",
+        messages[5].rawContent.content_type === "model_editable_context",
+        messages[5].rawContent.parts[0] === "Contexto interno",
       ];
     },
   },
