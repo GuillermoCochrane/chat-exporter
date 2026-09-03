@@ -44,3 +44,8 @@ export function sortMessagesSafe(messages) {
 
   return sorted;
 }
+
+// Invierte el orden de páginas de la conversación.
+export function sortPagesReverse(pages) {
+  return Array.isArray(pages) ? [...pages].reverse() : [];
+}

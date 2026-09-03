@@ -1,7 +1,5 @@
 export function extractMessages(conversation) {
-  const pages = Array.isArray(conversation)
-    ? [...conversation].reverse()
-    : [];
+  const pages = Array.isArray(conversation) ? conversation : [];
 
   const messages = [];
 
