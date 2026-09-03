@@ -1,5 +1,6 @@
 // Script de build para la extensión de Chrome.
-// Empaqueta el core usando esbuild y copia los archivos estáticos a dist/.
+// Empaqueta el core y el script inyectado usando esbuild.
+// Luego copia los archivos estáticos a dist/.
 
 import * as esbuild from "esbuild";
 import { copyFileSync, mkdirSync, readdirSync, statSync } from "node:fs";
@@ -34,6 +35,15 @@ await esbuild.build({
   absWorkingDir: root,
 });
 
+// Empaquetar el script inyectado con sus módulos
+await esbuild.build({
+  entryPoints: ["src/interfaces/extension/inject.js"],
+  bundle: true,
+  format: "iife",
+  outfile: "dist/inject.js",
+  absWorkingDir: root,
+});
+
 // Copia recursiva de directorios
 function copyDir(src, dest) {
   mkdirSync(dest, { recursive: true });
@@ -53,7 +63,6 @@ const staticFiles = [
   "manifest.json",
   "background.js",
   "content.js",
-  "inject.js",
   "popup.html",
 ];
 
