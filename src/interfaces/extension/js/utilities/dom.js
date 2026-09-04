@@ -17,3 +17,6 @@ export const hideTag = (selector) => { $(selector) && setValue(selector, "hidden
 
 //* Mostrar elemento del DOM
 export const showTag = (selector) => { $(selector) && setValue(selector, "hidden", false); };
+
+//* Cambiar el estilo inline de un elemento DOM
+export const setStyle = (selector, property, value) => { $(selector) && ($(selector).style[property] = value); };

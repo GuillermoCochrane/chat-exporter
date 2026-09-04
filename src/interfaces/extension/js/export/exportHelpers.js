@@ -1,4 +1,4 @@
-import { $, $$, setValue, setText, hideTag, showTag } from "../utilities/dom.js";
+import { $, $$, setValue, setText, hideTag, showTag, setStyle } from "../utilities/dom.js";
 import { getCurrentLanguage } from "../languages/languageHandler.js";
 import { TRANSLATIONS } from "../languages/translations.js";
 
@@ -53,13 +53,13 @@ export function getExportConfig() {
 export function beginExport() {
   setValue("#exportBtn", "disabled", true);
   setValue("#statusText", "textContent", "");
-  setValue(".spinner", "style.display", "inline-block");
+  setStyle(".spinner", "display", "inline-block");
 }
 
 // Restaurar estado previo a exportación
 function restoreExportState() {
   setValue("#exportBtn", "disabled", false);
-  setValue(".spinner", "style.display", "none");
+  setStyle(".spinner", "display", "none");
 }
 
 // Escucha los mensajes de progreso enviados por el background
