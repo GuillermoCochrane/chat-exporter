@@ -19,10 +19,14 @@ window.addEventListener("message", (event) => {
 
   if (!event.data.conversation) return;
 
-  chrome.runtime.sendMessage({
-    type: "DOWNLOAD_JSON",
-    conversation: event.data.conversation,
-  });
+  try {
+    chrome.runtime.sendMessage({
+      type: "DOWNLOAD_JSON",
+      conversation: event.data.conversation,
+    });
+  } catch {
+    // Contexto de la extensión invalidado; se ignora.
+  }
 });
 
 // Atiende solicitudes del background para obtener la conversación
@@ -46,9 +50,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       event.data?.type === "CONVERSATION_COMPLETE"
     ) {
       window.removeEventListener("message", listener);
+      clearTimeout(timeout);
       sendResponse({ conversation: event.data.conversation });
     }
   };
+
+  const timeout = setTimeout(() => {
+    window.removeEventListener("message", listener);
+    sendResponse({ conversation: null });
+  }, 60000);
 
   window.addEventListener("message", listener);
   return true;
