@@ -4,8 +4,7 @@ import { exportHandler } from './export/exportHandler.js';
 import { formatHandler } from './export/formatHandler.js';
 import { versionHandler } from './versionHandler.js';
 
-
-// Inicializamos el handler de versión  
+// Inicializamos el handler de versión
 versionHandler();
 
 // Inicializamos el handler de formato de exportación

@@ -39,6 +39,18 @@ export function captureConversation() {
           },
           "*"
         );
+
+        window.postMessage(
+          {
+            source: "AI_CHAT_EXPORTER",
+            type: "PROGRESS",
+            stage: "collecting",
+            data: {
+              pageCount: window.__AI_CHAT_EXPORTER__.conversation.length,
+            },
+          },
+          "*"
+        );
       } catch {
         // No se pudo capturar la conversación; se ignora.
       }

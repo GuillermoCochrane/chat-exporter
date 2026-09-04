@@ -28,8 +28,20 @@ export const TRANSLATIONS = {
     en: "Compact mode",
   },
   processing: {
-    es: "⏳ Procesando...",
-    en: "⏳ Processing...",
+    es: "Procesando...",
+    en: "Processing...",
+  },
+  collecting: {
+    es: "Recolectando página",
+    en: "Collecting page",
+  },
+  generating: {
+    es: "Generando",
+    en: "Generating",
+  },
+  downloading: {
+    es: "Preparando descarga...",
+    en: "Preparing download...",
   },
   success: {
     es: " exportado con éxito.",

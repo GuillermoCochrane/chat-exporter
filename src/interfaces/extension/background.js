@@ -24,17 +24,34 @@ const downloadFile = (dataUrl, extension) =>
   });
 
 // ---------------------------------------------------------------------------
+// Utilidades de progreso
+// ---------------------------------------------------------------------------
+
+function sendProgress(stage, data = {}) {
+  chrome.runtime.sendMessage({
+    type: "PROGRESS",
+    stage,
+    data,
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Handlers de formato de exportación
 // ---------------------------------------------------------------------------
 
 const exportHandlers = {
-  json: () => {
+  json: async () => {
+    sendProgress("generating", { format: "JSON" });
     const jsonStr = JSON.stringify(capturedConversation, null, 2);
     const url = buildDataUrl(jsonStr, "application/json");
-    return downloadFile(url, "json");
+
+    sendProgress("downloading");
+    await downloadFile(url, "json");
   },
 
-  md: (message) => {
+  md: async (message) => {
+    sendProgress("generating", { format: "Markdown" });
+
     const config = {
       source: "extension",
       conversation: capturedConversation,
@@ -43,6 +60,7 @@ const exportHandlers = {
 
       outputHandler: async (markdown) => {
         const url = buildDataUrl(markdown, "text/markdown");
+        sendProgress("downloading");
         await downloadFile(url, "md");
       },
     };
@@ -79,8 +97,9 @@ const messageHandlers = {
   },
 
   EXPORT: async (message, sendResponse, model = "ChatGPT") => {
-    // Tanto JSON como Markdown necesitan la conversación completa.
     if (message.format === "json" || message.format === "md") {
+      sendProgress("processing");
+
       const conversation = await getConversationFromPage();
 
       if (!conversation || !conversation.length) {
@@ -108,7 +127,6 @@ const messageHandlers = {
       return;
     }
 
-    // Formato desconocido.
     sendResponse({
       success: false,
       errorCode: "UNKNOWN_FORMAT",

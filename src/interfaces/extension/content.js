@@ -29,6 +29,28 @@ window.addEventListener("message", (event) => {
   }
 });
 
+// Reenvía mensajes de progreso emitidos por el script inyectado.
+window.addEventListener("message", (event) => {
+  if (event.source !== window) return;
+
+  if (
+    event.data?.source !== "AI_CHAT_EXPORTER" ||
+    event.data?.type !== "PROGRESS"
+  ) {
+    return;
+  }
+
+  try {
+    chrome.runtime.sendMessage({
+      type: "PROGRESS",
+      stage: event.data.stage,
+      data: event.data.data,
+    });
+  } catch {
+    // Contexto de la extensión invalidado; se ignora.
+  }
+});
+
 // Atiende solicitudes del background para obtener la conversación
 // directamente desde la página.
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
