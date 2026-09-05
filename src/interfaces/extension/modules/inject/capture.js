@@ -1,3 +1,7 @@
+import { SRC, MSG, PAGE_CAPTURED } from "../constants.js";
+import { postMsg } from "../postMessage.js";
+import { addPage, getConversation, getPageCount } from "./state.js";
+
 // Responsable de interceptar fetch y capturar respuestas crudas
 // de los endpoints de conversación de ChatGPT.
 
@@ -17,40 +21,31 @@ export function captureConversation() {
       try {
         const json = await clone.json();
 
-        window.__AI_CHAT_EXPORTER__ ??= {};
-        window.__AI_CHAT_EXPORTER__.conversation ??= [];
-
-        window.__AI_CHAT_EXPORTER__.conversation.push({
+        const page = {
           url: response.url,
           data: json,
-        });
+        };
+
+        addPage(page);
 
         window.dispatchEvent(
-          new CustomEvent("AI_CHAT_EXPORTER_PAGE_CAPTURED", {
-            detail: { url: response.url, data: json },
+          new CustomEvent(PAGE_CAPTURED, {
+            detail: page,
           })
         );
 
-        window.postMessage(
-          {
-            source: "AI_CHAT_EXPORTER",
-            type: "CONVERSATION",
-            conversation: window.__AI_CHAT_EXPORTER__.conversation,
-          },
-          "*"
-        );
+        postMsg({
+          source: SRC,
+          type: MSG.CONV,
+          conversation: getConversation(),
+        });
 
-        window.postMessage(
-          {
-            source: "AI_CHAT_EXPORTER",
-            type: "PROGRESS",
-            stage: "collecting",
-            data: {
-              pageCount: window.__AI_CHAT_EXPORTER__.conversation.length,
-            },
-          },
-          "*"
-        );
+        postMsg({
+          source: SRC,
+          type: MSG.PROG,
+          stage: "collecting",
+          data: { pageCount: getPageCount() },
+        });
       } catch {
         // No se pudo capturar la conversación; se ignora.
       }
