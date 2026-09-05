@@ -146,13 +146,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return;
   }
 
-  Promise.resolve(handler(message, sendResponse)).catch((error) => {
-    sendResponse({
-      success: false,
-      errorCode: "PIPELINE_ERROR",
-      params: { message: error.message },
+  // Solamente EXPORT necesita respuesta asíncrona.
+  // El resto de mensajes se procesan sin mantener el canal abierto.
+  if (message.type === "EXPORT") {
+    Promise.resolve(handler(message, sendResponse)).catch((error) => {
+      sendResponse({
+        success: false,
+        errorCode: "PIPELINE_ERROR",
+        params: { message: error.message },
+      });
     });
-  });
 
-  return true;
+    return true;
+  }
+
+  handler(message);
 });
