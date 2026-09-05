@@ -1,3 +1,5 @@
+import { MSG } from "./modules/constants.js";
+
 // Coordina la extensión: recibe la conversación capturada y
 // atiende las solicitudes de exportación del popup.
 
@@ -29,7 +31,7 @@ const downloadFile = (dataUrl, extension) =>
 
 function sendProgress(stage, data = {}) {
   chrome.runtime.sendMessage({
-    type: "PROGRESS",
+    type: MSG.PROG,
     stage,
     data,
   });
@@ -81,7 +83,7 @@ async function getConversationFromPage() {
   }
 
   const response = await chrome.tabs.sendMessage(tab.id, {
-    type: "GET_CONVERSATION_FROM_PAGE",
+    type: MSG.GET_PAGE,
   });
 
   return response?.conversation ?? null;
@@ -92,11 +94,11 @@ async function getConversationFromPage() {
 // ---------------------------------------------------------------------------
 
 const messageHandlers = {
-  DOWNLOAD_JSON: (message) => {
+  [MSG.DOWN]: (message) => {
     capturedConversation = message.conversation;
   },
 
-  EXPORT: async (message, sendResponse, model = "ChatGPT") => {
+  [MSG.EXP]: async (message, sendResponse, model = "ChatGPT") => {
     if (message.format === "json" || message.format === "md") {
       sendProgress("processing");
 
@@ -148,7 +150,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   // Solamente EXPORT necesita respuesta asíncrona.
   // El resto de mensajes se procesan sin mantener el canal abierto.
-  if (message.type === "EXPORT") {
+  if (message.type === MSG.EXP) {
     Promise.resolve(handler(message, sendResponse)).catch((error) => {
       sendResponse({
         success: false,

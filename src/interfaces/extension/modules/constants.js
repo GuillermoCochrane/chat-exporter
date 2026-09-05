@@ -1,9 +1,9 @@
 // Constantes para comunicación interna de la extensión.
 export const SRC = "AI_CHAT_EXPORTER";
-export const ORIGIN = "*"
+export const ORIGIN = "*";
 export const PAGE_CAPTURED = `${SRC}_PAGE_CAPTURED`;
 
-export const MSG  = {
+export const MSG = {
   CONV: "CONVERSATION",
   PROG: "PROGRESS",
   GET: "GET_CONVERSATION",
