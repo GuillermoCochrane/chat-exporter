@@ -14,16 +14,16 @@ const statusMessages = {
   responseSuccess: (format, lang) => `✔️ ${format.toUpperCase()}${TRANSLATIONS.success[lang]}`,
 
   collecting: (lang, data) =>
-    `⏳ ${TRANSLATIONS.collecting[lang]} ${data?.pageCount ?? ""}...`,
+    `${TRANSLATIONS.collecting[lang]} ${data?.pageCount ?? ""}...`,
 
   processing: (lang) =>
-    `⏳ ${TRANSLATIONS.processing[lang]}`,
+    `${TRANSLATIONS.processing[lang]}`,
 
   generating: (lang, data) =>
-    `⏳ ${TRANSLATIONS.generating[lang]} ${data?.format ?? ""}...`,
+    `${TRANSLATIONS.generating[lang]} ${data?.format ?? ""}...`,
 
   downloading: (lang) =>
-    `⏳ ${TRANSLATIONS.downloading[lang]}`,
+    `${TRANSLATIONS.downloading[lang]}`,
 };
 
 // Oculta temporalmente las opciones de exportación
@@ -52,6 +52,13 @@ export function getExportConfig() {
 // Estado inicial de exportación
 export function beginExport() {
   setValue("#exportBtn", "disabled", true);
+  setValue("#format", "disabled", true);
+  setValue("#compact", "disabled", true);
+
+  for (const radio of $$roleRadios) {
+    radio.disabled = true;
+  }
+
   setText("#statusText", "");
   setStyle(".spinner", "display", "inline-block");
 }
@@ -59,6 +66,13 @@ export function beginExport() {
 // Restaurar estado previo a exportación
 function restoreExportState() {
   setValue("#exportBtn", "disabled", false);
+  setValue("#format", "disabled", false);
+  setValue("#compact", "disabled", false);
+
+  for (const radio of $$roleRadios) {
+    radio.disabled = false;
+  }
+
   setStyle(".spinner", "display", "none");
 }
 
