@@ -1,7 +1,10 @@
-// Responsable de desplazar la interfaz de ChatGPT para forzar
-// la carga de todas las páginas de la conversación y recolectarlas.
+import { PAGE_CAPTURED } from "../constants.js";
+import { getConversation, getLastPage } from "./state.js";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Responsable de desplazar la interfaz de ChatGPT para forzar
+// la carga de todas las páginas de la conversación y recolectarlas.
 
 function findScrollableContainer() {
   const all = [...document.querySelectorAll("*")];
@@ -25,28 +28,17 @@ function findScrollableContainer() {
 function waitForNewPage(timeoutMs = 45000) {
   return new Promise((resolve) => {
     const handler = (event) => {
-      window.removeEventListener(
-        "AI_CHAT_EXPORTER_PAGE_CAPTURED",
-        handler
-      );
-
+      window.removeEventListener(PAGE_CAPTURED, handler);
       clearTimeout(timer);
       resolve(event.detail);
     };
 
     const timer = setTimeout(() => {
-      window.removeEventListener(
-        "AI_CHAT_EXPORTER_PAGE_CAPTURED",
-        handler
-      );
-
+      window.removeEventListener(PAGE_CAPTURED, handler);
       resolve(null);
     }, timeoutMs);
 
-    window.addEventListener(
-      "AI_CHAT_EXPORTER_PAGE_CAPTURED",
-      handler
-    );
+    window.addEventListener(PAGE_CAPTURED, handler);
   });
 }
 
@@ -66,13 +58,8 @@ async function scrollToBottom(container) {
 // devuelve al usuario al último mensaje de la conversación.
 export async function collectViaScroll() {
   const container = findScrollableContainer();
-  const state = window.__AI_CHAT_EXPORTER__;
 
-  let lastPage =
-    state.conversation.length > 0
-      ? state.conversation[state.conversation.length - 1].data
-      : null;
-
+  let lastPage = getLastPage();
   let consecutiveTimeouts = 0;
 
   while (lastPage?.page_info?.has_previous_page) {
@@ -104,5 +91,5 @@ export async function collectViaScroll() {
 
   await scrollToBottom(container);
 
-  return state.conversation;
+  return getConversation();
 }
