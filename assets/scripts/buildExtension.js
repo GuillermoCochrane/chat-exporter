@@ -1,5 +1,5 @@
 // Script de build para la extensión de Chrome.
-// Empaqueta el core y el script inyectado usando esbuild.
+// Empaqueta el core, el script inyectado, el content script y el background.
 // Luego copia los archivos estáticos a dist/.
 
 import * as esbuild from "esbuild";
@@ -44,6 +44,24 @@ await esbuild.build({
   absWorkingDir: root,
 });
 
+// Empaquetar el content script con sus imports
+await esbuild.build({
+  entryPoints: ["src/interfaces/extension/content.js"],
+  bundle: true,
+  format: "iife",
+  outfile: "dist/content.js",
+  absWorkingDir: root,
+});
+
+// Empaquetar el background con sus imports
+await esbuild.build({
+  entryPoints: ["src/interfaces/extension/background.js"],
+  bundle: true,
+  format: "iife",
+  outfile: "dist/background.js",
+  absWorkingDir: root,
+});
+
 // Copia recursiva de directorios
 function copyDir(src, dest) {
   mkdirSync(dest, { recursive: true });
@@ -61,8 +79,6 @@ function copyDir(src, dest) {
 // Copiar archivos estáticos de la extensión
 const staticFiles = [
   "manifest.json",
-  "background.js",
-  "content.js",
   "popup.html",
 ];
 
