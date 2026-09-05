@@ -1,3 +1,5 @@
+import { SRC, MSG } from "./modules/constants.js";
+
 // Responsable de inyectar el código capturador y actuar como
 // puente entre la página y la extensión.
 
@@ -11,8 +13,8 @@ window.addEventListener("message", (event) => {
   if (event.source !== window) return;
 
   if (
-    event.data?.source !== "AI_CHAT_EXPORTER" ||
-    event.data?.type !== "CONVERSATION"
+    event.data?.source !== SRC ||
+    event.data?.type !== MSG.CONV
   ) {
     return;
   }
@@ -21,7 +23,7 @@ window.addEventListener("message", (event) => {
 
   try {
     chrome.runtime.sendMessage({
-      type: "DOWNLOAD_JSON",
+      type: MSG.DOWN,
       conversation: event.data.conversation,
     });
   } catch {
@@ -34,15 +36,15 @@ window.addEventListener("message", (event) => {
   if (event.source !== window) return;
 
   if (
-    event.data?.source !== "AI_CHAT_EXPORTER" ||
-    event.data?.type !== "PROGRESS"
+    event.data?.source !== SRC ||
+    event.data?.type !== MSG.PROG
   ) {
     return;
   }
 
   try {
     chrome.runtime.sendMessage({
-      type: "PROGRESS",
+      type: MSG.PROG,
       stage: event.data.stage,
       data: event.data.data,
     });
@@ -54,12 +56,12 @@ window.addEventListener("message", (event) => {
 // Atiende solicitudes del background para obtener la conversación
 // directamente desde la página.
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type !== "GET_CONVERSATION_FROM_PAGE") return;
+  if (message.type !== MSG.GET_PAGE) return;
 
   window.postMessage(
     {
-      source: "AI_CHAT_EXPORTER",
-      type: "GET_CONVERSATION",
+      source: SRC,
+      type: MSG.GET,
     },
     "*"
   );
@@ -68,8 +70,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (event.source !== window) return;
 
     if (
-      event.data?.source === "AI_CHAT_EXPORTER" &&
-      event.data?.type === "CONVERSATION_COMPLETE"
+      event.data?.source === SRC &&
+      event.data?.type === MSG.DONE
     ) {
       window.removeEventListener("message", listener);
       sendResponse({ conversation: event.data.conversation });
