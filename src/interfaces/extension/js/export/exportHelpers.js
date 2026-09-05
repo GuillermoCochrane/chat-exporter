@@ -52,7 +52,7 @@ export function getExportConfig() {
 // Estado inicial de exportación
 export function beginExport() {
   setValue("#exportBtn", "disabled", true);
-  setValue("#statusText", "textContent", "");
+  setText("#statusText", "");
   setStyle(".spinner", "display", "inline-block");
 }
 
@@ -62,22 +62,31 @@ function restoreExportState() {
   setStyle(".spinner", "display", "none");
 }
 
-// Escucha los mensajes de progreso enviados por el background
-export function listenForProgress() {
-  chrome.runtime.onMessage.addListener((message) => {
-    if (message.type !== "PROGRESS") return;
-
-    const handler = statusMessages[message.stage];
-    if (!handler) return;
-
-    const currentLang = getCurrentLanguage();
-    setText("#statusText", handler(currentLang, message.data));
-  });
-}
-
 // Ejecutar exportación real con la configuración dada
 export function executeExport(config) {
   beginExport();
+
+  let inactivityTimeout = null;
+  let responded = false;
+
+  const cleanup = () => {
+    clearTimeout(inactivityTimeout);
+    chrome.runtime.onMessage.removeListener(progressListener);
+  };
+
+  const handleTimeout = () => {
+    responded = true;
+    cleanup();
+    restoreExportState();
+
+    const currentLang = getCurrentLanguage();
+    setText("#statusText", TRANSLATIONS.EXPORT_TIMEOUT[currentLang] ?? TRANSLATIONS.EXPORT_TIMEOUT.en);
+  };
+
+  const resetInactivityTimeout = () => {
+    clearTimeout(inactivityTimeout);
+    inactivityTimeout = setTimeout(handleTimeout, 300000);
+  };
 
   const progressListener = (message) => {
     if (message.type !== "PROGRESS") return;
@@ -87,14 +96,19 @@ export function executeExport(config) {
 
     const currentLang = getCurrentLanguage();
     setText("#statusText", handler(currentLang, message.data));
+    resetInactivityTimeout();
   };
 
   chrome.runtime.onMessage.addListener(progressListener);
+  resetInactivityTimeout();
 
   chrome.runtime.sendMessage(
     { type: "EXPORT", ...config },
     (response) => {
-      chrome.runtime.onMessage.removeListener(progressListener);
+      if (responded) return;
+      responded = true;
+
+      cleanup();
       restoreExportState();
 
       if (chrome.runtime.lastError) {

@@ -72,15 +72,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       event.data?.type === "CONVERSATION_COMPLETE"
     ) {
       window.removeEventListener("message", listener);
-      clearTimeout(timeout);
       sendResponse({ conversation: event.data.conversation });
     }
   };
-
-  const timeout = setTimeout(() => {
-    window.removeEventListener("message", listener);
-    sendResponse({ conversation: null });
-  }, 60000);
 
   window.addEventListener("message", listener);
   return true;
