@@ -103,6 +103,27 @@ posterior a `/backend-api/conversations/{id}`.
 Por lo tanto, la conversación nueva no queda disponible mediante el flujo
 paginado que la extensión captura actualmente.
 
+### F-004 — Flujo real de conversación nueva
+
+Se confirmó el flujo completo:
+
+```text
+POST /backend-api/f/conversation/prepare
+   ↓
+JSON { status: "ok", conduit_token }
+   ↓
+POST /backend-api/f/conversation
+   ↓
+SSE text/event-stream
+   ↓
+data: { type: "resume_conversation_token", conversation_id, ... }
+data: { type: "input_message", ... }
+event: delta → fragmentos append
+data: [DONE]
+```
+
+Este flujo no pasa por `/backend-api/conversations/{id}`.
+
 ### Impacto
 
 - E-002 y E-003 fallan porque el estado `conversation` no se actualiza con la conversación nueva.
