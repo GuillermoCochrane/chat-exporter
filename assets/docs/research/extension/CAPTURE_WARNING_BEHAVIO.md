@@ -59,6 +59,8 @@ Estado: ✅ Confirmada como conclusión preliminar
 
 Pendiente de análisis tras la detección de los escenarios fallidos.
 
+---
+
 ## Hallazgos posteriores
 
 ### F-001 — El endpoint de conversación nueva no coincide con el filtro actual
@@ -93,10 +95,17 @@ La estructura observada incluye múltiples eventos `delta` y `data` con:
 
 No se detectó `mapping` ni `page_info`.
 
-Esto confirma que el flujo de una conversación nueva es estructuralmente distinto al de una conversación existente paginada.
+### F-003 — No se detecta GET posterior al stream
+
+Al finalizar el stream de una conversación nueva, no se observó una petición
+posterior a `/backend-api/conversations/{id}`.
+
+Por lo tanto, la conversación nueva no queda disponible mediante el flujo
+paginado que la extensión captura actualmente.
 
 ### Impacto
 
 - E-002 y E-003 fallan porque el estado `conversation` no se actualiza con la conversación nueva.
 - La advertencia de recarga sigue mostrándose, pero no mitiga el problema real.
-- Cualquier solución futura deberá contemplar la captura del stream `/backend-api/f/conversation` y su integración con el modelo de paginación actual.
+- Cualquier solución futura deberá contemplar la captura del stream
+  `/backend-api/f/conversation` y su integración con el modelo actual.
