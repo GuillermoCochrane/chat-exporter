@@ -22,28 +22,39 @@ la extensión recorre todas las páginas disponibles antes de exportar.
 La recolección activa captura la conversación completa sin necesidad de
 recargar la página.
 
+Estado: ✅ Confirmada parcialmente
+
 ### H2
 La advertencia de recarga sigue apareciendo siempre, incluso cuando la
 recolección fue completa, porque el popup no recibe un flag que lo indique.
+
+Estado: ✅ Confirmada
 
 ### H3
 El comportamiento de la advertencia debe cambiar para adaptarse al nuevo
 flujo de recolección.
 
+Estado: ✅ Confirmada como conclusión preliminar
+
 ## Escenarios de prueba
 
 | ID | Escenario | Resultado observado | Advertencia |
 |----|-----------|----------------------|-------------|
-| E-001 | Recargar conversación existente y exportar sin scrollear manual | Pendiente | Pendiente |
-| E-002 | Crear conversación nueva y exportar | Pendiente | Pendiente |
-| E-003 | Recargar conversación, escribir mensaje nuevo y exportar | Pendiente | Pendiente |
-| E-004 | Exportar dos veces sin recargar | Pendiente | Pendiente |
-| E-005 | Conversación larga (190 páginas) y exportar | Pendiente | Pendiente |
+| E-001 | Recargar conversación existente y exportar sin scrollear manual | Recolección completa | Sí |
+| E-002 | Crear conversación nueva y exportar | Descarga conversación previa | Sí |
+| E-003 | Recargar conversación, escribir mensaje nuevo y exportar | No incluye mensajes nuevos | Sí |
+| E-004 | Exportar dos veces sin recargar | Recolección completa | Sí |
+| E-005 | Conversación larga (190 páginas) y exportar | Recolección completa | Sí |
 
 ## Observaciones
 
-Pendiente.
+- Al iniciar una conversación nueva desde una anterior, la extensión
+  descarga la conversación previa.
+- En una captura larga apareció el warning de canal asincrónico, pero en
+  el retry se descargó correctamente.
+- Los escenarios E-002 y E-003 sugieren que el estado capturado persiste
+  entre conversaciones o no se actualiza correctamente.
 
 ## Conclusión
 
-Pendiente.
+Pendiente de análisis tras la detección de los escenarios fallidos.
