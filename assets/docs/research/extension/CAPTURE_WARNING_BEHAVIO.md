@@ -124,48 +124,54 @@ data: [DONE]
 
 Este flujo no pasa por `/backend-api/conversations/{id}`.
 
+---
+
+## Avances de integración
+
 ### F-005 — Prototipo de reconstrucción SSE exitoso
 
-Se probó un script en consola para leer el stream de `POST /backend-api/f/conversation`
+Se probó en consola un lector del stream `POST /backend-api/f/conversation`
 mediante `response.clone().body.getReader()`.
 
 Resultados:
 
-- Se detectó `conversation_id` de forma temprana.
-- Se detectaron mensajes `input_message` con roles `developer` y `user`.
-- Se detectó `message_marker` al inicio del contenido visible del asistente.
-- Se acumularon los deltas `data: {"v":"..."}` y se reconstruyó correctamente el texto del asistente.
+- Se detectó `conversation_id` temprano.
+- Se detectaron `input_message` de usuario.
+- Se identificó el mensaje del asistente con `content_type: "text"`.
+- Se acumularon los deltas `json.v` string.
 
 Conclusión:
 
-- Es viable reconstruir la conversación desde el stream SSE.
-- Los mensajes con rol `developer` deberán filtrarse al integrar esta captura.
-- Falta diseñar cómo fusionar este flujo con la captura paginada actual.
+- Es viable reconstruir la conversación nueva desde el SSE.
 
-### F-006 — Captura SSE de conversación nueva
+### F-006 — Integración de captura SSE en streamCapture.js
 
-Se implementó un módulo `streamCapture.js` que lee el stream SSE de
-`POST /backend-api/f/conversation` y reconstruye los mensajes de la
-conversación nueva.
+Se creó `modules/inject/streamCapture.js`.
 
 Resultados:
 
-- Se guarda una página por turno.
-- Cada página contiene mensajes `user` y `assistant`.
-- Solo se conservan los mensajes del assistant con `content_type: "text"`.
-- Se ignora el mensaje `model_editable_context`.
-- El texto del assistant se acumula desde los deltas `json.v` de tipo string.
-- Los patches de metadata no se agregan al texto.
-
-Observación:
-
-- En algunas pruebas, el último delta del assistant no se agrega al texto final.
-  Queda como ajuste pendiente.
+- Captura una página por turno.
+- Guarda `user` y `assistant` con estructura compatible.
+- Ignora `model_editable_context`.
+- Solo procesa texto de `/message/content/parts/0`.
+- Maneja deltas simples, con ruta y parches arrays.
 
 Conclusión:
 
-- La captura de conversaciones nuevas funciona.
-- El flujo SSE queda integrado sin modificar el modelo de páginas existente.
+- La captura de conversaciones nuevas queda funcional.
+
+### F-007 — Exportación Markdown exitosa desde conversación nueva
+
+Se exportó una conversación nueva capturada por SSE.
+
+Resultado:
+
+- El Markdown incluyó correctamente los mensajes de usuario y asistente.
+- El orden fue el esperado.
+
+Conclusión:
+
+- El flujo completo funciona: SSE → pipeline → Markdown.
 
 ### Impacto
 
