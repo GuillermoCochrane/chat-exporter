@@ -30,6 +30,25 @@ function buildAssistantMessage(message) {
   };
 }
 
+// Solo procesa texto si la ruta corresponde al contenido visible.
+function applyTextDelta(accumulated, delta) {
+  if (!delta) return accumulated;
+
+  if (delta.p !== undefined && delta.p !== "/message/content/parts/0") {
+    return accumulated;
+  }
+
+  if (delta.o === "replace" && typeof delta.v === "string") {
+    return delta.v;
+  }
+
+  if ((delta.o === "append" || delta.o === undefined) && typeof delta.v === "string") {
+    return accumulated + delta.v;
+  }
+
+  return accumulated;
+}
+
 export async function captureStream(response) {
   const reader = response.clone().body.getReader();
   const decoder = new TextDecoder("utf-8");
@@ -63,18 +82,30 @@ export async function captureStream(response) {
 
         if (json.v?.message?.author?.role === "assistant") {
           const incoming = json.v.message;
-
           if (incoming.content?.content_type === "text") {
             assistantMessage = buildAssistantMessage(incoming);
             accumulatedText = "";
           }
         }
 
-        if (typeof json.v === "string" && assistantMessage) {
-          accumulatedText += json.v;
+        // 1) Delta con ruta y operación
+        if (json.p && json.o) {
+          accumulatedText = applyTextDelta(accumulatedText, json);
         }
-
-        // Ignorar json.v arrays: son patches de metadata, no texto.
+        // 2) Patch array
+        else if (Array.isArray(json.v) && json.o === "patch") {
+          for (const operation of json.v) {
+            accumulatedText = applyTextDelta(accumulatedText, operation);
+          }
+        }
+        // 3) Delta simple de texto
+        else if (typeof json.v === "string") {
+          accumulatedText = applyTextDelta(accumulatedText, {
+            p: "/message/content/parts/0",
+            o: "append",
+            v: json.v,
+          });
+        }
       } catch {
         // No es JSON; se ignora.
       }
