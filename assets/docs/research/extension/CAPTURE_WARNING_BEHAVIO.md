@@ -124,6 +124,24 @@ data: [DONE]
 
 Este flujo no pasa por `/backend-api/conversations/{id}`.
 
+### F-005 — Prototipo de reconstrucción SSE exitoso
+
+Se probó un script en consola para leer el stream de `POST /backend-api/f/conversation`
+mediante `response.clone().body.getReader()`.
+
+Resultados:
+
+- Se detectó `conversation_id` de forma temprana.
+- Se detectaron mensajes `input_message` con roles `developer` y `user`.
+- Se detectó `message_marker` al inicio del contenido visible del asistente.
+- Se acumularon los deltas `data: {"v":"..."}` y se reconstruyó correctamente el texto del asistente.
+
+Conclusión:
+
+- Es viable reconstruir la conversación desde el stream SSE.
+- Los mensajes con rol `developer` deberán filtrarse al integrar esta captura.
+- Falta diseñar cómo fusionar este flujo con la captura paginada actual.
+
 ### Impacto
 
 - E-002 y E-003 fallan porque el estado `conversation` no se actualiza con la conversación nueva.
