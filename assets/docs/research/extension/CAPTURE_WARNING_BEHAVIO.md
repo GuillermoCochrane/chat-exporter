@@ -142,6 +142,31 @@ Conclusión:
 - Los mensajes con rol `developer` deberán filtrarse al integrar esta captura.
 - Falta diseñar cómo fusionar este flujo con la captura paginada actual.
 
+### F-006 — Captura SSE de conversación nueva
+
+Se implementó un módulo `streamCapture.js` que lee el stream SSE de
+`POST /backend-api/f/conversation` y reconstruye los mensajes de la
+conversación nueva.
+
+Resultados:
+
+- Se guarda una página por turno.
+- Cada página contiene mensajes `user` y `assistant`.
+- Solo se conservan los mensajes del assistant con `content_type: "text"`.
+- Se ignora el mensaje `model_editable_context`.
+- El texto del assistant se acumula desde los deltas `json.v` de tipo string.
+- Los patches de metadata no se agregan al texto.
+
+Observación:
+
+- En algunas pruebas, el último delta del assistant no se agrega al texto final.
+  Queda como ajuste pendiente.
+
+Conclusión:
+
+- La captura de conversaciones nuevas funciona.
+- El flujo SSE queda integrado sin modificar el modelo de páginas existente.
+
 ### Impacto
 
 - E-002 y E-003 fallan porque el estado `conversation` no se actualiza con la conversación nueva.
