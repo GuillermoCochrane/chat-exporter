@@ -124,6 +124,13 @@ data: [DONE]
 
 Este flujo no pasa por `/backend-api/conversations/{id}`.
 
+### Impacto
+
+- E-002 y E-003 fallan porque el estado `conversation` no se actualiza con la conversación nueva.
+- La advertencia de recarga sigue mostrándose, pero no mitiga el problema real.
+- Cualquier solución futura deberá contemplar la captura del stream
+  `/backend-api/f/conversation` y su integración con el modelo actual.
+
 ---
 
 ## Avances de integración
@@ -155,6 +162,7 @@ Resultados:
 - Ignora `model_editable_context`.
 - Solo procesa texto de `/message/content/parts/0`.
 - Maneja deltas simples, con ruta y parches arrays.
+- Inserta cada página al inicio del array para respetar el contrato del parser.
 
 Conclusión:
 
@@ -168,14 +176,10 @@ Resultado:
 
 - El Markdown incluyó correctamente los mensajes de usuario y asistente.
 - El orden fue el esperado.
+- Se validó con múltiples turnos dentro de la misma conversación nueva.
 
 Conclusión:
 
 - El flujo completo funciona: SSE → pipeline → Markdown.
 
-### Impacto
-
-- E-002 y E-003 fallan porque el estado `conversation` no se actualiza con la conversación nueva.
-- La advertencia de recarga sigue mostrándose, pero no mitiga el problema real.
-- Cualquier solución futura deberá contemplar la captura del stream
-  `/backend-api/f/conversation` y su integración con el modelo actual.
+---
