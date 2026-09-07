@@ -8,11 +8,15 @@ import {
   setActiveConversationId,
   resetConversation,
 } from "./state.js";
+import { captureStream } from "./streamCapture.js";
 
 function getConversationIdFromUrl() {
   const match = window.location.pathname.match(/\/c\/([a-f0-9-]+)/i);
   return match?.[1] ?? null;
 }
+
+// Responsable de interceptar fetch y capturar respuestas crudas
+// de los endpoints de conversación de ChatGPT.
 
 export function captureConversation() {
   const originalFetch = window.fetch;
@@ -20,8 +24,6 @@ export function captureConversation() {
   window.fetch = async (...args) => {
     const response = await originalFetch(...args);
 
-    // Detección de cambio de conversación por URL.
-    // Solo se considera si la URL actual tiene un id de conversación.
     const currentId = getConversationIdFromUrl();
 
     if (currentId && currentId !== getActiveConversationId()) {
@@ -63,6 +65,13 @@ export function captureConversation() {
       } catch {
         // No se pudo capturar la conversación; se ignora.
       }
+    }
+
+    if (
+      response.url.includes("/backend-api/f/conversation") &&
+      !response.url.includes("/prepare")
+    ) {
+      captureStream(response);
     }
 
     return response;
