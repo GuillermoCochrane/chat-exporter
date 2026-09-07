@@ -1,19 +1,33 @@
 import { SRC, MSG, PAGE_CAPTURED } from "../constants.js";
 import { postMsg } from "../postMessage.js";
-import { addPage, getConversation, getPageCount } from "./state.js";
+import {
+  addPage,
+  getConversation,
+  getPageCount,
+  getActiveConversationId,
+  setActiveConversationId,
+  resetConversation,
+} from "./state.js";
 
-// Responsable de interceptar fetch y capturar respuestas crudas
-// de los endpoints de conversación de ChatGPT.
-
-// ---------------------------------------------------------------------------
-// Interceptor pasivo de fetch
-// ---------------------------------------------------------------------------
+function getConversationIdFromUrl() {
+  const match = window.location.pathname.match(/\/c\/([a-f0-9-]+)/i);
+  return match?.[1] ?? null;
+}
 
 export function captureConversation() {
   const originalFetch = window.fetch;
 
   window.fetch = async (...args) => {
     const response = await originalFetch(...args);
+
+    // Detección de cambio de conversación por URL.
+    // Solo se considera si la URL actual tiene un id de conversación.
+    const currentId = getConversationIdFromUrl();
+
+    if (currentId && currentId !== getActiveConversationId()) {
+      resetConversation();
+      setActiveConversationId(currentId);
+    }
 
     if (response.url.includes("/backend-api/conversations/")) {
       const clone = response.clone();

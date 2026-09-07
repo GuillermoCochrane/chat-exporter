@@ -1,9 +1,7 @@
-// Encapsula el estado interno de la extensión en la página.
-// Evita que los módulos accedan directamente a window.__AI_CHAT_EXPORTER__.
-
 export function getState() {
   window.__AI_CHAT_EXPORTER__ ??= {};
   window.__AI_CHAT_EXPORTER__.conversation ??= [];
+  window.__AI_CHAT_EXPORTER__.activeConversationId ??= null;
   return window.__AI_CHAT_EXPORTER__;
 }
 
@@ -22,4 +20,16 @@ export function getPageCount() {
 export function getLastPage() {
   const conversation = getConversation();
   return conversation.length > 0 ? conversation[conversation.length - 1].data : null;
+}
+
+export function getActiveConversationId() {
+  return getState().activeConversationId;
+}
+
+export function setActiveConversationId(id) {
+  getState().activeConversationId = id;
+}
+
+export function resetConversation() {
+  getState().conversation = [];
 }
