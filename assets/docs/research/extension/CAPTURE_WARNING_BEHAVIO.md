@@ -202,3 +202,20 @@ Conclusión:
   3. conversación recargada con nuevos mensajes.
 
 ---
+
+## Hallazgos de UX
+
+### U-001 — Confirmación real de descarga
+
+- Se decidió esperar el evento `chrome.downloads.onChanged` antes de responder al popup.
+- Esto evita mostrar “exportado con éxito” antes de que el archivo esté realmente disponible.
+- Se implementó `downloadFile` como promesa que resuelve en `complete` o `interrupted`.
+- Se agregó notificación al usuario mediante `chrome.notifications`.
+- Nuevo permiso: `"notifications"`.
+
+Resultado:
+
+- El popup ya no miente sobre el estado de la descarga.
+- El usuario recibe una notificación aunque el popup se haya cerrado.
+
+---
