@@ -182,4 +182,23 @@ Conclusión:
 
 - El flujo completo funciona: SSE → pipeline → Markdown.
 
+### F-008 — Validación completa con conversación larga existente
+
+Se probó una conversación con múltiples páginas históricas, seguida de
+recarga y nuevos mensajes capturados por SSE.
+
+Resultado:
+
+- El Markdown incluyó la conversación completa.
+- El orden cronológico fue correcto.
+- No se detectaron duplicados ni cortes.
+- El flujo combinado paginación + SSE funcionó correctamente.
+
+Conclusión:
+
+- La extensión maneja correctamente los tres escenarios:
+  1. conversación existente con paginación;
+  2. conversación nueva desde cero;
+  3. conversación recargada con nuevos mensajes.
+
 ---
