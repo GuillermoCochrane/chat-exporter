@@ -1,37 +1,53 @@
-import { getExportConfig, hideOptions, showOptions, executeExport } from './exportHelpers.js';
-import { $, showTag, hideTag } from '../utilities/dom.js';
+import { executeExport, getExportConfig, hideOptions, showOptions } from './exportHelpers.js';
+import { $, hideTag, showTag } from '../utilities/dom.js';
 
 const $exportBtn = $("#exportBtn");
 const $continueExportBtn = $("#continueExportBtn");
 const $dismissWarning = $("#dismissWarning");
 
 export function exportHandler() {
+  // --------------------------------------------------------------------
+  // Flujo principal de exportación
+  // --------------------------------------------------------------------
 
-  // Exportar conversación (con posible pausa por advertencia)
-  $exportBtn.addEventListener("click", async () => {
+  $exportBtn.addEventListener("click", () => {
     const config = getExportConfig();
-
-    try {
-      const result = await chrome.storage.local.get("captureWarningDismissed");
-      if (result.captureWarningDismissed) {
-        // Preferencia guardada: exportar directo
-        executeExport(config);
-      } else {
-        // Pausar, ocultar opciones y mostrar advertencia
-        hideOptions();
-        showTag("#captureWarning");
-
-        // Guardar config temporalmente para continuar
-        window.__pendingExportConfig = config;
-      }
-    } catch {
-      // Si falla storage, mostrar advertencia por seguridad
-      showTag("#captureWarning");
-      window.__pendingExportConfig = config;
-    }
+    executeExport(config);
   });
 
-  // Continuar con la exportación
+  // --------------------------------------------------------------------
+  // Advertencia de recarga
+  // --------------------------------------------------------------------
+  // Actualmente deshabilitada porque la captura activa (scroll + SSE)
+  // recupera la conversación completa antes de exportar.
+  //
+  // La lógica se conserva como referencia para futuros proveedores
+  // donde la captura parcial sí pueda requerir una advertencia.
+  //
+  // --------------------------------------------------------------------
+
+  // $exportBtn.addEventListener("click", async () => {
+  //   const config = getExportConfig();
+  //
+  //   try {
+  //     const result = await chrome.storage.local.get("captureWarningDismissed");
+  //     if (result.captureWarningDismissed) {
+  //       executeExport(config);
+  //     } else {
+  //       hideOptions();
+  //       showTag("#captureWarning");
+  //       window.__pendingExportConfig = config;
+  //     }
+  //   } catch {
+  //     showTag("#captureWarning");
+  //     window.__pendingExportConfig = config;
+  //   }
+  // });
+
+  // --------------------------------------------------------------------
+  // Continuar con la exportación (solo si se reactiva la advertencia)
+  // --------------------------------------------------------------------
+
   $continueExportBtn.addEventListener("click", async () => {
     const config = window.__pendingExportConfig;
     if (!config) return;
@@ -45,9 +61,9 @@ export function exportHandler() {
       }
     }
 
-    // Ocultar advertencia y restaurar opciones
+     // Ocultar advertencia y restaurar opciones
     hideTag("#captureWarning");
     showOptions();
     executeExport(config);
   });
-}; 
+}
