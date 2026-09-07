@@ -1,4 +1,4 @@
-import { addPage } from "./state.js";
+import { addPageToFront } from "./state.js";
 
 function buildUserMessage(message) {
   return {
@@ -121,7 +121,7 @@ export async function captureStream(response) {
   if (assistantMessage) messages.push(assistantMessage);
 
   if (messages.length > 0) {
-    addPage({
+    addPageToFront({
       url: response.url,
       data: { messages },
     });

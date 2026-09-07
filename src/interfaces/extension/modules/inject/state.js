@@ -1,3 +1,6 @@
+// Encapsula el estado interno de la extensión en la página.
+// Evita que los módulos accedan directamente a window.__AI_CHAT_EXPORTER__.
+
 export function getState() {
   window.__AI_CHAT_EXPORTER__ ??= {};
   window.__AI_CHAT_EXPORTER__.conversation ??= [];
@@ -11,6 +14,12 @@ export function getConversation() {
 
 export function addPage(page) {
   getConversation().push(page);
+}
+
+// Inserta la página al inicio del array.
+// Necesario para el flujo SSE, donde los turnos llegan en orden cronológico.
+export function addPageToFront(page) {
+  getConversation().unshift(page);
 }
 
 export function getPageCount() {
