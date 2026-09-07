@@ -4,6 +4,7 @@
 
 import { buildDataUrl, downloadFile } from "./download.js";
 import { sendProgress } from "./progress.js";
+import { notifyDownloadResult } from "./notifications.js";
 
 export const exportHandlers = {
   json: async (conversation) => {
@@ -13,7 +14,14 @@ export const exportHandlers = {
     const url = buildDataUrl(jsonStr, "application/json");
 
     sendProgress("downloading");
-    await downloadFile(url, "json");
+    const result = await downloadFile(url, "json");
+
+    if (!result.success) {
+      notifyDownloadResult(result, "json");
+      throw new Error(`DOWNLOAD_${result.error ?? "FAILED"}`);
+    }
+
+    notifyDownloadResult(result, "json");
   },
 
   md: async (conversation, message) => {
@@ -27,8 +35,16 @@ export const exportHandlers = {
 
       outputHandler: async (markdown) => {
         const url = buildDataUrl(markdown, "text/markdown");
+
         sendProgress("downloading");
-        await downloadFile(url, "md");
+        const result = await downloadFile(url, "md");
+
+        if (!result.success) {
+          notifyDownloadResult(result, "md");
+          throw new Error(`DOWNLOAD_${result.error ?? "FAILED"}`);
+        }
+
+        notifyDownloadResult(result, "md");
       },
     };
 
