@@ -99,8 +99,34 @@ La arquitectura busca que el núcleo del motor permanezca completamente independ
 │   │       ├── popup.html
 │   │       ├── js/
 │   │       │   ├── popup.js
-│   │       │   ├── languages.js
-│   │       │   └── languageSettings.js
+│   │       │   ├── updateNotification.js
+│   │       │   ├── versionHandler.js
+│   │       │   ├── export/
+│   │       │   │   ├── exportHandler.js
+│   │       │   │   ├── exportHelpers.js
+│   │       │   │   └── formatHandler.js
+│   │       │   ├── languages/
+│   │       │   │   ├── flagHandler.js
+│   │       │   │   ├── languageHandler.js
+│   │       │   │   ├── languageSettings.js
+│   │       │   │   └── translations.js
+│   │       │   └── utilities/
+│   │       │       └── dom.js
+│   │       ├── modules/
+│   │       │   ├── constants.js
+│   │       │   ├── postMessage.js
+│   │       │   ├── inject/
+│   │       │   │   ├── capture.js
+│   │       │   │   ├── messaging.js
+│   │       │   │   ├── scroll.js
+│   │       │   │   ├── state.js
+│   │       │   │   └── streamCapture.js
+│   │       │   └── background/
+│   │       │       ├── download.js
+│   │       │       ├── exportHandlers.js
+│   │       │       ├── messageHandlers.js
+│   │       │       ├── notifications.js
+│   │       │       └── progress.js
 │   │       ├── styles/
 │   │       │   ├── popup.css
 │   │       │   ├── variables.css
@@ -159,7 +185,7 @@ La arquitectura busca que el núcleo del motor permanezca completamente independ
 │   │   │   ├── commonHandler.js
 │   │   │   ├── languageHandler.js
 │   │   │   ├── languageSettings.js
-│   │   │   ├── flaghandler.js
+│   │   │   ├── flagHandler.js
 │   │   │   ├── intersectionObserver.js
 │   │   │   ├── sidebarToggle.js
 │   │   │   ├── themeToggle.js
@@ -277,11 +303,13 @@ La estrategia actual es:
 Formatter ✔
 Validator ✔
 Parser ✔
+Sorter ✔
 Filter ✔
 Normalizer ✔
 Markdown ✔
 JsonFileSource ✔
 Writer ✔
+Inspector ✔
 ```
 
 Además de la suite automatizada, el proyecto incorpora validaciones manuales para inspección, modos especiales y preparación de releases.
@@ -367,7 +395,14 @@ Puede utilizarse como punto de finalización anticipada mediante `--inspect`.
 
 ### parser.js
 
-Transforma el árbol (`mapping`) en una lista de mensajes.
+Transforma el array de páginas en una lista de mensajes.
+
+En el flujo de la extensión, las páginas llegan desde dos orígenes:
+
+- paginación: `GET /backend-api/conversations/{id}`;
+- stream SSE: `POST /backend-api/f/conversation`.
+
+El parser ya no espera únicamente `mapping`. Ahora consume páginas con `data.messages[]`.
 
 No filtra ni modifica contenido.
 
@@ -509,59 +544,77 @@ Este archivo es empaquetado por esbuild junto con todas las dependencias del pip
 
 Script inyectado en el contexto de la página de ChatGPT.
 
-Intercepta `window.fetch()` para capturar la respuesta del endpoint de conversación, filtrando por la presencia de `mapping`.
+Intercepta `window.fetch()`.
 
-Al detectar una conversación completa, la envía inmediatamente al `content.js` mediante `window.postMessage` con el tipo `CONVERSATION`.  
-Ya no espera una solicitud explícita; el envío es automático ante cada nueva captura.
+Detecta dos flujos:
+
+- paginación: `/backend-api/conversations/`;
+- stream SSE: `/backend-api/f/conversation` (excepto `/prepare`).
+
+Dependiendo del flujo, delega en:
+
+- `capture.js`: para captura paginada pasiva;
+- `streamCapture.js`: para captura de conversaciones nuevas;
+- `scroll.js`: para forzar la carga completa;
+- `state.js`: para encapsular el estado.
+
+No descarga archivos ni interpreta conversaciones.
 
 ### content.js
 
 Actúa como puente entre la página y la extensión.
 
 - Inyecta `inject.js` en el contexto de la página.
-- Escucha los mensajes `CONVERSATION` provenientes de `inject.js` y los reenvía al `background.js` con el tipo `DOWNLOAD_JSON`.
+- Escucha mensajes `CONVERSATION`, `PROGRESS`.
+- Reenvía al background.
+- Atiende solicitudes de recuperación desde background.
 
-No procesa datos; solo retransmite.
+No procesa datos.
 
 ### background.js
 
-Coordina la extensión de Chrome.
+Orquesta la extensión.
 
-Sus responsabilidades:
+- Recibe conversación capturada.
+- Atiende `EXPORT`.
+- Construye configuración del pipeline.
+- Invoca al Core si es Markdown.
+- Descarga archivos y notifica resultado.
 
-- Recibir la conversación capturada desde `content.js` y almacenarla en memoria.
-- Atender las solicitudes de exportación enviadas por el popup (`EXPORT`), que incluyen formato, modo compacto y filtro de roles.
-- Despachar al handler correspondiente según el formato:
-  - JSON: descarga directa del objeto almacenado.
-  - Markdown: construye un `config` con `source: "extension"`, `compact`, `roleFilter` y un `outputHandler` basado en `chrome.downloads`, y llama a `runExporter`.
-- No interpreta la conversación ni genera Markdown directamente; toda la lógica de procesamiento se delega al Core.
-- Los errores se comunican mediante códigos (`errorCode`) y parámetros para que el popup pueda traducirlos al idioma del usuario.
+Se apoya en los módulos:
+
+- `download.js`
+- `exportHandlers.js`
+- `messageHandlers.js`
+- `notifications.js`
+- `progress.js`
 
 ### popup.html / js/ / styles/
 
 Interfaz de usuario de la extensión con estética cyberpunk y sistema multi‑idioma.
 
 `popup.html` define el layout con:
-- Toggle de idioma en el encabezado (banderas SVG inline).
-- Encabezado contextual que indica el proveedor de la conversación (`Exportando desde ChatGPT`), preparado para futuros modelos.
-- Selector de formato (Markdown / JSON).
-- Opciones exclusivas de Markdown: switch de modo compacto y radio buttons con apariencia de hardware físico para filtro de roles (`all`, `user`, `assistant`).
-- Las opciones de Markdown se ocultan automáticamente al seleccionar JSON.
-- Footer con la versión dinámica de la extensión.
+
+- Toggle de idioma.
+- Encabezado contextual.
+- Selector de formato.
+- Opciones de Markdown.
+- Botón Exportar.
+- Banner de actualización temporal.
+- Footer con versión.
 
 Los scripts están organizados en `js/`:
-- `popup.js`: punto de entrada principal. Gestiona el estado visual (spinner, deshabilitado del botón Exportar), el envío de mensajes `EXPORT` y la traducción de la interfaz.
-- `languages.js`: helper de traducción con las claves textuales para español e inglés.
-- `languageSettings.js`: detecta el idioma inicial (navegador o preferencia guardada) y persiste la elección del usuario en `chrome.storage.local`.
 
-Los estilos están modularizados en `styles/`:
-- `variables.css`: tokens de diseño (colores, sombras, transiciones) con paleta cyberpunk derivada del ícono original.
-- `base.css`: estilos del body, tipografía y encabezado.
-- `selector.css`: estilos del `<select>` nativo usando `appearance: base-select`.
-- `options.css`: estilos del fieldset, switch de modo compacto, radio buttons físicos y el toggle de idioma.
-- `button.css`: estilos del botón Exportar y sus estados.
-- `footer.css`: estilos del estado de exportación (spinner, mensajes) y versión.
-- `popup.css`: punto de entrada que importa todos los módulos.
+- `popup.js`: orquestador principal.
+- `updateNotification.js`: aviso de actualización.
+- `versionHandler.js`: versión dinámica.
+- `export/exportHandler.js`: flujo de exportación.
+- `export/exportHelpers.js`: lógica de bajo nivel.
+- `export/formatHandler.js`: toggle de formato.
+- `languages/*`: idioma.
+- `utilities/dom.js`: helpers DOM.
+
+Los estilos están modularizados en `styles/`.
 
 ---
 
@@ -580,22 +633,22 @@ La web oficial del proyecto, alojada en GitHub Pages, comparte la identidad visu
 
 ### Estilos
 
-- `assets/css/shared/`: módulos compartidos (tokens, base, header, sidebar, main, footer, content).
+- `assets/css/shared/`: módulos compartidos.
 - `assets/css/home/`: estilos específicos de la landing.
 - `assets/css/privacy.css`, `faq.css`, `cli.css`, `changelog.css`, `map.css`: orquestadores por página.
 
 ### JavaScript
 
-- `assets/js/shared/`: módulos comunes (tema, sidebar, idioma, scroll spy, versión).
+- `assets/js/shared/`: módulos comunes.
 - `assets/js/languages/`: traducciones por página.
-- `assets/js/*.js`: orquestadores por página (main, privacy, faq, cli, changelog, sitemap).
+- `assets/js/*.js`: orquestadores por página.
 
 ### Sistema multiidioma
 
-- Detección automática del idioma del navegador.
-- Toggle con banderas SVG en el header.
+- Detección automática.
+- Toggle visual.
 - Persistencia en `localStorage`.
-- Traducción dinámica de textos mediante IDs.
+- Traducción dinámica.
 
 ---
 
@@ -605,13 +658,13 @@ Utilidades compartidas entre las interfaces.
 
 ### dom.js
 
-Helpers de manipulación del DOM (`$`, `$$`, `setText`, `setValue`).
+Helpers de manipulación del DOM (`$`, `$$`, `setText`, `setValue`, `setStyle`, `hideTag`, `showTag`).
 
 ---
 
 # Distribución
 
-Durante la serie **1.1.x** la arquitectura terminó de desacoplar el núcleo del proyecto.
+Durante la serie 1.1.x la arquitectura terminó de desacoplar el núcleo del proyecto.
 
 Actualmente cualquier interfaz puede reutilizar el mismo motor proporcionando únicamente:
 
@@ -620,9 +673,16 @@ Actualmente cualquier interfaz puede reutilizar el mismo motor proporcionando ú
 - un renderer;
 - un mecanismo de salida.
 
-Esta organización permite incorporar nuevas interfaces (como la extensión de Chrome y la web), nuevos formatos y nuevas salidas sin modificar el Core.
+Esta organización permite incorporar nuevas interfaces, nuevos formatos y nuevas salidas sin modificar el Core.
 
-La extensión de Chrome ya utiliza este mecanismo: captura el JSON, lo entrega al core mediante `ExtensionSource`, y recibe el Markdown generado para descargarlo mediante un `outputHandler` basado en `chrome.downloads`. Incluye un popup con opciones avanzadas de exportación (formato, modo compacto, filtro de roles) y soporte multi‑idioma.
+La extensión de Chrome ya utiliza este mecanismo: captura la conversación mediante paginación o stream SSE, la entrega al core mediante `ExtensionSource`, y recibe el Markdown generado para descargarlo mediante un `outputHandler` basado en `chrome.downloads`.
+
+El build con esbuild empaqueta:
+
+- `extensionCore.js` → `extensionBundle.js`
+- `inject.js` → `inject.js`
+- `content.js` → `content.js`
+- `background.js` → `background.js`
 
 La web documenta y presenta el proyecto al público, reutilizando los mismos principios y estética visual.
 

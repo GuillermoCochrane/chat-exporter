@@ -4,9 +4,9 @@
 
 Eliminar la necesidad de utilizar DevTools para recuperar el JSON de una conversación de ChatGPT.
 
-La extensión deberá capturar automáticamente el JSON recibido por la aplicación web y reutilizar el pipeline existente de AI Chat Exporter.
+La extensión captura automáticamente la conversación desde la interfaz web y la entrega al pipeline de AI Chat Exporter.
 
-El objetivo final es convertir el capturador experimental en una herramienta completa de exportación de conversaciones.
+El objetivo final es ofrecer una herramienta completa de exportación, con soporte para conversaciones existentes y nuevas.
 
 ---
 
@@ -19,6 +19,9 @@ El objetivo final es convertir el capturador experimental en una herramienta com
 - ✅ Popup con selector de formato (MD/JSON)
 - ✅ Opciones avanzadas (compact, roles)
 - ✅ UX completa
+- ✅ Captura de conversaciones nuevas mediante SSE
+- ✅ Confirmación real de descarga
+- ✅ Notificación de actualizaciones
 - 🚧 Publicación
 
 ---
@@ -27,7 +30,7 @@ El objetivo final es convertir el capturador experimental en una herramienta com
 
 ## Objetivos
 
-Implementar un capturador estable del JSON de conversación utilizando la API `fetch()` desde el contexto real de la página.
+Implementar un capturador estable de conversaciones de ChatGPT.
 
 ## Estado
 
@@ -37,20 +40,15 @@ Implementar un capturador estable del JSON de conversación utilizando la API `f
 
 - ✅ Inyección de código en el contexto de la página.
 - ✅ Intercepción de `window.fetch`.
-- ✅ Identificación del endpoint correcto:
-
-  ```
-  /backend-api/conversation/{id}
-  ```
-
-- ✅ Captura del objeto completo de conversación.
-- ✅ Identificación del campo `mapping`.
-- ✅ Filtrado de respuestas para evitar sobrescrituras por metadatos o arrays vacíos.
-- ✅ Confirmación de que el JSON coincide con el obtenido manualmente desde DevTools.
+- ✅ Identificación del endpoint de conversación.
+- ✅ Captura de conversaciones existentes paginadas.
+- ✅ Captura de conversaciones nuevas mediante stream SSE.
+- ✅ Integración de ambos flujos en el mismo estado.
+- ✅ Confirmación de que el JSON/SSE se puede transformar en el modelo del pipeline.
 
 ### Resultado
 
-La investigación demuestra que la captura automática del JSON es completamente viable bajo Manifest V3.
+La captura automática es viable y funciona tanto para conversaciones existentes como para conversaciones nuevas.
 
 ---
 
@@ -66,14 +64,16 @@ Definir un mecanismo de almacenamiento temporal desacoplado entre la captura y l
 
 ### Decisión adoptada
 
-La conversación capturada permanece en memoria en `capturedConversation` dentro del background. Además, si el Service Worker se reinicia y pierde `capturedConversation`, la extensión puede recuperar la conversación desde la página mediante el content script, evitando fallos en la segunda exportación.
+La conversación capturada permanece en memoria dentro del contexto de la página.
+
+Si el Service Worker se reinicia y pierde la conversación, la extensión puede recuperarla desde la página mediante el content script.
 
 ### Motivos
 
-- evita serialización innecesaria;
-- evita duplicación de memoria;
-- desacopla completamente la captura de la exportación;
-- simplifica la arquitectura.
+- Evita serialización innecesaria.
+- Evita duplicación de memoria.
+- Desacopla completamente la captura de la exportación.
+- Simplifica la arquitectura.
 
 ---
 
@@ -92,21 +92,25 @@ Conectar la extensión con el pipeline existente de AI Chat Exporter.
 ```text
 ChatGPT
       │
-      ▼
-Inject Script
+      ├── conversación existente → paginación
       │
-      ▼
-Content Script
-      │
-      ▼
-Background
-      │
-      ▼
-Popup → EXPORT
-      │
-      ├── JSON → descarga directa
-      │
-      └── MD   → runExporter → descarga
+      └── conversación nueva → SSE
+                │
+                ▼
+          Inject Script
+                │
+                ▼
+          Content Script
+                │
+                ▼
+             Background
+                │
+                ▼
+          Popup → EXPORT
+                │
+                ├── JSON → descarga directa
+                │
+                └── MD   → runExporter → descarga
 ```
 
 La extensión reutiliza el pipeline del Core y ofrece al usuario un popup para seleccionar el formato de exportación.
@@ -150,20 +154,22 @@ Construir la interfaz definitiva de la extensión.
 ### Implementado
 
 - ✅ Popup con selector de formato
-- ✅ Modo compacto (switch con efecto físico)
-- ✅ Filtro de roles (radio buttons con efecto hundido)
+- ✅ Modo compacto
+- ✅ Filtro de roles
 - ✅ Opciones de Markdown se ocultan al seleccionar JSON
-- ✅ Indicador de progreso (spinner animado)
+- ✅ Indicador de progreso
 - ✅ Botón Exportar deshabilitado durante el procesamiento
-- ✅ Mensajes de estado (éxito / error detallado)
+- ✅ Mensajes de estado
 - ✅ Encabezado contextual con nombre del proveedor
-- ✅ Footer con versión dinámica de la extensión
+- ✅ Footer con versión dinámica
 - ✅ Estética cyberpunk con glassmorphism y sistema de tokens CSS
 - ✅ Estilos modularizados por responsabilidad
-- ✅ Sistema multi‑idioma (español / inglés) con toggle visual
-- ✅ Advertencia de recarga antes de exportar con persistencia de preferencia
-- ✅ Popup modularizado en handlers reutilizables
-- ✅ Recuperación de conversación desde la página si el Service Worker se reinicia
+- ✅ Sistema multi‑idioma
+- ✅ Feedback de progreso
+- ✅ Timeout por inactividad
+- ✅ Confirmación real de descarga
+- ✅ Notificación al finalizar la descarga
+- ✅ Aviso de actualización
 
 ### Pendiente
 
@@ -184,11 +190,11 @@ Preparar la extensión para distribución.
 
 ### Alcance
 
-- revisión general;
-- documentación;
-- pruebas manuales;
-- empaquetado;
-- publicación.
+- Revisión general.
+- Documentación.
+- Pruebas manuales.
+- Empaquetado.
+- Publicación.
 
 ---
 
@@ -196,28 +202,26 @@ Preparar la extensión para distribución.
 
 ## Exportación
 
-- nuevos formatos;
-- exportación múltiple;
-- plantillas personalizadas.
+- Nuevos formatos.
+- Exportación múltiple.
+- Plantillas personalizadas.
 
 ## Compatibilidad
 
-- otros proveedores de IA;
-- detección automática del proveedor;
-- actualización de proveedores compatibles.
+- Otros proveedores de IA.
+- Detección automática del proveedor.
+- Actualización de proveedores compatibles.
 
 ## Integraciones
 
-- Obsidian;
-- Logseq;
-- Notion;
+- Obsidian.
+- Logseq.
+- Notion.
 - GitHub.
 
 ## Automatización
 
-- exportación automática;
-- exportación por conversación;
-- exportación por lote;
-- sincronización incremental.
-
----
+- Exportación automática.
+- Exportación por conversación.
+- Exportación por lote.
+- Sincronización incremental.

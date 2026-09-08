@@ -145,7 +145,7 @@ El orquestador (`runExporter`) no importa ni conoce el módulo de escritura.
 Cada interfaz provee su propio handler:
 
 - **CLI**: escribe el Markdown en disco usando `writer.js`.
-- **Extensión**: descarga el Markdown usando `chrome.downloads`.
+- **Extensión**: descarga el Markdown usando `chrome.downloads` y espera la confirmación real de descarga.
 
 Esto permite que el Core permanezca completamente independiente del entorno de ejecución (Node, navegador, etc.).
 
@@ -156,6 +156,11 @@ Esto permite que el Core permanezca completamente independiente del entorno de e
 Representa el modelo de conversación entregado por una Conversation Source.
 
 Actualmente corresponde a una conversación exportada desde ChatGPT.
+
+Puede provenir de dos flujos:
+
+- conversación existente paginada;
+- conversación nueva generada por stream SSE.
 
 El Core nunca conoce cómo fue obtenida esa conversación.
 
@@ -248,34 +253,51 @@ No contiene lógica de procesamiento.
 
 ### Captura
 
-La captura de la conversación sigue el flujo:
+La captura de la conversación se realiza mediante dos mecanismos complementarios.
+
+#### Flujo paginado
 
 ```text
-ChatGPT (fetch)
+ChatGPT (conversación existente)
     │
     ▼
-inject.js
+inject.js intercepta fetch
     │
     ▼
-postMessage(CONVERSATION)
+GET /backend-api/conversations/{id}
     │
     ▼
-content.js
+scroll automático para recorrer todas las páginas
     │
     ▼
-runtime.sendMessage(DOWNLOAD_JSON)
+capture.js acumula respuestas
     │
     ▼
-background.js
-    │
-capturedConversation
+estado `conversation`
 ```
 
-- `inject.js` intercepta `window.fetch()` en el contexto de la página y, al detectar una respuesta que contiene `mapping`, envía la conversación completa a `content.js` mediante `window.postMessage`.
-- `content.js` actúa como puente pasivo: escucha mensajes `CONVERSATION` y los reenvía al `background.js` como `DOWNLOAD_JSON`.
-- `background.js` almacena la conversación en `capturedConversation`, lista para ser exportada cuando el usuario lo solicite.
+#### Flujo SSE
 
-Este flujo es automático y no requiere que el usuario haga clic en el ícono para capturar la conversación. La captura ocurre durante la carga inicial de la página.
+```text
+ChatGPT (conversación nueva)
+    │
+    ▼
+POST /backend-api/f/conversation/prepare
+    │
+    ▼
+POST /backend-api/f/conversation
+    │
+    ▼
+stream SSE
+    │
+    ▼
+streamCapture.js reconstruye mensajes
+    │
+    ▼
+estado `conversation`
+```
+
+Ambos flujos alimentan el mismo estado y son transparentes para el Core.
 
 ### Exportación
 
@@ -298,15 +320,11 @@ exportHandlers[format]()
     └── md   → runExporter → outputHandler → descarga
 ```
 
-- `popup.js` presenta opciones de exportación: formato (MD/JSON), modo compacto y filtro de roles (`all`, `user`, `assistant`). Las opciones específicas de Markdown se ocultan al elegir JSON.
-- El popup incluye un encabezado contextual que indica el proveedor de la conversación y un footer con la versión dinámica de la extensión.
-- El popup incluye un sistema multi‑idioma (español / inglés) con detección automática del idioma del navegador, toggle visual con banderas SVG y persistencia de la preferencia en `chrome.storage.local`.
-- Los errores del background se comunican mediante códigos (`errorCode`) y parámetros, permitiendo que el popup los traduzca al idioma activo.
-- Envía un mensaje `EXPORT` con todos los parámetros (`format`, `compact`, `roleFilter`).
-- `background.js` recibe el mensaje, verifica que exista una conversación capturada y ejecuta el handler correspondiente:
-  - **JSON**: serializa la conversación y la descarga directamente.
-  - **Markdown**: construye un `config` con `source: "extension"`, `compact`, `roleFilter` y un `outputHandler` que descarga el archivo `.md`.
-- La descarga utiliza `chrome.downloads.download` con `saveAs: true` para que el usuario elija la ubicación.
+- `popup.js` presenta opciones de exportación: formato (MD/JSON), modo compacto y filtro de roles.
+- El popup incluye sistema multi‑idioma, feedback de progreso y aviso de actualización.
+- `background.js` recibe el mensaje, verifica que exista una conversación capturada y ejecuta el handler correspondiente.
+- La descarga espera el evento `chrome.downloads.onChanged` para confirmar finalización real.
+- Se notifica al usuario mediante `chrome.notifications`.
 
 ### Principios
 
@@ -325,6 +343,7 @@ La extensión reutiliza el mismo `runExporter` y `runPipeline` que la CLI. La co
 
 - `CONVERSATION`: inject → content.
 - `DOWNLOAD_JSON`: content → background.
+- `PROGRESS`: content → background → popup.
 - `EXPORT`: popup → background.
 
 ---
@@ -336,10 +355,11 @@ La extensión reutiliza el mismo `runExporter` y `runPipeline` que la CLI. La co
 3. [x] Validar que CLI y Extension reutilicen exactamente el mismo pipeline.
 4. [x] Incorporar selector de formato (MD/JSON) en el popup.
 5. [x] Agregar opciones avanzadas al popup (modo compacto, filtro de roles).
-6. [x] Mejorar feedback visual en el popup (spinner, errores detallados).
-7. [x] Preparar materiales para publicación en Chrome Web Store (descripción, política de privacidad, ZIP).
-8. [ ] Incorporar nuevos Conversation Sources sin modificar el Core.
-9. [ ] Incorporar nuevos Renderers y Outputs manteniendo el desacoplamiento actual.
+6. [x] Mejorar feedback visual en el popup (spinner, progreso, errores).
+7. [x] Preparar materiales para publicación en Chrome Web Store.
+8. [x] Incorporar nuevos Conversation Sources sin modificar el Core.
+9. [x] Incorporar captura de conversaciones nuevas mediante stream SSE.
+10. [ ] Incorporar nuevos Renderers y Outputs manteniendo el desacoplamiento actual.
 
 ---
 

@@ -4,6 +4,45 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
+# v1.5.0 — Captura de conversaciones nuevas y mejoras de UX
+
+* Se agrega captura de conversaciones nuevas de ChatGPT mediante el stream SSE:
+  - Se detecta el flujo `POST /backend-api/f/conversation/prepare` y `POST /backend-api/f/conversation`.
+  - Se reconstruyen los mensajes de usuario y asistente desde los deltas del stream.
+  - Se ignora el contenido interno `model_editable_context`.
+  - Se integra sin modificar el modelo de páginas existente.
+  - Se valida con conversaciones nuevas, recarga + mensajes nuevos, y conversaciones largas con múltiples páginas.
+* Se adapta la captura de conversaciones existentes al esquema paginado actual:
+  - Se utiliza el endpoint `/backend-api/conversations/{id}`.
+  - Se realiza scroll automático para recolectar todas las páginas.
+  - Se invierte el orden de páginas para respetar el flujo del parser.
+  - Se agrega failsafe por `parent_id` para mantener el orden.
+* Se agrega feedback de progreso durante la exportación:
+  - Estados `collecting`, `processing`, `generating` y `downloading`.
+  - Mensajes centralizados en `statusMessages`.
+  - Timeout por inactividad que se reinicia con cada progreso.
+* Se deshabilitan los controles del formulario mientras se exporta.
+* Se desactiva temporalmente la advertencia de recarga, ya que el flujo activo captura la conversación completa.
+* Se agrega confirmación real de descarga:
+  - `downloadFile` espera `chrome.downloads.onChanged`.
+  - Se distingue entre `complete` e `interrupted`.
+  - El popup solo muestra éxito cuando la descarga terminó.
+* Se agrega notificación al usuario al finalizar la descarga:
+  - Se usa `chrome.notifications`.
+  - Nuevo permiso: `"notifications"`.
+* Se agrega aviso de actualización:
+  - Se crea `updateNotification.js`.
+  - Se muestra un banner temporal cuando la versión no fue vista.
+  - Se guarda `lastSeenVersion` en `chrome.storage.local`.
+* Se modulariza la extensión:
+  - `inject.js` se divide en captura, scroll, mensajería, estado y stream.
+  - `background.js` se divide en descarga, progreso, handlers de exportación, handlers de mensajes y notificaciones.
+* Se actualiza el build para empaquetar `inject.js`, `content.js` y `background.js` con esbuild.
+* Se corrigen errores asincrónicos del canal de mensajería.
+* Se actualiza la documentación del proyecto.
+
+---
+
 # v1.4.2 — Refactor del popup y recuperación de conversación
 
 * Se modulariza el código del popup en handlers reutilizables:

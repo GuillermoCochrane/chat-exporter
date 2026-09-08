@@ -12,6 +12,7 @@
   - [v1.2.3 — Opciones avanzadas en la extensión](#v123--opciones-avanzadas-en-la-extensión)
   - [v1.2.4 — Rediseño visual y UX del popup](#v124--rediseño-visual-y-ux-del-popup)
   - [v1.3.1 — Sistema multi‑idioma y preparación para publicación](#v131--sistema-multiidioma-y-preparación-para-publicación)
+  - [v1.5.0 — Captura SSE y UX avanzada](#v150--captura-sse-y-ux-avanzada)
 - [Descubrimientos](#descubrimientos)
   - [Desarrollo](#desarrollo)
   - [Pre Release](#pre-release)
@@ -1245,6 +1246,120 @@ La extensión cumple con todos los requisitos técnicos y de contenido para ser 
 
 ---
 
+### v1.5.0 — Captura SSE y UX avanzada
+
+### E-051
+
+#### Objetivo
+
+Capturar conversaciones existentes que ahora se entregan de forma paginada.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- El endpoint `GET /backend-api/conversations/{id}` devuelve `messages[]` y `page_info`.
+- Se implementó scroll automático para recorrer todas las páginas.
+- Se respetó el orden cronológico invirtiendo las páginas.
+- Se agregó failsafe por `parent_id`.
+
+#### Conclusión
+
+La captura de conversaciones existentes quedó restaurada y es robusta.
+
+---
+
+### E-052
+
+#### Objetivo
+
+Capturar conversaciones nuevas que se generan en tiempo real mediante SSE.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- El flujo real es `POST /backend-api/f/conversation/prepare` seguido de `POST /backend-api/f/conversation`.
+- La respuesta es `text/event-stream`, no JSON directo.
+- Se reconstruyeron mensajes `user` y `assistant` desde deltas y patches.
+- Se ignoró el `model_editable_context`.
+
+#### Conclusión
+
+La captura de conversaciones nuevas quedó integrada sin modificar el Core.
+
+---
+
+### E-053
+
+#### Objetivo
+
+Confirmar que una descarga finalizó antes de informar éxito al usuario.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se implementó `downloadFile` como promesa que espera `chrome.downloads.onChanged`.
+- Se distingue `complete` de `interrupted`.
+- El popup ya no muestra éxito prematuro.
+
+#### Conclusión
+
+La confirmación real de descarga mejora la confiabilidad percibida.
+
+---
+
+### E-054
+
+#### Objetivo
+
+Notificar al usuario cuando la extensión se actualiza.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se creó `updateNotification.js`.
+- Se comparó `chrome.runtime.getManifest().version` con `lastSeenVersion`.
+- Se mostró un banner temporal con enlace al changelog.
+- Se corrigieron rutas de import.
+
+#### Conclusión
+
+La notificación de actualizaciones quedó funcional y discreta.
+
+---
+
+### E-055
+
+#### Objetivo
+
+Desactivar temporalmente la advertencia de recarga.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- El flujo activo de captura volvió innecesaria la advertencia.
+- Se conservó la lógica comentada para futuros proveedores.
+
+#### Conclusión
+
+La UX se simplificó sin eliminar la posibilidad de reintroducir la advertencia.
+
+---
+
 ## Descubrimientos
 
 ### Desarrollo
@@ -1296,6 +1411,13 @@ La extensión cumple con todos los requisitos técnicos y de contenido para ser 
 - La API `chrome.storage.local` es adecuada para persistir preferencias de usuario en extensiones Manifest V3 sin requerir permisos adicionales sensibles.
 - Usar `navigator.language` como idioma por defecto y luego sobrescribirlo con una preferencia guardada en storage es un patrón eficaz para respetar la configuración del usuario.
 - Los SVG inline permiten incluir gráficos vectoriales (como banderas) en el popup sin dependencias externas, manteniendo el principio de build autocontenido.
+- La conversación nueva no pasa por el endpoint paginado; viaja por un stream SSE.
+- `chrome.downloads.download()` confirma el inicio, no la finalización.
+- `chrome.downloads.onChanged` es el evento adecuado para detectar descarga completa o interrumpida.
+- `chrome.notifications` permite informar al usuario aunque el popup se haya cerrado.
+- Las rutas de import en módulos de extensión deben ser coherentes con la ubicación real del archivo.
+- La advertencia de recarga puede quedar latente y reactivarse para proveedores con captura parcial.
+- La captura combinada paginación + SSE cubre escenarios de conversaciones existentes y nuevas.
 
 ### Pre Release
 

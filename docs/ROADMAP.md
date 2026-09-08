@@ -10,7 +10,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 ## Versión
 
-**1.4.2 (Development)**
+**1.5.0 (Development)**
 
 ## Estado general
 
@@ -20,7 +20,8 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Conversation Sources
 - [x] Pipeline Profiles
 - [x] Inspector
-- [x] Parser
+- [x] Parser adaptado a conversaciones paginadas
+- [x] Sorter con failsafe por `parent_id`
 - [x] Filter
 - [x] Filtro por rol (user/assistant/all)
 - [x] Normalizer
@@ -31,7 +32,11 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 ### Interfaces
 
 - [x] CLI
-- [x] Chrome Extension (con popup y opciones avanzadas)
+- [x] Chrome Extension con popup y opciones avanzadas
+- [x] Captura de conversaciones existentes con paginación
+- [x] Captura de conversaciones nuevas vía SSE
+- [x] Confirmación real de descarga
+- [x] Notificación de actualizaciones
 - [x] Web (GitHub Pages)
 - [ ] REST API
 
@@ -45,10 +50,12 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Filter
 - [x] Filter (filtro por rol)
 - [x] Normalizer
+- [x] Sorter
 - [x] Markdown
 - [x] Markdown (modo compacto)
 - [x] JsonFileSource
 - [x] Writer
+- [x] Inspector
 
 #### Manual
 
@@ -56,6 +63,10 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Modo inspect
 - [x] Modo no-write
 - [x] Validación de distribución
+- [x] Conversación existente con paginación
+- [x] Conversación nueva desde cero
+- [x] Recarga + mensajes nuevos
+- [x] Conversación larga con múltiples páginas
 
 ### Distribución
 
@@ -77,6 +88,8 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Contrato unificado de fuentes (reciben `config` completo)
 - [x] ExtensionSource
 - [x] Build de extensión con esbuild
+- [x] Modularización de `inject` y `background`
+- [x] Captura de streams SSE sin acoplar al Core
 
 ### Extensión — UX
 
@@ -84,6 +97,12 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Modo compacto en popup
 - [x] Filtro de roles en popup
 - [x] Indicador de progreso y manejo de errores visual
+- [x] Feedback de progreso durante la exportación
+- [x] Timeout por inactividad
+- [x] Deshabilitar controles durante la exportación
+- [x] Confirmación real de descarga
+- [x] Notificación de descarga finalizada
+- [x] Aviso de actualización
 - [x] Sistema multi‑idioma (español / inglés) con toggle visual
 - [x] Popup refactorizado en handlers modulares
 
@@ -99,7 +118,11 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 - [x] Advertencia de recarga para mitigar captura incompleta.
 - [x] Recuperar conversación desde la página al exportar para evitar dependencia del estado del Service Worker.
-- [ ] Explorar captura incremental de mensajes nuevos y conversaciones desde cero (investigación futura, no prioritaria).
+- [x] Captura de conversaciones nuevas vía SSE.
+- [x] Captura de mensajes nuevos en conversaciones activas.
+- [x] Captura de conversaciones nuevas desde cero.
+- [ ] Explorar captura incremental más avanzada (investigación futura, no prioritaria).
+- [ ] Advertencia de recarga latente: evaluar si se reutiliza para otros proveedores.
 
 ---
 
@@ -124,6 +147,8 @@ Inspector
    ↓
 Parser
    ↓
+Sorter
+   ↓
 Filter
    ↓
 Normalizer
@@ -137,17 +162,16 @@ Output
 
 ## Próximo objetivo
 
-### DeepSeek y captura incremental
+### DeepSeek
 
 - Investigar la estructura del JSON de DeepSeek para integrarlo como nuevo Conversation Source.
-- Evaluar la viabilidad de captura incremental como mejora futura, no prioritaria.
 
 ---
 
 # Evoluciones previstas
 
 Una vez estabilizado el núcleo del proyecto podrán incorporarse nuevas capacidades reutilizando el mismo pipeline.
-Las funcionalidades listadas a continuación no forman parte del objetivo de la versión 1.0 y representan posibles líneas de evolución del proyecto.
+Las funcionalidades listadas a continuación no forman parte del objetivo de la versión 1.5.0 y representan posibles líneas de evolución del proyecto.
 
 ## Nuevos exportadores
 

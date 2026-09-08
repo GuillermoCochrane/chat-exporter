@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-La extensión tiene como único objetivo capturar automáticamente el JSON completo de una conversación de ChatGPT y entregarlo al pipeline de AI Chat Exporter.
+La extensión tiene como único objetivo capturar automáticamente las conversaciones de ChatGPT y entregarlas al pipeline de AI Chat Exporter.
 
 La extensión **no interpreta** la conversación.
 
@@ -18,39 +18,39 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
                 ChatGPT
                     │
                     ▼
-            Inject Script
+              Inject Script
                     │
-        Intercepta window.fetch()
-                    │
-                    ▼
-        JSON completo de conversación
+            Captura fetch y SSE
                     │
                     ▼
-            Content Script
-        (puente de comunicación)
+          Páginas o turnos crudos
                     │
                     ▼
-              Background
-      (coordinación y exportación)
+             Content Script
+          (puente de comunicación)
                     │
                     ▼
-        AI Chat Exporter Core
+               Background
+        (coordinación y exportación)
                     │
                     ▼
-                Parser
+          AI Chat Exporter Core
                     │
                     ▼
-              Normalizer
+                  Parser
                     │
                     ▼
-             Exportadores
-          ├──────────────┐
-          ▼              ▼
-       Markdown        JSON
-          │
-          ├──────────────┐
-          ▼              ▼
-        HTML           PDF
+                Normalizer
+                    │
+                    ▼
+               Exportadores
+              ├──────────────┐
+              ▼              ▼
+          Markdown        JSON
+              │
+              ├──────────────┐
+              ▼              ▼
+            HTML           PDF
 ```
 
 ---
@@ -68,15 +68,17 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 │                                       │
 │ • Intercepta fetch()                  │
 │ • Filtra respuestas                   │
-│ • Conserva únicamente el JSON         │
-│   que contiene `mapping`              │
-│ • Envía automáticamente la            │
-│   conversación capturada al           │
+│ • Captura páginas paginadas           │
+│ • Lee streams SSE                     │
+│ • Reconstruye turnos                  │
+│ • Envía automáticamente               │
+│   la conversación capturada al        │
 │   content script                      │
 └───────────────────────────────────────┘
                   │
           window.postMessage()
           tipo: CONVERSATION
+          tipo: PROGRESS
                   │
                   ▼
 ┌───────────────────────────────────────┐
@@ -84,14 +86,16 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 │                                       │
 │ • Inyecta inject.js                   │
 │ • Actúa como puente                   │
-│ • Reenvía CONVERSATION al             │
-│   background como DOWNLOAD_JSON       │
+│ • Reenvía CONVERSATION                │
+│   al background como DOWNLOAD_JSON    │
+│ • Reenvía PROGRESS                    │
 │ • Atiende solicitudes de              │
 │   recuperación desde background       │
 └───────────────────────────────────────┘
                   │
       chrome.runtime.sendMessage()
           tipo: DOWNLOAD_JSON
+          tipo: PROGRESS
                   │
                   ▼
 ┌───────────────────────────────────────┐
@@ -100,6 +104,8 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 │ • Almacena la última conversación     │
 │ • Responde al popup                   │
 │ • Ejecuta exportHandlers              │
+│ • Espera confirmación de descarga     │
+│ • Envía notificaciones                │
 │ • Invoca al Core si es Markdown       │
 │ • Descarga el archivo                 │
 └───────────────────────────────────────┘
@@ -119,6 +125,7 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 │ • Opciones MD se ocultan en JSON      │
 │ • Encabezado contextual               │
 │ • Spinner de progreso                 │
+│ • Aviso de actualización              │
 │ • Footer con versión dinámica         │
 │ • Muestra estado de la operación      │
 │ • Traducción multi‑idioma             │
@@ -134,9 +141,14 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 ### Responsabilidades:
 
 - interceptar `window.fetch`;
-- detectar la respuesta correcta del endpoint de conversación;
-- validar la presencia de `mapping`;
-- conservar el JSON completo en memoria;
+- detectar respuestas de:
+  - conversaciones existentes (`/backend-api/conversations/`);
+  - conversaciones nuevas (`/backend-api/f/conversation`);
+- capturar páginas paginadas;
+- leer streams SSE;
+- reconstruir turnos `user` y `assistant`;
+- conservar la conversación en estado interno;
+- emitir progreso de captura;
 - enviar automáticamente la conversación capturada al content script mediante `window.postMessage`.
 
 ### No debe:
@@ -147,14 +159,27 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 
 ---
 
+### Módulos internos de `inject/`
+
+| Módulo | Responsabilidad |
+|---|---|
+| `capture.js` | Interceptar fetch y capturar respuestas paginadas |
+| `scroll.js` | Forzar carga de todas las páginas de una conversación existente |
+| `messaging.js` | Atender mensajes del content script y responder |
+| `state.js` | Encapsular el estado global de la conversación |
+| `streamCapture.js` | Leer y reconstruir conversaciones nuevas desde SSE |
+
+---
+
 ## Content Script
 
 ### Responsabilidades:
 
 - inyectar `inject.js` en el contexto de la página;
 - actuar como puente pasivo entre la página y la extensión;
-- reenviar cualquier conversación recibida de `inject.js` al `background.js`;
-- atender solicitudes de recuperación de conversación desde `background.js` pidiéndosela a `inject.js`.
+- reenviar conversaciones capturadas al background;
+- reenviar mensajes de progreso;
+- atender solicitudes de recuperación de conversación desde el background.
 
 ### No debe:
 
@@ -163,63 +188,54 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 - tomar decisiones sobre el flujo de datos.
 
 ---
-## Background
 
+## Background
 
 ### Responsabilidades:
 
-- recibir y almacenar la conversación capturada enviada por el content script;
-- atender las solicitudes de exportación provenientes del popup;
-- si no hay conversación en memoria al exportar, recuperarla desde la página a través del content script;
-- despachar la exportación según el formato solicitado:
-  - JSON: descarga directa del objeto almacenado;
-  - Markdown: construir configuración del pipeline, invocar `runExporter` y descargar el resultado mediante `outputHandler`;
-- comunicar los errores mediante códigos (`errorCode`) y parámetros para que el popup pueda traducirlos al idioma del usuario.
+- recibir y almacenar la conversación capturada;
+- atender solicitudes de exportación del popup;
+- si no hay conversación en memoria, recuperarla desde la página;
+- despachar la exportación según formato:
+  - JSON: descarga directa;
+  - Markdown: invocar `runExporter` mediante el bundle del Core;
+- esperar confirmación real de descarga;
+- enviar notificaciones al finalizar la descarga;
+- comunicar errores mediante códigos (`errorCode`) y parámetros.
 
 ### No debe:
 
 - interpretar la conversación;
 - modificar el JSON.
+
 ---
 
-### Popup
+### Módulos internos de `background/`
+
+| Módulo | Responsabilidad |
+|---|---|
+| `download.js` | Iniciar descarga y esperar finalización |
+| `progress.js` | Enviar progreso al popup |
+| `exportHandlers.js` | Gestionar exportación JSON y Markdown |
+| `messageHandlers.js` | Coordinar mensajes entrantes |
+| `notifications.js` | Notificar éxito o error de descarga |
+
+---
+
+## Popup
 
 ### Responsabilidades:
 
-- presentar al usuario las opciones de exportación:
-  - toggle de idioma con banderas SVG (español / inglés) en el encabezado;
-  - encabezado contextual que indica el proveedor de la conversación (ej: "Exportando desde ChatGPT");
-  - selector de formato (Markdown / JSON);
-  - switch de modo compacto (solo visible en Markdown);
-  - radio buttons con apariencia de hardware físico para filtro de roles: `all`, `user`, `assistant` (solo visible en Markdown).
-- ocultar automáticamente las opciones de Markdown cuando se selecciona JSON;
-- mostrar un spinner animado y deshabilitar el botón Exportar durante el procesamiento;
-- mostrar el estado de la operación (éxito o error detallado traducido);
-- mostrar una advertencia de recarga antes de exportar cuando la conversación pueda estar incompleta, con opción de no volver a mostrar, enlace al FAQ y persistencia en `chrome.storage.local`;
-- mostrar la versión dinámica de la extensión en el footer, obtenida desde `chrome.runtime.getManifest()`.
-
-La interfaz sigue una estética cyberpunk con glassmorphism, tokens CSS y componentes con efecto de hardware físico (relieve/hundido).
-
-#### Los scripts están organizados en `js/`:
-- `popup.js`: orquestador principal que inicializa los handlers del popup.
-- `languages/translations.js`: helper con las claves textuales para español e inglés.
-- `languages/languageSettings.js`: detecta el idioma inicial (navegador o preferencia guardada) y persiste la elección del usuario en `chrome.storage.local`.
-- `languages/flagHandler.js`: gestiona el toggle visual de banderas.
-- `languages/languageHandler.js`: orquesta la carga, el cambio y la persistencia del idioma.
-- `export/exportHelpers.js`: lógica de bajo nivel para la exportación y los mensajes de estado.
-- `export/exportHandler.js`: flujo de exportación con advertencia de recarga.
-- `export/formatHandler.js`: toggle de opciones Markdown según el formato.
-- `utilities/dom.js`: helpers genéricos de manipulación del DOM.
-- `versionHandler.js`: muestra la versión dinámica de la extensión.
-
-#### Los estilos están modularizados en `styles/`:
-- `variables.css`: tokens de diseño (colores, sombras, transiciones).
-- `base.css`: estilos del body, tipografía y encabezado.
-- `selector.css`: estilos del `<select>` nativo.
-- `options.css`: estilos del fieldset, switch, radio buttons y toggle de idioma.
-- `button.css`: estilos del botón Exportar.
-- `footer.css`: estilos del estado de exportación (spinner, mensajes) y versión.
-- `popup.css`: punto de entrada que importa todos los módulos.
+- presentar opciones de exportación:
+  - formato (Markdown / JSON);
+  - modo compacto;
+  - filtro de roles;
+- mostrar progreso de exportación;
+- deshabilitar controles durante la operación;
+- mostrar aviso de actualización cuando corresponda;
+- mostrar notificación de resultado;
+- incluir enlace de ayuda;
+- traducir mensajes al idioma activo.
 
 ### No debe:
 
@@ -229,14 +245,27 @@ La interfaz sigue una estética cyberpunk con glassmorphism, tokens CSS y compon
 
 ---
 
-## AI Chat Exporter Core
+# Build
 
-### Responsabilidades:
+La extensión se compila con esbuild.
 
-- interpretar el JSON;
-- reconstruir la conversación;
-- normalizar la información;
-- generar cualquiera de los formatos soportados.
+### Entradas empaquetadas
+
+- `src/interfaces/extension/inject.js`
+- `src/interfaces/extension/content.js`
+- `src/interfaces/extension/background.js`
+
+### Salidas generadas en `dist/`
+
+- `dist/inject.js`
+- `dist/content.js`
+- `dist/background.js`
+
+### Core
+
+El Core se empaqueta en `dist/extensionBundle.js` y se expone en `globalThis.__AI_CHAT_EXPORTER__`.
+
+El background lo carga mediante `importScripts("extensionBundle.js")`.
 
 ---
 
@@ -249,10 +278,10 @@ Cada componente tiene una única función:
 - **Inject** captura y envía.
 - **Content** retransmite.
 - **Background** coordina y exporta.
-- **Popup** presenta opciones y solicita (HTML + JS + estilos modulares).
+- **Popup** presenta opciones y solicita.
 - **Core** procesa.
 
-Esta separación permite incorporar nuevos formatos de exportación sin modificar el mecanismo de captura, ni la comunicación entre componentes.
+Esta separación permite incorporar nuevos formatos de exportación, nuevos proveedores y nuevas interfaces sin modificar el mecanismo de captura.
 
 ---
 
@@ -260,6 +289,10 @@ Esta separación permite incorporar nuevos formatos de exportación sin modifica
 
 Arquitectura validada.
 
-La extensión captura automáticamente el JSON, ofrece un popup con selector de formato y exporta tanto Markdown como JSON reutilizando el pipeline existente sin modificaciones.
+La extensión captura conversaciones existentes paginadas y conversaciones nuevas vía SSE.
+
+Exporta Markdown y JSON reutilizando el pipeline sin modificaciones.
+
+Incluye feedback de progreso, confirmación real de descarga y notificaciones.
 
 ---

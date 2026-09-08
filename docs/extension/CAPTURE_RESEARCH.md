@@ -683,3 +683,79 @@ La solución adoptada consiste en interceptar `window.fetch()` desde un script i
 El JSON obtenido resultó ser completamente compatible con el pipeline existente de AI Chat Exporter, lo que permitió reutilizar el parser y el resto del motor sin modificaciones.
 
 Con la investigación concluida, el proyecto deja de centrarse en demostrar la viabilidad técnica de la captura y pasa a enfocarse en el desarrollo del producto: integración, experiencia de usuario y publicación de la extensión.
+
+---
+
+## Actualización: captura de conversaciones nuevas y mensajes en tiempo real
+
+### Contexto
+
+La investigación original concluyó que la captura automática era viable interceptando el JSON con `mapping` durante la carga inicial.
+
+Sin embargo, una actualización de la API de ChatGPT modificó parcialmente ese comportamiento:
+
+- Las conversaciones existentes ahora se entregan mediante paginación (`messages[]` y `page_info`).
+- Las conversaciones nuevas y los mensajes en tiempo real ya no pasan por el endpoint paginado, sino por un flujo SSE.
+
+Este cambio obligó a extender la estrategia de captura sin reemplazar la anterior.
+
+### Descubrimiento del flujo SSE
+
+Se identificó el siguiente flujo para conversaciones nuevas:
+
+```text
+POST /backend-api/f/conversation/prepare
+   ↓
+JSON { status: "ok", conduit_token }
+   ↓
+POST /backend-api/f/conversation
+   ↓
+SSE text/event-stream
+   ↓
+data: { type: "resume_conversation_token", conversation_id, ... }
+data: { type: "input_message", ... }
+event: delta → fragmentos append
+data: [DONE]
+```
+
+La respuesta es un stream de eventos (`text/event-stream`), no un JSON directo.
+
+### Estrategia adoptada
+
+Se combinaron dos mecanismos:
+
+1. **Captura de conversaciones existentes**
+
+   - Interceptar `GET /backend-api/conversations/{id}`.
+   - Recorrer la paginación mediante scroll automático.
+   - Invertir el orden de páginas para respetar el contrato del parser.
+   - Corregir el orden con `parent_id` cuando sea necesario.
+
+2. **Captura de conversaciones nuevas**
+
+   - Interceptar `POST /backend-api/f/conversation`.
+   - Leer el stream con `ReadableStream`.
+   - Reconstruir los mensajes `user` y `assistant`.
+   - Ignorar mensajes internos como `model_editable_context`.
+   - Guardar cada turno como una página dentro del estado de la extensión.
+
+### Resultado
+
+La estrategia combinada fue validada con:
+
+- conversaciones existentes con múltiples páginas;
+- conversaciones nuevas desde cero;
+- recarga de conversación + mensajes nuevos;
+- conversaciones largas de más de 180 páginas.
+
+En todos los casos se obtuvo una exportación Markdown completa y en orden cronológico.
+
+### Referencias
+
+### Referencias
+
+- [Bitácora de depuración: CAPTURE_PAGINATION_DEBUG](../../assets/docs/research/extension/CAPTURE_PAGINATION_DEBUG.md)
+- [Evaluación de advertencia: CAPTURE_WARNING_BEHAVIOR](../../assets/docs/research/extension/CAPTURE_WARNING_BEHAVIOR.md)
+- [Experimentos consolidados: LABORATORY](../LABORATORY.md)
+
+---

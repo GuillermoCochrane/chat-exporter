@@ -107,7 +107,8 @@ Por este motivo, distintas fuentes pueden producir estructuras completamente dif
 
 Por ejemplo:
 
-- ChatGPT Conversation.
+- ChatGPT Conversation paginada.
+- ChatGPT Conversation desde stream SSE.
 - Claude Conversation.
 - DeepSeek Conversation.
 - Gemini Conversation.
@@ -126,47 +127,27 @@ El Core nunca realiza suposiciones sobre la estructura interna de una Conversati
 
 Los Conversation Adapters conocen la estructura específica de una `Conversation` determinada.
 
-Actualmente el proyecto implementa este comportamiento para conversaciones de ChatGPT mediante `parser.js`, que adapta la estructura basada en `mapping` al modelo interno `Message[]`.
+Actualmente el proyecto implementa este comportamiento para conversaciones de ChatGPT mediante `parser.js`.
 
-La arquitectura permite incorporar adaptadores adicionales para otros proveedores sin modificar el resto del Core.
+Antes, el parser esperaba un objeto con `mapping`.
 
-Su responsabilidad consiste en transformar la representación original del proveedor hacia el modelo interno utilizado por el proyecto.
+Ahora admite dos representaciones:
 
-Cada proveedor implementa su propio adaptador.
-
-Por ejemplo:
+### Conversación paginada
 
 ```text
-ChatGPT Conversation
-
-↓
-
-ChatGPT Adapter
-
-↓
-
-Message[]
+[ { data: { messages: [...], page_info: {...} } } ]
 ```
 
-o
+### Conversación generada por stream SSE
 
 ```text
-Claude Conversation
-
-↓
-
-Claude Adapter
-
-↓
-
-Message[]
+[ { data: { messages: [...] } } ]
 ```
 
-Todos los adaptadores producen exactamente el mismo contrato de salida.
+Ambas producen como salida el modelo interno `Message[]`.
 
-Los adaptadores forman parte de la interfaz del proveedor y no del Core. Su existencia permite que el motor permanezca completamente independiente de la estructura interna utilizada por cada plataforma.
-
-A partir de este punto el resto del sistema deja de depender del proveedor original.
+A partir de este punto, el resto del sistema deja de depender del proveedor original.
 
 ---
 
@@ -338,4 +319,3 @@ Cada nuevo formato debe consumir exactamente la misma representación de mensaje
 La evolución del sistema consiste en agregar componentes alrededor del Core, manteniendo inalterado su comportamiento interno siempre que sea posible.
 
 ---
-

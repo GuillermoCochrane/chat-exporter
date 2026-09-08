@@ -926,3 +926,66 @@ Se necesitaba una funcionalidad para filtrar mensajes por rol (`user`, `assistan
 Aceptada.
 
 ---
+
+## ADR-0033
+
+#### Fecha
+
+2026-09-03
+
+#### Título
+
+Reconstruir conversaciones paginadas mediante scroll automático.
+
+#### Motivación
+
+Las conversaciones existentes de ChatGPT se entregan paginadas.
+
+No es posible solicitar todas las páginas con `fetch` directo por limitaciones de autenticación.
+
+La extensión necesita capturar la conversación completa sin intervención manual del usuario.
+
+#### Consecuencia
+
+- Se implementa scroll automático en `inject.js`.
+- Se recorre el historial hasta alcanzar `has_previous_page: false`.
+- La captura se realiza mediante interceptación pasiva de `fetch`.
+- El estado se reconstruye a partir de las páginas capturadas.
+- Se evita depender de reproducción de peticiones autenticadas.
+
+#### Estado
+
+Aceptada.
+
+---
+
+## ADR-0034
+
+#### Fecha
+
+2026-09-07
+
+#### Título
+
+Capturar conversaciones nuevas mediante stream SSE.
+
+#### Motivación
+
+Las conversaciones nuevas de ChatGPT no se obtienen mediante el endpoint paginado.
+
+El backend envía los mensajes por un stream SSE en `POST /backend-api/f/conversation`.
+
+La captura anterior solo contemplaba respuestas JSON directas.
+
+#### Consecuencia
+
+- Se crea `modules/inject/streamCapture.js`.
+- Se leen los deltas del stream y se reconstruyen los mensajes.
+- Se mantiene el mismo contrato de páginas para no modificar el Core.
+- La captura de conversaciones nuevas queda integrada al flujo existente.
+
+#### Estado
+
+Aceptada.
+
+---
