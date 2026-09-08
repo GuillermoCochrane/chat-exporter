@@ -104,6 +104,7 @@
         <details open>
           <summary id="on-this-page">On this page</summary>
           <ul>
+            <li><a href="#v1.4.2" id="anchor-v142">...</a></li>
             <li><a href="#v1.4.2" id="anchor-v142"><strong>v1.4.2</strong> — Popup refactor & fix</a></li>
             <li><a href="#v1.4.1" id="anchor-v141"><strong>v1.4.1</strong> — Reload warning</a></li>
             <li><a href="#v1.4.0" id="anchor-v140"><strong>v1.4.0</strong> — Official website</a></li>
@@ -126,6 +127,27 @@
             Every update, improvement, and fix — all in one place.
           </p>
         </header>
+
+        <section id="v1.5.0">
+          <header class="section-heading">
+            <h2>
+              <strong>v1.5.0</strong>
+              <span id="changelog-v150-title"> — New conversation capture & UX improvements</span>
+            </h2>
+          </header>
+          <ul class="styled-list">
+            <li id="changelog-v150-item1">Added capture for new ChatGPT conversations using SSE streaming.</li>
+            <li id="changelog-v150-item2">Reconstructed user and assistant messages from stream deltas.</li>
+            <li id="changelog-v150-item3">Ignored internal model_editable_context messages.</li>
+            <li id="changelog-v150-item4">Adapted existing conversation capture to the new paginated schema.</li>
+            <li id="changelog-v150-item5">Added real download confirmation using chrome.downloads.onChanged.</li>
+            <li id="changelog-v150-item6">Added notifications when a download finishes.</li>
+            <li id="changelog-v150-item7">Added update notification banner in the popup.</li>
+            <li id="changelog-v150-item8">Added progress feedback during export.</li>
+            <li id="changelog-v150-item9">Modularized extension scripts by responsibility.</li>
+            <li id="changelog-v150-item10">Updated extension build with esbuild for inject, content, and background.</li>
+          </ul>
+        </section>
 
         <section id="v1.4.2">
           <header class="section-heading">

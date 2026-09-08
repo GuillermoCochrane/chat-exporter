@@ -1,5 +1,9 @@
 export const CHANGELOGTRANSLATIONS = {
   // Changelog navbar
+  "anchor-v150": {
+    en: "v1.5.0 — New conversation capture & UX",
+    es: "v1.5.0 — Captura de conversaciones nuevas y UX",
+  },
   "anchor-v142": {
     en: "v1.4.2 — Popup refactor & fix",
     es: "v1.4.2 — Refactor y corrección del popup",
@@ -37,6 +41,51 @@ export const CHANGELOGTRANSLATIONS = {
     es: "Versiones anteriores",
   },
 
+  // v1.5.0
+  "changelog-v150-title": {
+    en: " — New conversation capture & UX improvements",
+    es: " — Captura de conversaciones nuevas y mejoras de UX",
+  },
+  "changelog-v150-item1": {
+    en: "Added capture for new ChatGPT conversations using SSE streaming.",
+    es: "Se agregó captura de conversaciones nuevas de ChatGPT mediante streaming SSE.",
+  },
+  "changelog-v150-item2": {
+    en: "Reconstructed user and assistant messages from stream deltas.",
+    es: "Se reconstruyeron mensajes de usuario y asistente a partir de los deltas del stream.",
+  },
+  "changelog-v150-item3": {
+    en: "Ignored internal model_editable_context messages.",
+    es: "Se ignoraron mensajes internos model_editable_context.",
+  },
+  "changelog-v150-item4": {
+    en: "Adapted existing conversation capture to the new paginated schema.",
+    es: "Se adaptó la captura de conversaciones existentes al nuevo esquema paginado.",
+  },
+  "changelog-v150-item5": {
+    en: "Added real download confirmation using chrome.downloads.onChanged.",
+    es: "Se agregó confirmación real de descarga usando chrome.downloads.onChanged.",
+  },
+  "changelog-v150-item6": {
+    en: "Added notifications when a download finishes.",
+    es: "Se agregaron notificaciones al finalizar una descarga.",
+  },
+  "changelog-v150-item7": {
+    en: "Added update notification banner in the popup.",
+    es: "Se agregó un banner de notificación de actualización en el popup.",
+  },
+  "changelog-v150-item8": {
+    en: "Added progress feedback during export.",
+    es: "Se agregó feedback de progreso durante la exportación.",
+  },
+  "changelog-v150-item9": {
+    en: "Modularized extension scripts by responsibility.",
+    es: "Se modularizaron los scripts de la extensión por responsabilidad.",
+  },
+  "changelog-v150-item10": {
+    en: "Updated extension build with esbuild for inject, content, and background.",
+    es: "Se actualizó el build de la extensión con esbuild para inject, content y background.",
+  },
 
   // v1.4.2
   "changelog-v142-title": {
