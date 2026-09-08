@@ -74,6 +74,13 @@
         <span id="compactLabel">Modo compacto</span>
       </label>
     </div>
+    <section id="updateBanner" hidden>
+      <article>
+        <h3 id="updateAvailable"></h3>
+        <a id="updateLink" href="#" target="_blank" rel="noopener"></a>
+      </article>
+      <button id="updateDismiss" type="button">✕</button>
+    </section>
     <button id="exportBtn">Exportar</button>
 
     <!-- Advertencia de conversación posiblemente incompleta -->
@@ -96,8 +103,24 @@
   </footer>
 
   <aside class="version">
-    <span id="versionText"></span>
-    <a id="faqLink" href="https://guillermocochrane.github.io/chat-exporter/pages/faq/#troubleshooting" target="_blank" rel="noopener" title="Help">?</a>
+    <a 
+      id="versionText"
+      href="https://guillermocochrane.github.io/chat-exporter/pages/changelog/"
+      target="_blank" 
+      rel="noopener"
+      title="changelog"
+      >
+        X.X.X
+    </a>
+    <a 
+      id="faqLink" 
+      href="https://guillermocochrane.github.io/chat-exporter/pages/faq/#troubleshooting" 
+      target="_blank" 
+      rel="noopener" 
+      title="Help"
+      >
+        ?
+    </a>
   </aside>
 </body>
 </html>

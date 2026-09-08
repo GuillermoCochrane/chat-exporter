@@ -3,6 +3,7 @@ import { languageHandler } from './languages/languageHandler.js';
 import { exportHandler } from './export/exportHandler.js';
 import { formatHandler } from './export/formatHandler.js';
 import { versionHandler } from './versionHandler.js';
+import { updateNotificationHandler } from './updateNotification.js';
 
 // Inicializamos el handler de versión
 versionHandler();
@@ -15,3 +16,6 @@ languageHandler(TRANSLATIONS);
 
 // Inicializamos el handler de exportación
 exportHandler();
+
+// Inicializamos el handler de notificación de actualizaciones.
+updateNotificationHandler();

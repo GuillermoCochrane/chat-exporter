@@ -83,4 +83,12 @@ export const TRANSLATIONS = {
     es: "Ayuda",
     en: "Help",
   },
+  updateAvailable: {
+    es: "¡Nueva versión disponible!",
+    en: "New version available!",
+  },
+  updateLink: {
+    es: "Ver los cambios",
+    en: "See changes",
+  },
 };
