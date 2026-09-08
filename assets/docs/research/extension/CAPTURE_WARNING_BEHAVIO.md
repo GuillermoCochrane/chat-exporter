@@ -22,19 +22,19 @@ la extensión recorre todas las páginas disponibles antes de exportar.
 La recolección activa captura la conversación completa sin necesidad de
 recargar la página.
 
-Estado: ✅ Confirmada parcialmente
+**Estado**: ✅ Confirmada parcialmente
 
 ### H2
 La advertencia de recarga sigue apareciendo siempre, incluso cuando la
 recolección fue completa, porque el popup no recibe un flag que lo indique.
 
-Estado: ✅ Confirmada
+**Estado**: ✅ Confirmada, pero la advertencia fue deshabilitada temporalmente.
 
 ### H3
 El comportamiento de la advertencia debe cambiar para adaptarse al nuevo
 flujo de recolección.
 
-Estado: ✅ Confirmada como conclusión preliminar
+**Estado**: ✅ Resuelta mediante desactivación temporal; la lógica queda latente.
 
 ## Escenarios de prueba
 
@@ -140,14 +140,14 @@ Este flujo no pasa por `/backend-api/conversations/{id}`.
 Se probó en consola un lector del stream `POST /backend-api/f/conversation`
 mediante `response.clone().body.getReader()`.
 
-Resultados:
+**Resultados**:
 
 - Se detectó `conversation_id` temprano.
 - Se detectaron `input_message` de usuario.
 - Se identificó el mensaje del asistente con `content_type: "text"`.
 - Se acumularon los deltas `json.v` string.
 
-Conclusión:
+**Conclusión**:
 
 - Es viable reconstruir la conversación nueva desde el SSE.
 
@@ -155,7 +155,7 @@ Conclusión:
 
 Se creó `modules/inject/streamCapture.js`.
 
-Resultados:
+**Resultados**:
 
 - Captura una página por turno.
 - Guarda `user` y `assistant` con estructura compatible.
@@ -164,7 +164,7 @@ Resultados:
 - Maneja deltas simples, con ruta y parches arrays.
 - Inserta cada página al inicio del array para respetar el contrato del parser.
 
-Conclusión:
+**Conclusión**:
 
 - La captura de conversaciones nuevas queda funcional.
 
@@ -172,13 +172,13 @@ Conclusión:
 
 Se exportó una conversación nueva capturada por SSE.
 
-Resultado:
+**Resultado**:
 
 - El Markdown incluyó correctamente los mensajes de usuario y asistente.
 - El orden fue el esperado.
 - Se validó con múltiples turnos dentro de la misma conversación nueva.
 
-Conclusión:
+**Conclusión**:
 
 - El flujo completo funciona: SSE → pipeline → Markdown.
 
@@ -187,14 +187,14 @@ Conclusión:
 Se probó una conversación con múltiples páginas históricas, seguida de
 recarga y nuevos mensajes capturados por SSE.
 
-Resultado:
+**Resultado**:
 
 - El Markdown incluyó la conversación completa.
 - El orden cronológico fue correcto.
 - No se detectaron duplicados ni cortes.
 - El flujo combinado paginación + SSE funcionó correctamente.
 
-Conclusión:
+**Conclusión**:
 
 - La extensión maneja correctamente los tres escenarios:
   1. conversación existente con paginación;
@@ -213,9 +213,27 @@ Conclusión:
 - Se agregó notificación al usuario mediante `chrome.notifications`.
 - Nuevo permiso: `"notifications"`.
 
-Resultado:
+**Resultado**:
 
 - El popup ya no miente sobre el estado de la descarga.
 - El usuario recibe una notificación aunque el popup se haya cerrado.
+
+### U-002 — Desactivación temporal de la advertencia de recarga
+
+- Se deshabilitó la advertencia de recarga.
+- El flujo actual de captura activa (scroll + SSE) cubre los casos que antes requerían advertencia.
+- La lógica se conservó comentada en `exportHandler.js` para futuros proveedores.
+
+### U-003 — Notificación de actualizaciones
+
+- Se creó `updateNotification.js`.
+- Al abrir el popup, se compara la versión actual con `lastSeenVersion`.
+- Si es nueva, se muestra un banner temporal con enlace al changelog.
+- Se corrigieron rutas de import para que el módulo cargara correctamente.
+
+### U-004 — Limpieza de logs temporales
+
+- Se eliminaron logs de depuración de `popup.js`, `updateNotification.js` y `versionHandler.js`.
+- Solo se conservan los logs propios de la CLI en `exporter.js` y `cli.js`.
 
 ---
