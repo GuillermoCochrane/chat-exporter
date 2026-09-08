@@ -8,6 +8,8 @@ Actualmente permite procesar conversaciones exportadas desde ChatGPT a partir de
 
 El proyecto ofrece dos interfaces que comparten el mismo motor: una CLI para procesar archivos JSON locales y una extensión de Chrome que captura y exporta conversaciones directamente desde el navegador.
 
+La extensión es capaz de capturar tanto conversaciones existentes como conversaciones nuevas, utilizando paginación y streaming SSE.
+
 Aunque hoy el proyecto soporta ChatGPT y Markdown, su arquitectura fue diseñada para crecer hacia nuevos asistentes, nuevos formatos de exportación y futuras integraciones sin reescribir el núcleo de la aplicación.
 
 ---
@@ -45,10 +47,11 @@ Aunque hoy el proyecto soporta ChatGPT y Markdown, su arquitectura fue diseñada
 
 # Estado
 
-- ✅ Versión estable 1.3.0
+- ✅ Versión estable 1.5.0
 - ✅ CLI funcional
 - ✅ Extensión de Chrome integrada
 - ✅ Soporte para ChatGPT
+- ✅ Captura de conversaciones existentes y nuevas
 - ✅ Exportación a Markdown
 - ✅ Suite de pruebas automatizadas
 
@@ -63,7 +66,13 @@ Aunque hoy el proyecto soporta ChatGPT y Markdown, su arquitectura fue diseñada
 - Extensión de Chrome con popup interactivo:
   - Selector de formato (Markdown / JSON).
   - Modo compacto y filtro de roles (todos / usuario / asistente).
+  - Feedback de progreso durante la exportación.
+  - Confirmación real de descarga.
+  - Notificación al finalizar la descarga.
+  - Aviso de actualización.
   - Diseño cyberpunk con indicador de progreso y mensajes de estado.
+- Captura de conversaciones existentes mediante paginación.
+- Captura de conversaciones nuevas mediante streaming SSE.
 - Build automatizado de la extensión con esbuild.
 - Empaquetado en ZIP listo para distribución.
 - Suite de pruebas automatizadas por módulo.
@@ -93,7 +102,7 @@ El proyecto solo requiere `esbuild` como dependencia de desarrollo para construi
 
 # Extensión de Chrome
 
-La extensión captura automáticamente el JSON de cualquier conversación de ChatGPT y la exporta a Markdown o JSON utilizando el mismo pipeline que la CLI.
+La extensión captura automáticamente la conversación de ChatGPT y la exporta a Markdown o JSON utilizando el mismo pipeline que la CLI.
 
 ## Build
 
@@ -212,6 +221,8 @@ Actualmente existen pruebas automatizadas para:
 - Markdown (modo compacto)
 - JsonFileSource
 - Writer
+- Inspector
+- Sorter
 
 ---
 
@@ -290,15 +301,28 @@ src/
 │       ├── inject.js
 │       ├── manifest.json
 │       ├── popup.html
-│       ├── popup.js
+│       ├── js/
+│       │   ├── popup.js
+│       │   ├── updateNotification.js
+│       │   └── ...
+│       ├── modules/
+│       │   ├── constants.js
+│       │   ├── postMessage.js
+│       │   ├── inject/
+│       │   │   ├── capture.js
+│       │   │   ├── messaging.js
+│       │   │   ├── scroll.js
+│       │   │   ├── state.js
+│       │   │   └── streamCapture.js
+│       │   └── background/
+│       │       ├── download.js
+│       │       ├── exportHandlers.js
+│       │       ├── messageHandlers.js
+│       │       ├── notifications.js
+│       │       └── progress.js
 │       └── styles/
 │           ├── popup.css
-│           ├── variables.css
-│           ├── base.css
-│           ├── selector.css
-│           ├── options.css
-│           ├── button.css
-│           └── footer.css
+│           └── ...
 └── utilities/
     ├── formatter.js
     └── validator.js
@@ -327,7 +351,7 @@ La documentación está organizada por responsabilidad.
 |-----------|-----------|
 | [ROADMAP](docs/extension/ROADMAP.md) | Estado y fases de la extensión. |
 | [ARCHITECTURE](docs/extension/ARCHITECTURE.md) | Diseño interno de la extensión. |
-| [CAPTURE_RESEARCH](docs/extension/CAPTURE_RESEARCH.md) | Investigación sobre la captura del JSON. |
+| [CAPTURE_RESEARCH](docs/extension/CAPTURE_RESEARCH.md) | Investigación sobre la captura del JSON y SSE. |
 
 ---
 
