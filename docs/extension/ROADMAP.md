@@ -22,6 +22,8 @@ El objetivo final es ofrecer una herramienta completa de exportación, con sopor
 - ✅ Captura de conversaciones nuevas mediante SSE
 - ✅ Confirmación real de descarga
 - ✅ Notificación de actualizaciones
+- ✅ Detección automática de proveedor
+- ✅ Nombres de archivo descriptivos
 - 🚧 Publicación
 
 ---
@@ -44,6 +46,7 @@ Implementar un capturador estable de conversaciones de ChatGPT.
 - ✅ Captura de conversaciones existentes paginadas.
 - ✅ Captura de conversaciones nuevas mediante stream SSE.
 - ✅ Integración de ambos flujos en el mismo estado.
+- ✅ Detección del proveedor mediante URL.
 - ✅ Confirmación de que el JSON/SSE se puede transformar en el modelo del pipeline.
 
 ### Resultado
@@ -68,12 +71,17 @@ La conversación capturada permanece en memoria dentro del contexto de la págin
 
 Si el Service Worker se reinicia y pierde la conversación, la extensión puede recuperarla desde la página mediante el content script.
 
+Además, se guarda el título de la conversación cuando está disponible, tanto desde páginas paginadas como desde el stream SSE.
+
+El proveedor se detecta automáticamente y se utiliza para construir nombres de archivo descriptivos.
+
 ### Motivos
 
 - Evita serialización innecesaria.
 - Evita duplicación de memoria.
 - Desacopla completamente la captura de la exportación.
 - Simplifica la arquitectura.
+- Mejora la organización de los archivos descargados.
 
 ---
 
@@ -170,6 +178,8 @@ Construir la interfaz definitiva de la extensión.
 - ✅ Confirmación real de descarga
 - ✅ Notificación al finalizar la descarga
 - ✅ Aviso de actualización
+- ✅ Detección dinámica de proveedor
+- ✅ Nombres de archivo descriptivos
 
 ### Pendiente
 
@@ -225,3 +235,5 @@ Preparar la extensión para distribución.
 - Exportación por conversación.
 - Exportación por lote.
 - Sincronización incremental.
+
+---

@@ -32,11 +32,9 @@ Todos esos componentes pertenecen al núcleo de AI Chat Exporter y quedan fuera 
 
 ## Estado
 
-Investigación finalizada.
+Investigación finalizada y actualizada tras el cambio de API de ChatGPT.
 
-Se confirmó que la captura automática del JSON completo es técnicamente viable y compatible con la arquitectura existente del proyecto.
-
-A partir de este punto el desarrollo deja de ser una investigación y pasa a la etapa de construcción del producto.
+Se confirmó que la captura automática es técnicamente viable y compatible con la arquitectura existente del proyecto.
 
 ---
 
@@ -89,27 +87,6 @@ Estas incógnitas definieron las primeras hipótesis de trabajo.
 
 ---
 
-# Estado inicial
-
-Antes de comenzar la investigación se conocían los siguientes hechos:
-
-- ChatGPT reconstruía correctamente conversaciones muy extensas.
-- DevTools permitía descargar un archivo `conversation.json`.
-- El pipeline existente ya era capaz de interpretar dicho archivo.
-
-Lo desconocido era:
-
-- de dónde provenía exactamente ese JSON;
-- cuándo era generado;
-- si podía solicitarse nuevamente;
-- si existía alguna API pública;
-- si React conservaba el árbol completo;
-- si era posible interceptarlo automáticamente.
-
-Estas incógnitas definieron las primeras hipótesis de trabajo.
-
----
-
 # Hipótesis
 
 | ID | Hipótesis | Estado |
@@ -122,6 +99,8 @@ Estas incógnitas definieron las primeras hipótesis de trabajo.
 | H-006 | Un Content Script puede interceptar el `window.fetch()` utilizado por la página. | ❌ Refutada |
 | H-007 | Un script inyectado puede interceptar el `window.fetch()` real de ChatGPT. | ✅ Confirmada |
 | H-008 | El JSON puede capturarse antes de que la aplicación lo procese. | ✅ Confirmada |
+| H-009 | Las conversaciones nuevas viajan por un flujo SSE. | ✅ Confirmada |
+| H-010 | La captura combinada paginación + SSE cubre todos los escenarios de ChatGPT. | ✅ Confirmada |
 
 ---
 
@@ -271,6 +250,54 @@ La captura automática es compatible con la arquitectura existente del proyecto.
 
 ---
 
+## E-009 — Captura de conversaciones existentes paginadas
+
+**Objetivo**
+
+Restaurar la captura de conversaciones existentes después del cambio a paginación.
+
+**Resultado**
+
+Se implementó scroll automático y se capturaron todas las páginas.
+
+**Conclusión**
+
+La estrategia funciona sin reproducir peticiones manualmente.
+
+---
+
+## E-010 — Captura de conversaciones nuevas con SSE
+
+**Objetivo**
+
+Capturar conversaciones nuevas que no pasan por el endpoint paginado.
+
+**Resultado**
+
+Se leyó el stream SSE y se reconstruyeron los mensajes de usuario y asistente.
+
+**Conclusión**
+
+La estrategia SSE complementa la captura paginada.
+
+---
+
+## E-011 — Captura combinada en escenarios reales
+
+**Objetivo**
+
+Validar la extensión en conversaciones existentes, nuevas, recargadas y con múltiples páginas.
+
+**Resultado**
+
+La exportación Markdown fue correcta en todos los escenarios.
+
+**Conclusión**
+
+La estrategia combinada es robusta.
+
+---
+
 # Problemas encontrados
 
 ## P-001 — Múltiples respuestas bajo el mismo endpoint
@@ -344,6 +371,28 @@ desde ese contexto no afecta al `fetch` utilizado por ChatGPT.
 ### Resolución
 
 Inyectar un script directamente en el contexto de la página.
+
+---
+
+## P-005 — Timeout fijo en content script
+
+Un timeout fijo de 60 segundos para recuperar la conversación completa cortaba las recolecciones largas.
+
+### Resolución
+
+Eliminar el timeout fijo y delegar el control de inactividad al popup.
+
+---
+
+## P-006 — Captura de stream SSE con deltas incompletos
+
+Los deltas del SSE pueden venir como strings, objetos con ruta o arrays de patches.
+
+Si no se procesan todos, el mensaje del asistente queda incompleto.
+
+### Resolución
+
+Implementar un acumulador que maneje los tres formatos.
 
 ---
 
@@ -478,6 +527,18 @@ El parser existente pudo reutilizarse sin modificaciones.
 
 ---
 
+## DISC-005 — Las conversaciones nuevas no usan paginación
+
+Las conversaciones nuevas llegan por SSE, no por el endpoint paginado.
+
+---
+
+## DISC-006 — El proveedor puede detectarse por URL
+
+La URL actual permite detectar el proveedor sin permisos adicionales.
+
+---
+
 # Cambios de estrategia
 
 ## S-001
@@ -549,6 +610,20 @@ Manifest V3 no soporta `URL.createObjectURL()` dentro del Service Worker.
 
 ---
 
+## S-005
+
+### Antes
+
+Asumir que toda conversación llegaba en un único JSON con `mapping`.
+
+### Después
+
+Diferenciar captura paginada de captura SSE.
+
+### Motivo
+
+La API de ChatGPT separó ambos flujos.
+
 ---
 
 # Arquitectura final
@@ -569,8 +644,14 @@ Inject Script
     │
 Intercepta window.fetch()
     │
+    ├── Captura paginada
+    │        └── Scroll automático
+    │
+    └── Captura SSE
+             └── Reconstrucción de turnos
+    │
     ▼
-JSON completo
+Conversación cruda
     │
     ▼
 Content Script
@@ -587,24 +668,29 @@ AI Chat Exporter Core
 ### Inject Script
 
 - interceptar `window.fetch()`;
-- identificar la respuesta correcta;
-- conservar únicamente la conversación válida.
+- identificar el flujo (paginado o SSE);
+- capturar páginas paginadas;
+- leer streams SSE;
+- reconstruir turnos;
+- conservar la conversación en estado interno.
 
 ### Content Script
 
 - inyectar el capturador;
-- actuar como puente entre ambos contextos.
+- actuar como puente entre ambos contextos;
+- reenviar mensajes y progreso.
 
 ### Background
 
 - coordinar la extensión;
 - iniciar la captura;
-- descargar el JSON.
+- descargar el JSON o Markdown;
+- notificar al usuario.
 
 ### AI Chat Exporter Core
 
-- interpretar el árbol;
-- normalizar la conversación;
+- interpretar la conversación;
+- normalizar los mensajes;
 - generar Markdown;
 - producir los formatos de salida.
 
@@ -620,11 +706,12 @@ AI Chat Exporter Core
 | React Router | ❌ |
 | React Query | ❌ |
 | Response.prototype.json() | ❌ |
-| ReadableStream | ❌ |
+| ReadableStream | ✅ |
 | Content Script | ⚠️ Parcial |
 | Script inyectado | ✅ |
 | window.fetch() | ✅ |
 | chrome.downloads | ✅ |
+| chrome.notifications | ✅ |
 | Data URL | ✅ |
 
 ---
@@ -639,19 +726,16 @@ AI Chat Exporter Core
 - descargar mediante Blob y `URL.createObjectURL()`;
 - utilizar `chrome.downloads` desde el Content Script.
 
-Todas estas alternativas fueron sustituidas por una arquitectura basada en un script inyectado que intercepta `window.fetch()` y comunica el resultado mediante mensajes entre contextos.
+Todas estas alternativas fueron sustituidas por una arquitectura basada en un script inyectado que intercepta `window.fetch()` y comunica el resultado mediante mensajes entre contextos, combinando captura paginada y captura SSE.
 
 ---
 
 # Pendientes
 
-- eliminar los mensajes de depuración;
-- implementar el popup de la extensión;
-- integrar la exportación directa a Markdown;
-- incorporar nuevos formatos de salida;
-- realizar pruebas con conversaciones muy grandes;
 - validar conversaciones con ramas y regeneraciones;
-- preparar el empaquetado para publicación.
+- evaluar captura incremental más avanzada;
+- preparar materiales para futuras publicaciones;
+- analizar integración con otros proveedores.
 
 ---
 
@@ -669,90 +753,30 @@ Todas estas alternativas fueron sustituidas por una arquitectura basada en un sc
 10. Implementación del flujo Background → Content → Inject.
 11. Resolución de las limitaciones de descarga mediante Data URLs.
 12. Validación completa utilizando el pipeline existente de AI Chat Exporter.
+13. Migración a captura paginada tras cambio de API.
+14. Detección del flujo SSE para conversaciones nuevas.
+15. Integración de captura combinada y validación final.
 
 ---
 
 # Conclusiones
 
-La investigación permitió demostrar que la captura automática del árbol completo de conversaciones de ChatGPT es técnicamente viable sin depender de DevTools.
+La investigación permitió demostrar que la captura automática de conversaciones de ChatGPT es técnicamente viable sin depender de DevTools.
 
-El principal obstáculo no fue interpretar el JSON, sino descubrir el momento exacto en que debía capturarse y comprender las restricciones impuestas por Manifest V3.
+La estrategia original se basó en interceptar `window.fetch()` para capturar el JSON con `mapping`.
 
-La solución adoptada consiste en interceptar `window.fetch()` desde un script inyectado, identificar la respuesta que contiene la propiedad `mapping` y transferir el objeto completo al resto de la extensión mediante un canal de comunicación desacoplado.
+Tras el cambio de API, la captura se amplió para soportar:
 
-El JSON obtenido resultó ser completamente compatible con el pipeline existente de AI Chat Exporter, lo que permitió reutilizar el parser y el resto del motor sin modificaciones.
+- conversaciones existentes mediante paginación;
+- conversaciones nuevas y mensajes en tiempo real mediante SSE.
 
-Con la investigación concluida, el proyecto deja de centrarse en demostrar la viabilidad técnica de la captura y pasa a enfocarse en el desarrollo del producto: integración, experiencia de usuario y publicación de la extensión.
+El pipeline existente pudo reutilizarse sin modificaciones.
+
+Con esta actualización, la extensión cubre los escenarios principales de uso real.
 
 ---
 
-## Actualización: captura de conversaciones nuevas y mensajes en tiempo real
-
-### Contexto
-
-La investigación original concluyó que la captura automática era viable interceptando el JSON con `mapping` durante la carga inicial.
-
-Sin embargo, una actualización de la API de ChatGPT modificó parcialmente ese comportamiento:
-
-- Las conversaciones existentes ahora se entregan mediante paginación (`messages[]` y `page_info`).
-- Las conversaciones nuevas y los mensajes en tiempo real ya no pasan por el endpoint paginado, sino por un flujo SSE.
-
-Este cambio obligó a extender la estrategia de captura sin reemplazar la anterior.
-
-### Descubrimiento del flujo SSE
-
-Se identificó el siguiente flujo para conversaciones nuevas:
-
-```text
-POST /backend-api/f/conversation/prepare
-   ↓
-JSON { status: "ok", conduit_token }
-   ↓
-POST /backend-api/f/conversation
-   ↓
-SSE text/event-stream
-   ↓
-data: { type: "resume_conversation_token", conversation_id, ... }
-data: { type: "input_message", ... }
-event: delta → fragmentos append
-data: [DONE]
-```
-
-La respuesta es un stream de eventos (`text/event-stream`), no un JSON directo.
-
-### Estrategia adoptada
-
-Se combinaron dos mecanismos:
-
-1. **Captura de conversaciones existentes**
-
-   - Interceptar `GET /backend-api/conversations/{id}`.
-   - Recorrer la paginación mediante scroll automático.
-   - Invertir el orden de páginas para respetar el contrato del parser.
-   - Corregir el orden con `parent_id` cuando sea necesario.
-
-2. **Captura de conversaciones nuevas**
-
-   - Interceptar `POST /backend-api/f/conversation`.
-   - Leer el stream con `ReadableStream`.
-   - Reconstruir los mensajes `user` y `assistant`.
-   - Ignorar mensajes internos como `model_editable_context`.
-   - Guardar cada turno como una página dentro del estado de la extensión.
-
-### Resultado
-
-La estrategia combinada fue validada con:
-
-- conversaciones existentes con múltiples páginas;
-- conversaciones nuevas desde cero;
-- recarga de conversación + mensajes nuevos;
-- conversaciones largas de más de 180 páginas.
-
-En todos los casos se obtuvo una exportación Markdown completa y en orden cronológico.
-
-### Referencias
-
-### Referencias
+## Referencias
 
 - [Bitácora de depuración: CAPTURE_PAGINATION_DEBUG](../../assets/docs/research/extension/CAPTURE_PAGINATION_DEBUG.md)
 - [Evaluación de advertencia: CAPTURE_WARNING_BEHAVIOR](../../assets/docs/research/extension/CAPTURE_WARNING_BEHAVIOR.md)

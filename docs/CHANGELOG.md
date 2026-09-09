@@ -4,6 +4,26 @@ Este documento resume la evolución del proyecto versión por versión y registr
 
 ---
 
+# v1.5.1 — Detección dinámica de proveedor y nombres descriptivos de descarga
+
+* Se agrega detección automática del proveedor por URL:
+  - Se crea `modules/providers.js` con un registro declarativo de dominios.
+  - Se soportan ChatGPT, DeepSeek y Gemini.
+* Se extrae la obtención del proveedor a `modules/background/providerService.js`:
+  - El background consulta al content script de la pestaña activa.
+  - El content script detecta el dominio actual usando `providers.js`.
+* Se muestra el proveedor dinámico en el encabezado del popup:
+  - Se crea `js/providerHandler.js`.
+  - El popup actualiza el texto según el proveedor detectado.
+* Se utiliza el título de la conversación y el proveedor para el nombre del archivo descargado:
+  - Se agrega `modules/background/filename.js`.
+  - Se sanitiza el título.
+  - El nombre sugerido sigue el formato `Titulo_Proveedor.ext`.
+  - Se captura el título tanto de conversaciones paginadas como del stream SSE.
+* Se actualiza el build para incluir los nuevos módulos.
+
+---
+
 # v1.5.0 — Captura de conversaciones nuevas y mejoras de UX
 
 * Se agrega captura de conversaciones nuevas de ChatGPT mediante el stream SSE:

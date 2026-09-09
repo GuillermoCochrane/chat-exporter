@@ -99,6 +99,7 @@ La arquitectura busca que el núcleo del motor permanezca completamente independ
 │   │       ├── popup.html
 │   │       ├── js/
 │   │       │   ├── popup.js
+│   │       │   ├── providerHandler.js
 │   │       │   ├── updateNotification.js
 │   │       │   ├── versionHandler.js
 │   │       │   ├── export/
@@ -115,6 +116,7 @@ La arquitectura busca que el núcleo del motor permanezca completamente independ
 │   │       ├── modules/
 │   │       │   ├── constants.js
 │   │       │   ├── postMessage.js
+│   │       │   ├── providers.js
 │   │       │   ├── inject/
 │   │       │   │   ├── capture.js
 │   │       │   │   ├── messaging.js
@@ -124,9 +126,11 @@ La arquitectura busca que el núcleo del motor permanezca completamente independ
 │   │       │   └── background/
 │   │       │       ├── download.js
 │   │       │       ├── exportHandlers.js
+│   │       │       ├── filename.js
 │   │       │       ├── messageHandlers.js
 │   │       │       ├── notifications.js
-│   │       │       └── progress.js
+│   │       │       ├── progress.js
+│   │       │       └── providerService.js
 │   │       ├── styles/
 │   │       │   ├── popup.css
 │   │       │   ├── variables.css
@@ -568,6 +572,7 @@ Actúa como puente entre la página y la extensión.
 - Escucha mensajes `CONVERSATION`, `PROGRESS`.
 - Reenvía al background.
 - Atiende solicitudes de recuperación desde background.
+- Responde `GET_PROVIDER` usando `detectProvider(hostname)`.
 
 No procesa datos.
 
@@ -577,6 +582,7 @@ Orquesta la extensión.
 
 - Recibe conversación capturada.
 - Atiende `EXPORT`.
+- Expone `GET_PROVIDER` para el popup.
 - Construye configuración del pipeline.
 - Invoca al Core si es Markdown.
 - Descarga archivos y notifica resultado.
@@ -585,9 +591,11 @@ Se apoya en los módulos:
 
 - `download.js`
 - `exportHandlers.js`
+- `filename.js`
 - `messageHandlers.js`
 - `notifications.js`
 - `progress.js`
+- `providerService.js`
 
 ### popup.html / js/ / styles/
 
@@ -596,7 +604,7 @@ Interfaz de usuario de la extensión con estética cyberpunk y sistema multi‑i
 `popup.html` define el layout con:
 
 - Toggle de idioma.
-- Encabezado contextual.
+- Encabezado contextual dinámico.
 - Selector de formato.
 - Opciones de Markdown.
 - Botón Exportar.
@@ -606,6 +614,7 @@ Interfaz de usuario de la extensión con estética cyberpunk y sistema multi‑i
 Los scripts están organizados en `js/`:
 
 - `popup.js`: orquestador principal.
+- `providerHandler.js`: actualiza el proveedor dinámico.
 - `updateNotification.js`: aviso de actualización.
 - `versionHandler.js`: versión dinámica.
 - `export/exportHandler.js`: flujo de exportación.
@@ -683,6 +692,8 @@ El build con esbuild empaqueta:
 - `inject.js` → `inject.js`
 - `content.js` → `content.js`
 - `background.js` → `background.js`
+
+Incluye además los módulos de la extensión y los handlers del popup.
 
 La web documenta y presenta el proyecto al público, reutilizando los mismos principios y estética visual.
 

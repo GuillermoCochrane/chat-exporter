@@ -1360,6 +1360,75 @@ La UX se simplificó sin eliminar la posibilidad de reintroducir la advertencia.
 
 ---
 
+### E-056
+
+#### Objetivo
+
+Detectar el proveedor activo a partir de la URL de la página.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se creó `modules/providers.js` con un registro declarativo.
+- Se soportaron inicialmente `chatgpt.com`, `deepseek.com` y `gemini.google.com`.
+- La detección se realiza mediante `window.location.hostname`.
+
+#### Conclusión
+
+El proveedor puede determinarse sin modificar el Core ni agregar permisos.
+
+---
+
+### E-057
+
+#### Objetivo
+
+Mostrar el proveedor detectado en el encabezado del popup.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se creó `js/providerHandler.js`.
+- El popup solicita el proveedor mediante `GET_PROVIDER`.
+- El background consulta al content script de la pestaña activa.
+- El content script responde usando `detectProvider(hostname)`.
+- Se extrajo la lógica del background a `modules/background/providerService.js`.
+
+#### Conclusión
+
+El encabezado del popup refleja dinámicamente el proveedor actual.
+
+---
+
+### E-058
+
+#### Objetivo
+
+Usar título y proveedor para el nombre del archivo descargado.
+
+#### Resultado
+
+✔ Confirmado.
+
+#### Observaciones
+
+- Se creó `modules/background/filename.js`.
+- Se sanitiza el título normalizando y reemplazando espacios por `_`.
+- Se captura el título tanto de conversaciones paginadas como del stream SSE.
+- El nombre final sigue el formato `Titulo_Proveedor.ext`.
+
+#### Conclusión
+
+La descarga sugiere un nombre descriptivo y seguro, mejorando la organización del usuario.
+
+---
+
 ## Descubrimientos
 
 ### Desarrollo
@@ -1418,6 +1487,11 @@ La UX se simplificó sin eliminar la posibilidad de reintroducir la advertencia.
 - Las rutas de import en módulos de extensión deben ser coherentes con la ubicación real del archivo.
 - La advertencia de recarga puede quedar latente y reactivarse para proveedores con captura parcial.
 - La captura combinada paginación + SSE cubre escenarios de conversaciones existentes y nuevas.
+- La detección de proveedor por URL es suficiente para los casos actuales y evita permisos adicionales.
+- El proveedor puede mostrarse en el popup coordinando popup → background → content.
+- El título de la conversación puede recuperarse tanto de páginas paginadas como del stream SSE.
+- Sanitizar nombres de archivo con `_` mejora la legibilidad y evita caracteres inválidos.
+- Separar la obtención del proveedor en un servicio encapsula la lógica de mensajería.
 
 ### Pre Release
 

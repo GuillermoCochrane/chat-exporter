@@ -10,7 +10,7 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 
 ## Versión
 
-**1.5.0 (Development)**
+**1.5.1 (Development)**
 
 ## Estado general
 
@@ -37,6 +37,9 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Captura de conversaciones nuevas vía SSE
 - [x] Confirmación real de descarga
 - [x] Notificación de actualizaciones
+- [x] Detección automática del proveedor por URL
+- [x] Proveedor dinámico en encabezado del popup
+- [x] Nombre de archivo descriptivo (título + proveedor)
 - [x] Web (GitHub Pages)
 - [ ] REST API
 
@@ -89,6 +92,9 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] ExtensionSource
 - [x] Build de extensión con esbuild
 - [x] Modularización de `inject` y `background`
+- [x] Módulo declarativo de proveedores (`providers.js`)
+- [x] Servicio de proveedor en background (`providerService.js`)
+- [x] Helper de nombres de archivo (`filename.js`)
 - [x] Captura de streams SSE sin acoplar al Core
 
 ### Extensión — UX
@@ -103,6 +109,8 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Confirmación real de descarga
 - [x] Notificación de descarga finalizada
 - [x] Aviso de actualización
+- [x] Proveedor dinámico en encabezado
+- [x] Nombre de archivo sugerido con título y proveedor
 - [x] Sistema multi‑idioma (español / inglés) con toggle visual
 - [x] Popup refactorizado en handlers modulares
 
@@ -121,8 +129,9 @@ Convertir conversaciones exportadas desde plataformas de inteligencia artificial
 - [x] Captura de conversaciones nuevas vía SSE.
 - [x] Captura de mensajes nuevos en conversaciones activas.
 - [x] Captura de conversaciones nuevas desde cero.
+- [x] Advertencia de recarga desactivada temporalmente para el flujo actual.
+- [ ] Evaluar reactivación de advertencia para futuros proveedores.
 - [ ] Explorar captura incremental más avanzada (investigación futura, no prioritaria).
-- [ ] Advertencia de recarga latente: evaluar si se reutiliza para otros proveedores.
 
 ---
 

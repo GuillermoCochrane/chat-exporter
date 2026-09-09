@@ -89,6 +89,7 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 │ • Reenvía CONVERSATION                │
 │   al background como DOWNLOAD_JSON    │
 │ • Reenvía PROGRESS                    │
+│ • Responde GET_PROVIDER               │
 │ • Atiende solicitudes de              │
 │   recuperación desde background       │
 └───────────────────────────────────────┘
@@ -103,7 +104,9 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 │                                       │
 │ • Almacena la última conversación     │
 │ • Responde al popup                   │
+│ • Expone GET_PROVIDER                 │
 │ • Ejecuta exportHandlers              │
+│ • Construye nombres de archivo        │
 │ • Espera confirmación de descarga     │
 │ • Envía notificaciones                │
 │ • Invoca al Core si es Markdown       │
@@ -123,7 +126,7 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 │ • Modo compacto (switch)              │
 │ • Filtro de roles (radio buttons)     │
 │ • Opciones MD se ocultan en JSON      │
-│ • Encabezado contextual               │
+│ • Encabezado contextual dinámico      │
 │ • Spinner de progreso                 │
 │ • Aviso de actualización              │
 │ • Footer con versión dinámica         │
@@ -179,6 +182,7 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 - actuar como puente pasivo entre la página y la extensión;
 - reenviar conversaciones capturadas al background;
 - reenviar mensajes de progreso;
+- responder `GET_PROVIDER` detectando el proveedor por URL;
 - atender solicitudes de recuperación de conversación desde el background.
 
 ### No debe:
@@ -199,9 +203,11 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 - despachar la exportación según formato:
   - JSON: descarga directa;
   - Markdown: invocar `runExporter` mediante el bundle del Core;
+- construir nombres de archivo descriptivos;
 - esperar confirmación real de descarga;
 - enviar notificaciones al finalizar la descarga;
-- comunicar errores mediante códigos (`errorCode`) y parámetros.
+- comunicar errores mediante códigos (`errorCode`) y parámetros;
+- exponer `GET_PROVIDER` para el popup.
 
 ### No debe:
 
@@ -219,6 +225,8 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 | `exportHandlers.js` | Gestionar exportación JSON y Markdown |
 | `messageHandlers.js` | Coordinar mensajes entrantes |
 | `notifications.js` | Notificar éxito o error de descarga |
+| `filename.js` | Construir nombres de archivo seguros |
+| `providerService.js` | Obtener proveedor desde la pestaña activa |
 
 ---
 
@@ -235,7 +243,20 @@ Toda la lógica de procesamiento permanece dentro del Core de AI Chat Exporter.
 - mostrar aviso de actualización cuando corresponda;
 - mostrar notificación de resultado;
 - incluir enlace de ayuda;
-- traducir mensajes al idioma activo.
+- traducir mensajes al idioma activo;
+- actualizar proveedor dinámico en el encabezado.
+
+### Scripts principales
+
+- `popup.js`: orquestador principal.
+- `providerHandler.js`: actualiza el proveedor dinámico.
+- `updateNotification.js`: aviso de actualización.
+- `versionHandler.js`: versión dinámica.
+- `export/exportHandler.js`: flujo de exportación.
+- `export/exportHelpers.js`: lógica de bajo nivel.
+- `export/formatHandler.js`: toggle de formato.
+- `languages/*`: idioma.
+- `utilities/dom.js`: helpers DOM.
 
 ### No debe:
 
@@ -293,6 +314,6 @@ La extensión captura conversaciones existentes paginadas y conversaciones nueva
 
 Exporta Markdown y JSON reutilizando el pipeline sin modificaciones.
 
-Incluye feedback de progreso, confirmación real de descarga y notificaciones.
+Incluye feedback de progreso, confirmación real de descarga, notificaciones, detección dinámica de proveedor y nombres de archivo descriptivos.
 
 ---
