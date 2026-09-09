@@ -1,4 +1,5 @@
 import { SRC, MSG } from "./modules/constants.js";
+import { detectProvider } from "./modules/providers.js";
 
 // Responsable de inyectar el código capturador y actuar como
 // puente entre la página y la extensión.
@@ -53,9 +54,16 @@ window.addEventListener("message", (event) => {
   }
 });
 
-// Atiende solicitudes del background para obtener la conversación
-// directamente desde la página.
+// Responde consultas del background.
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Consulta del proveedor actual desde la URL de la página.
+  if (message.type === "GET_PROVIDER") {
+    const provider = detectProvider(window.location.hostname);
+    sendResponse({ provider });
+    return false;
+  }
+
+  // Solicitud de conversación completa desde la página.
   if (message.type !== MSG.GET_PAGE) return;
 
   window.postMessage(
