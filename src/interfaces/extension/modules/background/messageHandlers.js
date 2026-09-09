@@ -1,9 +1,7 @@
-// Handlers de mensajes del background.
-// Centraliza la coordinación entre popup, content y exportación.
-
 import { MSG } from "../constants.js";
 import { exportHandlers } from "./exportHandlers.js";
 import { sendProgress } from "./progress.js";
+import { getProviderFromActiveTab } from "./providerService.js";
 
 let capturedConversation = null;
 
@@ -43,8 +41,10 @@ export const messageHandlers = {
 
       capturedConversation = conversation;
 
+      const provider = await getProviderFromActiveTab();
+
       try {
-        await exportHandlers[message.format](conversation, message);
+        await exportHandlers[message.format](conversation, message, provider);
         sendResponse({ success: true });
       } catch (error) {
         sendResponse({

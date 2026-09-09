@@ -1,20 +1,20 @@
-// Handlers de exportación para JSON y Markdown.
-// No conocen el flujo de mensajes, solo reciben la configuración
-// y descargan el resultado final.
-
 import { buildDataUrl, downloadFile } from "./download.js";
 import { sendProgress } from "./progress.js";
 import { notifyDownloadResult } from "./notifications.js";
+import { getConversationTitle, buildExportFilename } from "./filename.js";
 
 export const exportHandlers = {
-  json: async (conversation) => {
+  json: async (conversation, message, provider) => {
     sendProgress("generating", { format: "JSON" });
 
     const jsonStr = JSON.stringify(conversation, null, 2);
     const url = buildDataUrl(jsonStr, "application/json");
 
+    const title = getConversationTitle(conversation);
+    const filenameBase = buildExportFilename(title, provider);
+
     sendProgress("downloading");
-    const result = await downloadFile(url, "json");
+    const result = await downloadFile(url, "json", filenameBase);
 
     if (!result.success) {
       notifyDownloadResult(result, "json");
@@ -24,7 +24,7 @@ export const exportHandlers = {
     notifyDownloadResult(result, "json");
   },
 
-  md: async (conversation, message) => {
+  md: async (conversation, message, provider) => {
     sendProgress("generating", { format: "Markdown" });
 
     const config = {
@@ -36,8 +36,11 @@ export const exportHandlers = {
       outputHandler: async (markdown) => {
         const url = buildDataUrl(markdown, "text/markdown");
 
+        const title = getConversationTitle(conversation);
+        const filenameBase = buildExportFilename(title, provider);
+
         sendProgress("downloading");
-        const result = await downloadFile(url, "md");
+        const result = await downloadFile(url, "md", filenameBase);
 
         if (!result.success) {
           notifyDownloadResult(result, "md");

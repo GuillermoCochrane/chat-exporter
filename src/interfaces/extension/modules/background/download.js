@@ -4,8 +4,6 @@
 
 const downloadResolvers = new Map();
 
-// Listener global para despertar al service worker ante cambios
-// en el estado de las descargas.
 chrome.downloads.onChanged.addListener((delta) => {
   if (!delta.state) return;
 
@@ -28,16 +26,12 @@ chrome.downloads.onChanged.addListener((delta) => {
 export const buildDataUrl = (content, mimeType) =>
   `data:${mimeType};charset=utf-8,${encodeURIComponent(content)}`;
 
-// Inicia una descarga y espera hasta que finalice o falle.
-// Devuelve:
-//   { success: true, state: "complete", error: null }
-//   { success: false, state: "interrupted", error: "USER_CANCELED" | ... }
-export function downloadFile(dataUrl, extension) {
+export function downloadFile(dataUrl, extension, filenameBase = "conversation") {
   return new Promise((resolve) => {
     chrome.downloads.download(
       {
         url: dataUrl,
-        filename: `conversation.${extension}`,
+        filename: `${filenameBase}.${extension}`,
         saveAs: true,
       },
       (downloadId) => {

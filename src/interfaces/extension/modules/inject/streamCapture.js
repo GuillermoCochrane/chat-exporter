@@ -30,7 +30,6 @@ function buildAssistantMessage(message) {
   };
 }
 
-// Solo procesa texto si la ruta corresponde al contenido visible.
 function applyTextDelta(accumulated, delta) {
   if (!delta) return accumulated;
 
@@ -56,6 +55,7 @@ export async function captureStream(response) {
   let userMessage = null;
   let assistantMessage = null;
   let accumulatedText = "";
+  let conversationTitle = null;
 
   while (true) {
     const { value, done } = await reader.read();
@@ -80,6 +80,10 @@ export async function captureStream(response) {
           }
         }
 
+        if (json.type === "title_generation" && json.title) {
+          conversationTitle = json.title;
+        }
+
         if (json.v?.message?.author?.role === "assistant") {
           const incoming = json.v.message;
           if (incoming.content?.content_type === "text") {
@@ -88,18 +92,13 @@ export async function captureStream(response) {
           }
         }
 
-        // 1) Delta con ruta y operación
         if (json.p && json.o) {
           accumulatedText = applyTextDelta(accumulatedText, json);
-        }
-        // 2) Patch array
-        else if (Array.isArray(json.v) && json.o === "patch") {
+        } else if (Array.isArray(json.v) && json.o === "patch") {
           for (const operation of json.v) {
             accumulatedText = applyTextDelta(accumulatedText, operation);
           }
-        }
-        // 3) Delta simple de texto
-        else if (typeof json.v === "string") {
+        } else if (typeof json.v === "string") {
           accumulatedText = applyTextDelta(accumulatedText, {
             p: "/message/content/parts/0",
             o: "append",
@@ -123,7 +122,10 @@ export async function captureStream(response) {
   if (messages.length > 0) {
     addPageToFront({
       url: response.url,
-      data: { messages },
+      data: {
+        title: conversationTitle,
+        messages,
+      },
     });
   }
 }
