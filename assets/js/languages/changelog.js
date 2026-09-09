@@ -1,11 +1,15 @@
 export const CHANGELOGTRANSLATIONS = {
   // Changelog navbar
+  "anchor-v151": {
+    en: "v1.5.1 — Provider detection",
+    es: "v1.5.1 — Detección de proveedor",
+  },
   "anchor-v150": {
-    en: "v1.5.0 — New conversation capture & UX",
-    es: "v1.5.0 — Captura de conversaciones nuevas y UX",
+    en: "v1.5.0 — New capture",
+    es: "v1.5.0 — Captura de conversaciones nuevas",
   },
   "anchor-v142": {
-    en: "v1.4.2 — Popup refactor & fix",
+    en: "v1.4.2 — Popup refactor",
     es: "v1.4.2 — Refactor y corrección del popup",
   },
   "anchor-v141": {
@@ -39,6 +43,24 @@ export const CHANGELOGTRANSLATIONS = {
   "anchor-older": {
     en: "Older versions",
     es: "Versiones anteriores",
+  },
+
+  // v1.5.1
+  "changelog-v151-title": {
+    en: " — Provider detection & descriptive filenames",
+    es: " — Detección de proveedor y nombres descriptivos",
+  },
+  "changelog-v151-item1": {
+    en: "Added automatic provider detection by URL.",
+    es: "Se agregó detección automática del proveedor por URL.",
+  },
+  "changelog-v151-item2": {
+    en: "Showed dynamic provider in popup header.",
+    es: "Se mostró el proveedor dinámico en el encabezado del popup.",
+  },
+  "changelog-v151-item3": {
+    en: "Used conversation title and provider for downloaded filename.",
+    es: "Se utilizó el título de la conversación y el proveedor para el nombre del archivo descargado.",
   },
 
   // v1.5.0
